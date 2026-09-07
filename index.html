@@ -179,6 +179,31 @@ tr.me td{background:var(--tint)}
 .adm input{width:100%;background:none;border:none;color:var(--ink);outline:none;
   font-family:'Noto Kufi Arabic',sans-serif;font-size:19px;font-weight:800}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pv{margin:0 12px 14px;background:#fff;border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.pv-h{background:var(--tint);padding:10px 13px;font-size:12.5px;font-weight:800;color:var(--pur);
+  display:flex;justify-content:space-between;align-items:center}
+.pv-h .c{font-size:11px;color:var(--sub);font-weight:700}
+.pv table{width:100%;border-collapse:collapse}
+.pv th{background:#fbf9ff;color:var(--sub);font-size:10.5px;font-weight:700;padding:7px 5px;text-align:center;
+  border-bottom:1px solid var(--line)}
+.pv td{padding:9px 5px;font-size:12px;text-align:center;border-bottom:1px solid #f2ecfb;color:var(--grey)}
+.pv td.nm{text-align:right;font-weight:700;color:var(--ink);white-space:nowrap}
+.pv td.sc{font-family:'Noto Kufi Arabic',sans-serif;font-weight:800;color:var(--ink)}
+.pv td.pt{font-weight:800;color:var(--pink)}
+.pv tr:last-child td{border-bottom:none}
+.pv tr.me td{background:var(--tint)}
+.pv .empty{padding:16px;text-align:center;font-size:12.5px;color:var(--sub)}
+.locked-note{padding:16px;text-align:center;font-size:12.5px;color:var(--sub);line-height:1.9}
+.adm select,.adm input[type=datetime-local]{width:100%;background:none;border:none;color:var(--ink);outline:none;
+  font-family:inherit;font-size:14px;font-weight:700}
+.sbtn.ghost{background:#fff;border:2px solid var(--line);color:var(--grey);box-shadow:none;font-size:14px;padding:13px}
+.sbtn.ghost:active{background:var(--tint)}
+.st3{display:flex;gap:8px}
+.st3 button{flex:1;background:var(--tint2);border:2.5px solid #ede5fa;border-radius:12px;padding:11px 3px;
+  font-size:12.5px;font-weight:700;color:var(--ink)}
+.st3 button[aria-pressed="true"]{border-color:var(--deep);background:linear-gradient(135deg,#f5efff,#ebe0fc)}
+.sel{width:100%;padding:12px 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--tint);
+  color:var(--ink);font-family:inherit;font-size:14px;font-weight:600;outline:none;margin-bottom:14px}
 .hide{display:none!important}
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--line);
   border-radius:13px;padding:12px 22px;font-size:13.5px;font-weight:700;z-index:999;display:none;
@@ -225,7 +250,14 @@ tr.me td{background:var(--tint)}
   <div class="page">
     <div class="pane act" id="pane-matches"></div>
 
-    <div class="pane" id="pane-board"><div class="panel"><table id="board"></table></div></div>
+    <div class="pane" id="pane-board">
+      <div class="panel"><table id="board"></table></div>
+      <div class="panel" style="margin-top:16px">
+        <h4 style="font-size:15px;color:var(--pur);margin-bottom:12px">توقعات الجميع لكل مباراة</h4>
+        <select class="sel" id="mSel"></select>
+        <div id="mPreds"></div>
+      </div>
+    </div>
 
     <div class="pane" id="pane-rules">
       <div class="panel rules">
@@ -320,7 +352,7 @@ async function refresh(){
   MATCHES=m.data||[]; PREDS=p.data||[]; USERS=u.data||[]; CHAMPS=c.data||[];
   SETTINGS=Object.fromEntries((s.data||[]).map(r=>[r.key,r.value]));
   if(!Object.values(DIRTY).some(Boolean)) drawMatches();
-  drawBoard(); if(ME.is_admin) drawAdmin();
+  drawBoard(); drawPredsPanel(); if(ME.is_admin) drawAdmin();
 }
 
 function scoreMatch(pred,m){
@@ -352,7 +384,12 @@ function totalFor(uid){
 }
 const myPred=id=>PREDS.find(p=>p.user_id===ME.id&&p.match_id===id);
 const lockAt=m=>new Date(new Date(m.kickoff).getTime()-LOCK_MIN*60000);
-const isShut=m=>lockAt(m)<=new Date();
+const isShut=m=>{
+  if(m.locked===true) return true;
+  if(m.locked===false) return false;
+  return lockAt(m)<=new Date();
+};
+const revealed=m=>ME.is_admin||m.finished||(new Date(m.kickoff)<=new Date()&&m.locked!==false);
 const champShut=()=>new Date(SETTINGS.champion_deadline||0)<=new Date();
 
 function leftText(target){
@@ -372,6 +409,13 @@ function tickAll(){
     el.innerHTML="يقفل التوقع بعد <b>"+left+"</b>";
   });
 }
+function toInput(iso){
+  const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Kuwait",year:"numeric",month:"2-digit",
+    day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date(iso));
+  const g=t=>parts.find(x=>x.type===t).value;
+  return g("year")+"-"+g("month")+"-"+g("day")+"T"+g("hour")+":"+g("minute");
+}
+const fromInput=v=>v+":00+03:00";
 const fmtDay=d=>d.toLocaleDateString("ar-KW",{weekday:"long",day:"numeric",month:"long",timeZone:"Asia/Kuwait"});
 const fmtTime=d=>d.toLocaleTimeString("ar-KW",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Kuwait"});
 
@@ -471,6 +515,7 @@ function drawMatches(){
       ${shut?"":`<div class="warn" id="w${m.id}">لم يتم حفظ التصويت — اضغط زر الحفظ تحت</div>
       <div class="sw"><button class="sbtn${p?" ok":""}" id="s${m.id}">${p?"توقعك محفوظ ✓":"احفظ توقعي"}</button></div>`}
       <div id="sv${m.id}">${p?sumBox(m,p):""}</div>
+      ${predsPanel(m,revealed(m))}
       ${shut&&!p?`<div class="sum" style="text-align:center;color:var(--sub);font-size:12.5px">ما سجّلت توقع لهالمباراة</div>`:""}
       ${m.finished?`<div class="sum"><div class="sum-t">النتيجة الرسمية</div>
         <div class="row"><span>النتيجة</span><b>${flag(m.home)} ${ar(m.home_goals)} × ${ar(m.away_goals)} ${flag(m.away)}</b></div>
@@ -535,6 +580,39 @@ function drawMatches(){
   tickAll();
 }
 
+function winnerName(m,p){
+  const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
+  return w==="home"?flag(m.home)+" "+m.home : w==="away"?flag(m.away)+" "+m.away : "تعادل";
+}
+function predsOf(m){
+  return PREDS.filter(x=>x.match_id===m.id).map(x=>{
+    const u=USERS.find(u=>u.id===x.user_id);
+    return {...x, name:u?u.name:"—"};
+  }).sort((a,b)=>a.name.localeCompare(b.name,"ar"));
+}
+function predsTable(m){
+  const list=predsOf(m);
+  if(!list.length) return `<div class="empty">ما فيه توقعات مسجّلة لهالمباراة</div>`;
+  return `<table><tr><th>الاسم</th><th>الفايز</th><th>النتيجة</th><th>كروت</th><th>بلنتي</th>
+    ${m.finished?"<th>نقاط</th>":""}</tr>`+
+    list.map(x=>`<tr class="${x.user_id===ME.id?"me":""}">
+      <td class="nm">${x.name}</td>
+      <td>${winnerName(m,x)}</td>
+      <td class="sc">${ar(x.home_goals)} × ${ar(x.away_goals)}</td>
+      <td>${yFull(x.yellows)}</td>
+      <td>${x.penalty?"نعم":"لا"}</td>
+      ${m.finished?`<td class="pt">${ar(scoreMatch(x,m))}</td>`:""}</tr>`).join("")+`</table>`;
+}
+function predsPanel(m,open){
+  const n=predsOf(m).length, total=USERS.length;
+  const label="توقعات المشاركين";
+  return `<div class="pv">
+    <div class="pv-h"><span>${label}</span><span class="c">${ar(n)} من ${ar(total)} سجّلوا</span></div>
+    ${open?predsTable(m)
+          :`<div class="locked-note">التوقعات مخفية لين تبدأ المباراة.<br>أول ما تصفّر البداية تنكشف توقعات الجميع.</div>`}
+  </div>`;
+}
+
 function sumBox(m,p){
   const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
   const wn=w==="home"?flag(m.home)+" "+m.home:w==="away"?flag(m.away)+" "+m.away:"تعادل";
@@ -557,10 +635,35 @@ function drawBoard(){
     }).join("");
 }
 
+function drawPredsPanel(){
+  const sel=$("#mSel"), holder=$("#mPreds");
+  const list=MATCHES.filter(m=>revealed(m));
+  if(!list.length){
+    sel.classList.add("hide");
+    holder.innerHTML=`<div class="locked-note">ما بدأت أي مباراة بعد.<br>أول ما تبدأ أول مباراة تنكشف توقعات الجميع هنا.</div>`;
+    return;
+  }
+  sel.classList.remove("hide");
+  const keep=sel.value;
+  sel.innerHTML=list.map(m=>{
+    const k=new Date(m.kickoff);
+    return `<option value="${m.id}">${m.home} × ${m.away} — ${fmtDay(k)}</option>`;
+  }).join("");
+  const def = keep && list.some(m=>String(m.id)===keep) ? keep : String(list[list.length-1].id);
+  sel.value=def;
+  const show=()=>{
+    const m=MATCHES.find(x=>String(x.id)===sel.value);
+    holder.innerHTML=m?`<div class="pv">
+      <div class="pv-h"><span>${m.home} × ${m.away}</span>
+        <span class="c">${m.finished?"انتهت":"جارية"}</span></div>${predsTable(m)}</div>`:"";
+  };
+  sel.onchange=show; show();
+}
+
 function drawAdmin(){
   const box=$("#pane-admin");
   box.innerHTML=`<div class="champ"><h3>🏆 بطل البطولة</h3>
-    <p>اضغط على البطل بعد النهائي عشان تتوزع الـ١٠ نقاط على اللي ضبطوا.</p>
+    <p>اضغط على البطل بعد النهائي عشان تتوزع الـ١٠ نقاط على اللي ضبطوه.</p>
     <div class="tg">${TEAMS.map(t=>
       `<button data-ch="${t}" aria-pressed="${SETTINGS.champion===t}">${flag(t,"30px","21px")}${t}</button>`).join("")}</div></div>`;
   box.querySelectorAll("[data-ch]").forEach(b=>b.onclick=async()=>{
@@ -569,6 +672,10 @@ function drawAdmin(){
   });
 
   MATCHES.forEach(m=>{
+    const lockState = m.locked===true?"shut":m.locked===false?"open":"auto";
+    const teamOpts = cur => TEAMS.map(t=>`<option value="${t}" ${t===cur?"selected":""}>${t}</option>`).join("")
+      + (TEAMS.includes(cur)?"":`<option value="${cur}" selected>${cur}</option>`);
+
     const c=document.createElement("div"); c.className="mc";
     c.innerHTML=`
       <div class="mh" style="padding:15px 18px">
@@ -576,25 +683,70 @@ function drawAdmin(){
           <span>${flag(m.home)} ${m.home} × ${m.away} ${flag(m.away)}</span>
           <span style="color:${m.finished?"#7FE0A8":"var(--gold)"}">${m.finished?"معتمدة":"بانتظار"}</span></div>
       </div>
-      <div class="q"><div class="q-top"><span class="q-n">١</span><span class="q-title">النتيجة النهائية</span></div>
+
+      <div class="q">
+        <div class="q-top"><span class="q-n">١</span><span class="q-title">المنتخبات والموعد</span></div>
+        <div class="g2" style="margin-bottom:10px">
+          <div class="adm"><label>المنتخب الأول</label><select id="th${m.id}">${teamOpts(m.home)}</select></div>
+          <div class="adm"><label>المنتخب الثاني</label><select id="ta${m.id}">${teamOpts(m.away)}</select></div>
+        </div>
+        <div class="adm" style="margin-bottom:10px"><label>موعد المباراة بتوقيت الكويت</label>
+          <input type="datetime-local" id="tk${m.id}" value="${toInput(m.kickoff)}"></div>
+        <label style="display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:6px">حالة باب التوقع</label>
+        <div class="st3">
+          <button data-ls="auto" aria-pressed="${lockState==="auto"}">تلقائي</button>
+          <button data-ls="open" aria-pressed="${lockState==="open"}">مفتوح</button>
+          <button data-ls="shut" aria-pressed="${lockState==="shut"}">مقفل</button>
+        </div>
+        <p class="note">تلقائي يعني يقفل قبل الموعد بخمس دقايق. ولو فتحته يدوياً، توقعات المشاركين تبقى مخفية عن بعض.</p>
+        <div style="margin-top:12px"><button class="sbtn ghost" id="cfg${m.id}">احفظ المنتخبات والموعد</button></div>
+      </div>
+
+      <div class="q"><div class="q-top"><span class="q-n">٢</span><span class="q-title">النتيجة النهائية</span></div>
         <div class="g2">
           <div class="adm"><label>أهداف ${m.home}</label><input type="number" min="0" id="ah${m.id}" value="${m.home_goals??0}"></div>
           <div class="adm"><label>أهداف ${m.away}</label><input type="number" min="0" id="aa${m.id}" value="${m.away_goals??0}"></div>
         </div></div>
-      <div class="q"><div class="q-top"><span class="q-n">٢</span><span class="q-title">عدد الكروت الصفرا</span></div>
-        <div class="adm"><input type="number" min="0" id="ay${m.id}" value="${m.yellows??0}"></div></div>
-      <div class="q"><div class="q-top"><span class="q-n">٣</span><span class="q-title">صار بلنتي؟</span></div>
+
+      <div class="q"><div class="q-top"><span class="q-n">٣</span><span class="q-title">عدد الكروت الصفرا</span></div>
+        <div class="adm"><input type="number" min="0" id="ay${m.id}" value="${m.yellows??0}"></div>
+        <p class="note">اكتب الرقم الفعلي. لو طلعت ٧ كروت، اللي اختاروا ٥ فأكثر ياخذون النقطة.</p></div>
+
+      <div class="q"><div class="q-top"><span class="q-n">٤</span><span class="q-title">صار بلنتي؟</span></div>
         <div class="yn">
           <button class="ynb yes" data-ap="1" aria-pressed="${m.penalty===true}"><span class="ic">✓</span>نعم</button>
           <button class="ynb no" data-ap="0" aria-pressed="${m.penalty===false||m.penalty==null}"><span class="ic">✕</span>لا</button>
         </div></div>
-      <div class="sw"><button class="sbtn" id="as${m.id}">اعتمد النتيجة ووزّع النقاط</button></div>`;
 
-    let AP=m.penalty===true;
+      <div class="sw">
+        <button class="sbtn" id="as${m.id}">${m.finished?"حدّث النتيجة وأعد حساب النقاط":"اعتمد النتيجة ووزّع النقاط"}</button>
+        ${m.finished?`<button class="sbtn ghost" id="un${m.id}" style="margin-top:9px">ألغِ الاعتماد</button>`:""}
+      </div>`;
+
+    let AP=m.penalty===true, LS=lockState;
     c.querySelectorAll("[data-ap]").forEach(b=>b.onclick=()=>{
       AP=b.dataset.ap==="1";
       c.querySelectorAll("[data-ap]").forEach(x=>x.setAttribute("aria-pressed",(x.dataset.ap==="1")===AP));
     });
+    c.querySelectorAll("[data-ls]").forEach(b=>b.onclick=()=>{
+      LS=b.dataset.ls;
+      c.querySelectorAll("[data-ls]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.ls===LS));
+    });
+
+    c.querySelector("#cfg"+m.id).onclick=async e=>{
+      const kv=c.querySelector("#tk"+m.id).value;
+      if(!kv){ toast("حط موعد المباراة",true); return; }
+      const {error}=await db.from("gc_matches").update({
+        home:c.querySelector("#th"+m.id).value,
+        away:c.querySelector("#ta"+m.id).value,
+        kickoff:fromInput(kv),
+        locked: LS==="auto"?null:LS==="shut",
+        updated_at:new Date().toISOString()
+      }).eq("id",m.id);
+      if(error){ toast("ما انحفظت الإعدادات",true); return; }
+      toast("انحفظت المنتخبات والموعد"); refresh();
+    };
+
     c.querySelector("#as"+m.id).onclick=async e=>{
       const {error}=await db.from("gc_matches").update({
         home_goals:+c.querySelector("#ah"+m.id).value,
@@ -603,9 +755,16 @@ function drawAdmin(){
         penalty:AP,finished:true,updated_at:new Date().toISOString()
       }).eq("id",m.id);
       if(error){ toast("ما انحفظت النتيجة",true); return; }
-      e.target.classList.add("ok"); e.target.textContent="معتمدة ✓";
-      toast("انحفظت النتيجة وتوزعت النقاط"); refresh();
+      toast("انحفظت النتيجة وتحدّث الترتيب"); refresh();
     };
+
+    const un=c.querySelector("#un"+m.id);
+    if(un) un.onclick=async()=>{
+      const {error}=await db.from("gc_matches").update({finished:false,updated_at:new Date().toISOString()}).eq("id",m.id);
+      if(error){ toast("ما انلغى الاعتماد",true); return; }
+      toast("انلغى الاعتماد وانسحبت نقاط هالمباراة"); refresh();
+    };
+
     box.appendChild(c);
   });
 }
