@@ -112,6 +112,17 @@ img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inli
 .opt[aria-pressed="true"]{border-color:var(--deep);background:linear-gradient(135deg,#f5efff,#ebe0fc)}
 .opt:disabled{opacity:.35}
 
+.wn{display:flex;gap:9px}
+.wn button{flex:1;background:var(--tint2);border:2.5px solid #ede5fa;border-radius:14px;padding:13px 4px;
+  font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.5}
+.wn button img{width:34px;height:24px;border-radius:4px;display:block;margin:0 auto 7px}
+.wn button .dr{font-size:21px;display:block;margin-bottom:5px;line-height:1}
+.wn button[aria-pressed="true"]{border-color:var(--deep);background:linear-gradient(135deg,#f5efff,#ebe0fc)}
+.wn button:disabled{opacity:.35}
+.warn{background:#fff6e0;border:1.5px solid #e8a33d;color:#8a5a00;border-radius:13px;padding:12px;
+  margin:0 12px 12px;text-align:center;font-size:13px;font-weight:700;display:none;line-height:1.7}
+.warn.on{display:block}
+.sbtn.pend{background:linear-gradient(135deg,#e8a33d,#d97706);box-shadow:0 8px 24px rgba(217,119,6,.3)}
 .yn{display:flex;gap:10px}
 .ynb{flex:1;border-radius:14px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:8px;
   border:2px solid transparent;font-size:13.5px;font-weight:700;color:var(--ink)}
@@ -268,6 +279,10 @@ function toast(msg,bad){
 }
 
 let ME=null,MATCHES=[],PREDS=[],USERS=[],CHAMPS=[],SETTINGS={};
+const DIRTY={};
+window.addEventListener("beforeunload",e=>{
+  if(Object.values(DIRTY).some(Boolean)){ e.preventDefault(); e.returnValue=""; }
+});
 
 $("#btnLogin").onclick = async ()=>{
   const name=$("#inName").value.trim(), pin=$("#inPin").value.trim();
@@ -304,13 +319,16 @@ async function refresh(){
   ]);
   MATCHES=m.data||[]; PREDS=p.data||[]; USERS=u.data||[]; CHAMPS=c.data||[];
   SETTINGS=Object.fromEntries((s.data||[]).map(r=>[r.key,r.value]));
-  drawMatches(); drawBoard(); if(ME.is_admin) drawAdmin();
+  if(!Object.values(DIRTY).some(Boolean)) drawMatches();
+  drawBoard(); if(ME.is_admin) drawAdmin();
 }
 
 function scoreMatch(pred,m){
   if(!pred||!m.finished) return 0;
   let pts=0;
-  const rw=Math.sign(m.home_goals-m.away_goals), gw=Math.sign(pred.home_goals-pred.away_goals);
+  const rw=Math.sign(m.home_goals-m.away_goals);
+  const wp=pred.winner_pick||(pred.home_goals>pred.away_goals?"home":pred.home_goals<pred.away_goals?"away":"draw");
+  const gw=wp==="home"?1:wp==="away"?-1:0;
   if(rw===gw) pts+=RULES.winner;
   if(RULES.scoreAlways||rw===gw){
     if(pred.home_goals===m.home_goals) pts+=RULES.goalEach;
@@ -382,6 +400,7 @@ function drawMatches(){
               :m.stage==="semi"?"نصف النهائي":"المباراة النهائية";
     let H=p?p.home_goals:0, A=p?p.away_goals:0;
     let Y=p?Math.min(p.yellows,YMAX):0, P=p?p.penalty:false;
+    let W=p?(p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw")):null;
 
     const c=document.createElement("div"); c.className="mc";
     c.innerHTML=`
@@ -401,8 +420,19 @@ function drawMatches(){
         :shut?`<div class="bnr lock">التوقع مقفل — بقي أقل من ٥ دقايق على البداية</div>`:""}
 
       <div class="q">
-        <div class="q-top"><span class="q-n">١</span><span class="q-title">كم تتوقع تنتهي النتيجة؟</span>
-          <span class="q-badge">٥ نقاط</span></div>
+        <div class="q-top"><span class="q-n">١</span><span class="q-title">مين بيفوز بالمباراة؟</span>
+          <span class="q-badge">٣ نقاط</span></div>
+        <div class="wn">
+          <button data-w="home" aria-pressed="${W==='home'}" ${shut?"disabled":""}>${flag(m.home,"34px","24px")}${m.home}</button>
+          <button data-w="draw" aria-pressed="${W==='draw'}" ${shut?"disabled":""}><span class="dr">🤝</span>تعادل</button>
+          <button data-w="away" aria-pressed="${W==='away'}" ${shut?"disabled":""}>${flag(m.away,"34px","24px")}${m.away}</button>
+        </div>
+        <p class="note">٣ نقاط كاملة إذا ضبطت، والتعادل يحتسب مثل الفوز.</p>
+      </div>
+
+      <div class="q">
+        <div class="q-top"><span class="q-n">٢</span><span class="q-title">وكم تنتهي النتيجة؟</span>
+          <span class="q-badge">نقطتين</span></div>
         <div class="sc">
           <div class="sc-side"><span class="f">${flag(m.home,"38px","27px")}</span><div class="n">${m.home}</div>
             <div class="stp">
@@ -415,11 +445,11 @@ function drawMatches(){
               <span class="v" id="a${m.id}">${ar(A)}</span>
               <button data-t="a" data-d="1" aria-label="زد" ${shut?"disabled":""}>+</button></div></div>
         </div>
-        <p class="note">٣ نقاط للفايز، ونقطة على كل رقم صح.</p>
+        <p class="note">نقطة على كل رقم صح، وتنحسب حتى لو غلطت بالفايز.</p>
       </div>
 
       <div class="q">
-        <div class="q-top"><span class="q-n">٢</span><span class="q-title">كم كرت أصفر بالمباراة؟</span>
+        <div class="q-top"><span class="q-n">٣</span><span class="q-title">كم كرت أصفر بالمباراة؟</span>
           <span class="q-badge">نقطة</span></div>
         <div class="grid">${[0,1,2,3,4,5].map(v=>
           `<button class="opt${v===5?" sm":""}" data-y="${v}" aria-pressed="${Y===v}" ${shut?"disabled":""}>${v===5?"٥ فأكثر":ar(v)}</button>`).join("")}</div>
@@ -427,7 +457,7 @@ function drawMatches(){
       </div>
 
       <div class="q">
-        <div class="q-top"><span class="q-n">٣</span><span class="q-title">بيصير بلنتي خلال المباراة؟</span>
+        <div class="q-top"><span class="q-n">٤</span><span class="q-title">بيصير بلنتي خلال المباراة؟</span>
           <span class="q-badge">نقطة</span></div>
         <div class="yn">
           <button class="ynb yes" data-p="1" aria-pressed="${P===true}" ${shut?"disabled":""}>
@@ -438,7 +468,8 @@ function drawMatches(){
         <p class="note">النقطة اتيي مع نعم إذا صار بلنتي فعلاً.</p>
       </div>
 
-      ${shut?"":`<div class="sw"><button class="sbtn${p?" ok":""}" id="s${m.id}">${p?"توقعك محفوظ ✓ — اضغط بعد التعديل":"احفظ توقعي"}</button></div>`}
+      ${shut?"":`<div class="warn" id="w${m.id}">لم يتم حفظ التصويت — اضغط زر الحفظ تحت</div>
+      <div class="sw"><button class="sbtn${p?" ok":""}" id="s${m.id}">${p?"توقعك محفوظ ✓":"احفظ توقعي"}</button></div>`}
       <div id="sv${m.id}">${p?sumBox(m,p):""}</div>
       ${shut&&!p?`<div class="sum" style="text-align:center;color:var(--sub);font-size:12.5px">ما سجّلت توقع لهالمباراة</div>`:""}
       ${m.finished?`<div class="sum"><div class="sum-t">النتيجة الرسمية</div>
@@ -447,14 +478,31 @@ function drawMatches(){
         <div class="row"><span>البلنتي</span><b>${m.penalty?"صار":"ما صار"}</b></div>
         ${p?`<div class="row"><span>حصيلتك</span><b style="color:var(--pink)">${ar(scoreMatch(p,m))} نقاط</b></div>`:""}</div>`:""}`;
 
-    const btn=c.querySelector("#s"+m.id);
-    const dirty=()=>{ if(btn){ btn.classList.remove("ok"); btn.textContent="احفظ توقعي"; } };
+    const btn=c.querySelector("#s"+m.id), wrn=c.querySelector("#w"+m.id);
+    const dirty=()=>{
+      DIRTY[m.id]=true;
+      if(btn){ btn.classList.remove("ok"); btn.classList.add("pend"); btn.textContent="احفظ توقعي"; }
+      if(wrn) wrn.classList.add("on");
+    };
+
+    c.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{
+      W=b.dataset.w;
+      c.querySelectorAll("[data-w]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.w===W));
+      if(W==="home"&&H<=A){ H=1; A=0; }
+      else if(W==="away"&&A<=H){ H=0; A=1; }
+      else if(W==="draw"&&H!==A){ H=1; A=1; }
+      c.querySelector("#h"+m.id).textContent=ar(H);
+      c.querySelector("#a"+m.id).textContent=ar(A);
+      dirty();
+    });
 
     c.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{
       if(b.dataset.t==="h") H=Math.max(0,Math.min(15,H+ +b.dataset.d));
       else A=Math.max(0,Math.min(15,A+ +b.dataset.d));
       c.querySelector("#h"+m.id).textContent=ar(H);
       c.querySelector("#a"+m.id).textContent=ar(A);
+      W = H>A?"home":H<A?"away":"draw";
+      c.querySelectorAll("[data-w]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.w===W));
       dirty();
     });
     c.querySelectorAll("[data-y]").forEach(b=>b.onclick=()=>{
@@ -470,11 +518,14 @@ function drawMatches(){
 
     if(btn) btn.onclick=async()=>{
       if(isShut(m)){ toast("التوقع مقفل",true); return refresh(); }
-      const rec={user_id:ME.id,match_id:m.id,home_goals:H,away_goals:A,
+      if(!W){ toast("اختر مين بيفوز أول",true); return; }
+      const rec={user_id:ME.id,match_id:m.id,winner_pick:W,home_goals:H,away_goals:A,
                  yellows:Y,penalty:P,updated_at:new Date().toISOString()};
       const {error}=await db.from("gc_predictions").upsert(rec,{onConflict:"user_id,match_id"});
       if(error){ toast("ما انحفظ، جرّب مرة ثانية",true); return; }
-      btn.classList.add("ok"); btn.textContent="توقعك محفوظ ✓ — اضغط بعد التعديل";
+      btn.classList.remove("pend"); btn.classList.add("ok"); btn.textContent="توقعك محفوظ ✓";
+      if(wrn) wrn.classList.remove("on");
+      DIRTY[m.id]=false;
       c.querySelector("#sv"+m.id).innerHTML=sumBox(m,rec);
       toast("انحفظ توقعك ✓");
       const f=await db.from("gc_predictions").select("*"); PREDS=f.data||[];
@@ -485,7 +536,10 @@ function drawMatches(){
 }
 
 function sumBox(m,p){
+  const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
+  const wn=w==="home"?flag(m.home)+" "+m.home:w==="away"?flag(m.away)+" "+m.away:"تعادل";
   return `<div class="sum"><div class="sum-t">توقعك المحفوظ</div>
+    <div class="row"><span>الفايز</span><b>${wn}</b></div>
     <div class="row"><span>النتيجة</span><b>${flag(m.home)} ${ar(p.home_goals)} × ${ar(p.away_goals)} ${flag(m.away)}</b></div>
     <div class="row"><span>الكروت الصفرا</span><b>${yFull(p.yellows)}</b></div>
     <div class="row"><span>البلنتي</span><b>${p.penalty?"توقعت فيه بلنتي":"توقعت ما فيه"}</b></div></div>`;
