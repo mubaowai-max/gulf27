@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>خليجي ٢٧ — توقعات العائلة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --pur:#4F008C; --pur2:#7B00D4; --deep:#5A009E; --pink:#FF375E;
+  --lav:#C89BFF; --gold:#FFD93D; --line:#e8dff8; --tint:#f8f4ff; --tint2:#faf7ff;
+  --ink:#1A0040; --sub:#9b8fb5; --grey:#5a5a6a; --green:#1A9E58; --red:#CC1A3A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:var(--ink);min-height:100vh;
+  background:radial-gradient(ellipse at 50% 8%,#6a1560,transparent 60%),linear-gradient(165deg,#1a0530,#2d0a4a 55%,#16042a);
+  -webkit-tap-highlight-color:transparent}
+h1,h2,h3,.kufi{font-family:'Noto Kufi Arabic',sans-serif}
+button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--lav);outline-offset:2px;border-radius:10px}
+img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inline-block;vertical-align:-.16em;
+  box-shadow:0 1px 3px rgba(0,0,0,.25)}
+
+/* ── دخول ── */
+#login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;overflow-y:auto}
+.lb{background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 26px;width:100%;max-width:400px;
+  box-shadow:0 20px 60px rgba(79,0,140,.3);text-align:center}
+.lb h1{font-size:28px;color:var(--pur);margin-bottom:2px}
+.lb p.s{font-size:13px;color:var(--sub);margin-bottom:22px}
+.lb input{width:100%;background:var(--tint);border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;
+  color:var(--ink);font-family:inherit;font-size:15px;outline:none;margin-bottom:11px}
+.lb input:focus{border-color:var(--pur2)}
+.lb button{width:100%;padding:14px;background:linear-gradient(135deg,var(--pur),var(--pur2));border-radius:12px;
+  color:#fff;font-size:15px;font-weight:700}
+.lb .err{background:#fdecea;border:1px solid rgba(255,55,94,.25);border-radius:10px;padding:9px;font-size:12.5px;
+  color:var(--red);margin-top:11px;display:none}
+.lb .err.on{display:block}
+.lb .hint{font-size:12px;color:var(--sub);margin-top:14px}
+
+/* ── ترويسة ── */
+.hdr{background:var(--pur);border-bottom:3px solid var(--pink);padding:11px 15px;display:flex;
+  align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.hdr-t{font-family:'Noto Kufi Arabic',sans-serif;font-size:16px;font-weight:700;color:#fff;line-height:1.3}
+.hdr-s{font-size:10.5px;color:var(--lav)}
+.hdr-u{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  border-radius:20px;padding:5px 12px}
+.hdr-n{font-size:12px;font-weight:700;color:#fff;display:block}
+.hdr-p{font-size:10px;color:var(--gold);display:block;font-weight:700}
+.hdr-x{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:9px;padding:6px 11px;
+  color:#fff;font-size:11.5px}
+
+/* ── تبويبات ── */
+.tabs{display:flex;gap:5px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line);
+  overflow-x:auto;position:sticky;top:60px;z-index:40}
+.tab{padding:8px 17px;border-radius:9px;font-size:13.5px;color:#888;font-weight:600;white-space:nowrap}
+.tab.act{background:var(--pur);color:#fff;font-weight:700}
+.pane{display:none}.pane.act{display:block}
+.page{padding:16px 14px 40px;max-width:640px;margin:0 auto}
+
+/* ── بطاقة ── */
+.mc{background:#fff;border-radius:24px;overflow:hidden;margin-bottom:16px;border:1px solid var(--line);
+  box-shadow:0 16px 48px rgba(79,0,140,.22)}
+.mh{background:linear-gradient(135deg,#5A009E 0%,#7B1FA2 55%,#3D0070 100%);padding:20px 22px;position:relative;overflow:hidden}
+.mh::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(255,255,255,.1),transparent 50%)}
+.mh-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:11.5px;
+  color:rgba(255,255,255,.7);font-weight:700;position:relative;z-index:1}
+.mh-teams{display:flex;align-items:center;justify-content:center;gap:14px;position:relative;z-index:1}
+.mh-team{display:flex;flex-direction:column;align-items:center;flex:1}
+.mh-team .f{font-size:0;margin-bottom:9px}
+.mh-team .f img{width:56px;height:39px;border-radius:5px;box-shadow:0 6px 14px rgba(0,0,0,.3)}
+.mh-name{font-size:16px;font-weight:700;color:#fff}
+.mh-vs{font-family:'Noto Kufi Arabic',sans-serif;font-size:17px;font-weight:800;color:var(--gold);
+  background:rgba(255,255,255,.12);border-radius:13px;padding:8px 13px;border:1px solid rgba(255,217,61,.3)}
+.mh-sub{text-align:center;margin-top:14px;font-size:12px;color:rgba(255,255,255,.72);position:relative;z-index:1;line-height:1.9}
+.mh-sub b{color:var(--gold)}
+
+.bnr{border-radius:12px;padding:11px;margin:12px 12px 0;text-align:center;font-size:12.5px;font-weight:700}
+.bnr.lock{background:rgba(200,134,10,.09);border:1px solid rgba(200,134,10,.28);color:#B8860B}
+.bnr.live{background:rgba(255,55,94,.08);border:1px solid rgba(255,55,94,.25);color:var(--pink);
+  display:flex;align-items:center;justify-content:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--pink);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.bnr.done{background:rgba(46,204,113,.07);border:1px solid rgba(46,204,113,.22);color:var(--green)}
+
+.q{background:var(--tint);border-radius:16px;margin:12px;padding:15px 14px;border:1px solid var(--line)}
+.q-top{display:flex;align-items:center;gap:9px;margin-bottom:13px}
+.q-n{width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,#ede5fa,#e0d4f7);display:flex;
+  align-items:center;justify-content:center;font-family:'Noto Kufi Arabic',sans-serif;font-size:13px;
+  font-weight:800;color:var(--deep);flex-shrink:0}
+.q-title{font-size:15.5px;font-weight:700;color:var(--ink);flex:1}
+.q-badge{background:linear-gradient(135deg,var(--deep),#7B1FA2);border-radius:24px;padding:5px 12px;
+  font-size:11.5px;font-weight:700;color:#fff;white-space:nowrap}
+
+.sc{display:flex;gap:12px}
+.sc-side{flex:1;background:var(--tint2);border:2.5px solid #ede5fa;border-radius:16px;padding:14px 8px;text-align:center}
+.sc-side .f img{width:38px;height:27px;border-radius:4px}
+.sc-side .n{font-size:13.5px;font-weight:700;color:var(--ink);margin:7px 0 10px}
+.stp{display:flex;align-items:center;justify-content:center;gap:9px}
+.stp button{width:34px;height:34px;border-radius:11px;background:#fff;border:2px solid #e0d4f7;
+  font-size:19px;line-height:1;color:var(--deep);font-weight:700}
+.stp button:active{background:var(--deep);color:#fff}
+.stp button:disabled{opacity:.35}
+.stp .v{font-family:'Noto Kufi Arabic',sans-serif;font-size:27px;font-weight:800;color:var(--ink);min-width:30px}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opt{background:var(--tint2);border:2.5px solid #ede5fa;border-radius:13px;padding:13px 3px;text-align:center;
+  font-family:'Noto Kufi Arabic',sans-serif;font-size:16px;font-weight:800;color:var(--ink)}
+.opt.sm{font-size:13px}
+.opt[aria-pressed="true"]{border-color:var(--deep);background:linear-gradient(135deg,#f5efff,#ebe0fc)}
+.opt:disabled{opacity:.35}
+
+.yn{display:flex;gap:10px}
+.ynb{flex:1;border-radius:14px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:8px;
+  border:2px solid transparent;font-size:13.5px;font-weight:700;color:var(--ink)}
+.ynb.no{background:#fff5f5;border-color:#ffd0d0}
+.ynb.yes{background:#f0fff5;border-color:#b2f0cb}
+.ynb.no[aria-pressed="true"]{border-color:#E24B4A;background:#fdecea}
+.ynb.yes[aria-pressed="true"]{border-color:#2ECC71;background:#e6f9f0}
+.ynb .ic{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:#fff}
+.ynb.no .ic{background:#E24B4A}
+.ynb.yes .ic{background:#2ECC71}
+.ynb:disabled{opacity:.4}
+.note{font-size:11.5px;color:var(--sub);margin-top:10px;text-align:center;line-height:1.8}
+
+.sw{padding:4px 12px 18px}
+.sbtn{width:100%;padding:16px;background:linear-gradient(135deg,var(--deep),var(--pink));border-radius:16px;
+  color:#fff;font-size:15.5px;font-weight:700;box-shadow:0 8px 24px rgba(90,0,158,.28)}
+.sbtn.ok{background:linear-gradient(135deg,#1A9E58,#2ECC71);box-shadow:0 8px 24px rgba(26,158,88,.28)}
+.sum{background:#f0ebfa;border-radius:12px;padding:11px 13px;margin:0 12px 14px}
+.sum-t{font-size:11px;font-weight:800;color:var(--pur);margin-bottom:6px}
+.row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--grey);padding:4px 0;
+  border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row b{font-weight:700;color:#1E0050}
+
+/* ── البطل ── */
+.champ{background:#fff;border-radius:24px;padding:18px 16px;margin-bottom:16px;border:2px solid var(--gold);
+  box-shadow:0 16px 48px rgba(79,0,140,.22)}
+.champ h3{font-size:17px;color:var(--pur);margin-bottom:4px}
+.champ p{font-size:12.5px;color:var(--sub);margin-bottom:14px;line-height:1.8}
+.tg{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.tg button{background:var(--tint2);border:2.5px solid #ede5fa;border-radius:14px;padding:11px 2px;
+  font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.6}
+.tg button img{width:30px;height:21px;border-radius:3px;display:block;margin:0 auto 5px}
+.tg button[aria-pressed="true"]{border-color:var(--deep);background:linear-gradient(135deg,#f5efff,#ebe0fc)}
+.tg button:disabled{opacity:.4}
+
+/* ── ترتيب وقوانين ── */
+.panel{background:#fff;border-radius:22px;padding:16px;border:1px solid var(--line);
+  box-shadow:0 16px 48px rgba(79,0,140,.2)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px 7px;text-align:right;border-bottom:1px solid var(--line);font-size:13.5px}
+th{color:var(--sub);font-size:11.5px;font-weight:700}
+td.p{font-family:'Noto Kufi Arabic',sans-serif;font-weight:800;color:var(--pur);text-align:left;font-size:16px}
+tr.me td{background:var(--tint)}
+.rk{width:30px;color:var(--sub);font-weight:700}
+.rk.top{color:var(--gold);background:var(--deep);border-radius:6px;text-align:center}
+.rules h4{font-size:14.5px;color:var(--pur);margin:18px 0 5px}
+.rules h4:first-child{margin-top:0}
+.rules p{font-size:13.5px;color:var(--grey);margin-bottom:4px;line-height:1.9}
+.rules b{color:var(--ink);font-weight:700}
+.adm{background:var(--tint);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+.adm label{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:3px}
+.adm input{width:100%;background:none;border:none;color:var(--ink);outline:none;
+  font-family:'Noto Kufi Arabic',sans-serif;font-size:19px;font-weight:800}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hide{display:none!important}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--line);
+  border-radius:13px;padding:12px 22px;font-size:13.5px;font-weight:700;z-index:999;display:none;
+  box-shadow:0 10px 34px rgba(0,0,0,.3);color:var(--green)}
+#toast.on{display:block}
+#toast.bad{color:var(--red);border-color:rgba(255,55,94,.3)}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <div class="lb">
+    <h1>خليجي ٢٧</h1>
+    <p class="s">بطولة توقعات العائلة</p>
+    <input id="inName" placeholder="اكتب اسمك" autocomplete="username">
+    <input id="inPin" placeholder="الرقم السري" type="tel" inputmode="numeric" autocomplete="current-password">
+    <button id="btnLogin">دخول</button>
+    <div class="err" id="loginErr"></div>
+    <p class="hint">إذا اسمك مو مسجّل، كلّم مبارك يضيفك</p>
+  </div>
+</section>
+
+<main id="app" class="hide">
+  <div class="hdr">
+    <div>
+      <div class="hdr-t">خليجي ٢٧</div>
+      <div class="hdr-s">جدة · ٢٣ سبتمبر — ٦ أكتوبر</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="hdr-u">
+        <span><span class="hdr-n" id="uName"></span><span class="hdr-p"><span id="uPts">٠</span> نقطة</span></span>
+      </div>
+      <button class="hdr-x" id="btnOut">خروج</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab act" data-tab="matches">المباريات</button>
+    <button class="tab" data-tab="board">الترتيب</button>
+    <button class="tab" data-tab="rules">القوانين</button>
+    <button class="tab hide" data-tab="admin" id="tabAdmin">الإدارة</button>
+  </div>
+
+  <div class="page">
+    <div class="pane act" id="pane-matches"></div>
+
+    <div class="pane" id="pane-board"><div class="panel"><table id="board"></table></div></div>
+
+    <div class="pane" id="pane-rules">
+      <div class="panel rules">
+        <h4>كيف تلعب</h4>
+        <p>قبل كل مباراة تدخل وتتوقع ثلاث أشياء: النتيجة، وعدد الكروت الصفرا، وهل بيصير بلنتي أو لا. وبعدين تضغط زر الحفظ.</p>
+        <p>تقدر تعدّل توقعك أي وقت. <b>التوقع يقفل قبل بداية المباراة بخمس دقايق</b>، وكل بطاقة مكتوب فيها كم باقي على القفل.</p>
+        <h4>نقاط المباراة</h4>
+        <p><b>٣ نقاط</b> — إذا عرفت مين الفايز، والتعادل يحتسب مثل الفوز.</p>
+        <p><b>نقطة</b> — على كل رقم صح في النتيجة. يعني لو توقعت ٢ × ١ وطلعت ٢ × ١ تاخذ نقطتين. وهالنقاط تنحسب حتى لو غلطت بالفايز.</p>
+        <p><b>نقطة</b> — إذا ضبط عدد الكروت الصفرا. الاختيار من صفر لخمسة، وخيار <b>٥ فأكثر</b> يكسب إذا طلعت الكروت خمسة أو أكثر.</p>
+        <p><b>نقطة</b> — إذا اخترت <b>نعم فيه بلنتي</b> وصار بلنتي فعلاً خلال المباراة.</p>
+        <p style="margin-top:8px">أقصى شي بالمباراة الوحدة <b>٧ نقاط</b>.</p>
+        <h4>نقاط البطل</h4>
+        <p><b>١٠ نقاط</b> — إذا ضبطت المنتخب اللي ياخذ الكاس. تختاره من فوق صفحة المباريات، ويقفل قبل أول مباراة يوم ٢٣ سبتمبر.</p>
+        <h4>الترتيب</h4>
+        <p>النقاط تنحدث بعد ما يعتمد مبارك نتيجة كل مباراة. وتوقعات البطل تبقى مخفية عن الكل لين يقفل باب الاختيار.</p>
+      </div>
+    </div>
+
+    <div class="pane" id="pane-admin"></div>
+  </div>
+</main>
+<div id="toast"></div>
+
+<script>
+const SUPABASE_URL  = "https://pkfntzalwzrabkcddzas.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZm50emFsd3pyYWJrY2RkemFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3NTkwMDYsImV4cCI6MjEwNDMzNTAwNn0.rK_YbEfrjnI9RWsu8r8b-E_zglPkIiMUdIQGLbOSmQk";
+
+const LOCK_MIN = 5, YMAX = 5;
+const RULES = { winner:3, goalEach:1, yellows:1, penalty:1, champion:10,
+                scoreAlways:true, penaltyBothWays:false };
+const CODES = {"السعودية":"sa","الكويت":"kw","عمان":"om","العراق":"iq",
+               "الإمارات":"ae","البحرين":"bh","اليمن":"ye","قطر":"qa"};
+const TEAMS = Object.keys(CODES);
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const $  = s => document.querySelector(s);
+const ar = n => String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+const yLabel = v => v>=YMAX ? ar(YMAX)+"+" : ar(v);
+const yFull  = v => v>=YMAX ? ar(YMAX)+" فأكثر" : ar(v);
+
+function flag(t,w,h){
+  const c = CODES[t];
+  if(!c) return "⚽";
+  return "<img class='fl' src='https://flagcdn.com/"+c+".svg' alt='"+t+"'"+
+         (w?" style='width:"+w+";height:"+(h||"auto")+"'":"")+">";
+}
+function toast(msg,bad){
+  const el=$("#toast"); el.textContent=msg; el.className="on"+(bad?" bad":"");
+  clearTimeout(el._t); el._t=setTimeout(()=>el.className="",2800);
+}
+
+let ME=null,MATCHES=[],PREDS=[],USERS=[],CHAMPS=[],SETTINGS={};
+
+$("#btnLogin").onclick = async ()=>{
+  const name=$("#inName").value.trim(), pin=$("#inPin").value.trim();
+  const e=$("#loginErr");
+  if(!name||!pin){ e.textContent="عبّي الاسم والرقم السري"; e.classList.add("on"); return; }
+  const {data}=await db.from("gc_users").select("*").eq("name",name).eq("pin",pin).maybeSingle();
+  if(!data){ e.textContent="الاسم أو الرقم السري غلط"; e.classList.add("on"); return; }
+  ME=data; localStorage.setItem("gc_me",JSON.stringify(data)); start();
+};
+$("#inPin").addEventListener("keydown",e=>{ if(e.key==="Enter") $("#btnLogin").click(); });
+$("#btnOut").onclick=()=>{ localStorage.removeItem("gc_me"); location.reload(); };
+
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("act",x===b));
+  ["matches","board","rules","admin"].forEach(t=>
+    $("#pane-"+t).classList.toggle("act", t===b.dataset.tab));
+  window.scrollTo(0,0);
+});
+
+async function start(){
+  $("#login").classList.add("hide"); $("#app").classList.remove("hide");
+  $("#uName").textContent=ME.name;
+  if(ME.is_admin) $("#tabAdmin").classList.remove("hide");
+  await refresh(); setInterval(refresh,60000); setInterval(tickAll,1000);
+}
+
+async function refresh(){
+  const [m,p,u,c,s]=await Promise.all([
+    db.from("gc_matches").select("*").order("kickoff"),
+    db.from("gc_predictions").select("*"),
+    db.from("gc_users").select("id,name"),
+    db.from("gc_champion_picks").select("*"),
+    db.from("gc_settings").select("*")
+  ]);
+  MATCHES=m.data||[]; PREDS=p.data||[]; USERS=u.data||[]; CHAMPS=c.data||[];
+  SETTINGS=Object.fromEntries((s.data||[]).map(r=>[r.key,r.value]));
+  drawMatches(); drawBoard(); if(ME.is_admin) drawAdmin();
+}
+
+function scoreMatch(pred,m){
+  if(!pred||!m.finished) return 0;
+  let pts=0;
+  const rw=Math.sign(m.home_goals-m.away_goals), gw=Math.sign(pred.home_goals-pred.away_goals);
+  if(rw===gw) pts+=RULES.winner;
+  if(RULES.scoreAlways||rw===gw){
+    if(pred.home_goals===m.home_goals) pts+=RULES.goalEach;
+    if(pred.away_goals===m.away_goals) pts+=RULES.goalEach;
+  }
+  if(m.yellows!=null){
+    const hit = pred.yellows>=YMAX ? m.yellows>=YMAX : pred.yellows===m.yellows;
+    if(hit) pts+=RULES.yellows;
+  }
+  if(m.penalty!=null){
+    if(RULES.penaltyBothWays ? pred.penalty===m.penalty : (pred.penalty&&m.penalty)) pts+=RULES.penalty;
+  }
+  return pts;
+}
+function totalFor(uid){
+  let t=PREDS.filter(p=>p.user_id===uid)
+    .reduce((s,p)=>s+scoreMatch(p,MATCHES.find(m=>m.id===p.match_id)||{}),0);
+  const pick=CHAMPS.find(c=>c.user_id===uid);
+  if(SETTINGS.champion&&pick&&pick.team===SETTINGS.champion) t+=RULES.champion;
+  return t;
+}
+const myPred=id=>PREDS.find(p=>p.user_id===ME.id&&p.match_id===id);
+const lockAt=m=>new Date(new Date(m.kickoff).getTime()-LOCK_MIN*60000);
+const isShut=m=>lockAt(m)<=new Date();
+const champShut=()=>new Date(SETTINGS.champion_deadline||0)<=new Date();
+
+function leftText(target){
+  let d=target-new Date(); if(d<=0) return null;
+  const dy=Math.floor(d/86400000),h=Math.floor(d%86400000/3600000),
+        mi=Math.floor(d%3600000/60000),s=Math.floor(d%60000/1000);
+  if(dy>0) return ar(dy)+" يوم و"+ar(h)+" ساعة";
+  if(h>0)  return ar(h)+" ساعة و"+ar(mi)+" دقيقة";
+  if(mi>0) return ar(mi)+" دقيقة و"+ar(s)+" ثانية";
+  return ar(s)+" ثانية";
+}
+function tickAll(){
+  document.querySelectorAll("[data-cd]").forEach(el=>{
+    const m=MATCHES.find(x=>x.id===+el.dataset.cd); if(!m) return;
+    const left=leftText(lockAt(m));
+    if(!left){ refresh(); return; }
+    el.innerHTML="يقفل التوقع بعد <b>"+left+"</b>";
+  });
+}
+const fmtDay=d=>d.toLocaleDateString("ar-KW",{weekday:"long",day:"numeric",month:"long",timeZone:"Asia/Kuwait"});
+const fmtTime=d=>d.toLocaleTimeString("ar-KW",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Kuwait"});
+
+function drawMatches(){
+  const box=$("#pane-matches"); box.innerHTML="";
+  $("#uPts").textContent=ar(totalFor(ME.id));
+
+  const mine=CHAMPS.find(c=>c.user_id===ME.id);
+  const ch=document.createElement("div"); ch.className="champ";
+  ch.innerHTML=`<h3>🏆 مين ياخذ الكاس؟</h3>
+    <p>${champShut()
+      ? (mine?"اخترت "+mine.team+" · باب الاختيار مقفل":"ما اخترت منتخب قبل ما يقفل الباب")
+      : "اضغط على منتخب واحد. إذا ضبطت تاخذ ١٠ نقاط. الباب يقفل قبل أول مباراة."}</p>
+    <div class="tg">${TEAMS.map(t=>
+      `<button data-team="${t}" aria-pressed="${!!mine&&mine.team===t}" ${champShut()?"disabled":""}>
+        ${flag(t,"30px","21px")}${t}</button>`).join("")}</div>`;
+  ch.querySelectorAll("[data-team]").forEach(b=>b.onclick=async()=>{
+    const {error}=await db.from("gc_champion_picks").upsert({user_id:ME.id,team:b.dataset.team});
+    toast(error?"ما انحفظ الاختيار":"اخترت "+b.dataset.team,!!error); refresh();
+  });
+  box.appendChild(ch);
+
+  MATCHES.forEach(m=>{
+    const p=myPred(m.id), shut=isShut(m), k=new Date(m.kickoff), started=k<=new Date();
+    const stage=m.stage==="group"?"دور المجموعات · مجموعة "+m.grp
+              :m.stage==="semi"?"نصف النهائي":"المباراة النهائية";
+    let H=p?p.home_goals:0, A=p?p.away_goals:0;
+    let Y=p?Math.min(p.yellows,YMAX):0, P=p?p.penalty:false;
+
+    const c=document.createElement("div"); c.className="mc";
+    c.innerHTML=`
+      <div class="mh">
+        <div class="mh-top"><span>${stage}</span><span>${fmtTime(k)}</span></div>
+        <div class="mh-teams">
+          <div class="mh-team"><span class="f">${flag(m.home)}</span><span class="mh-name">${m.home}</span></div>
+          <div class="mh-vs">×</div>
+          <div class="mh-team"><span class="f">${flag(m.away)}</span><span class="mh-name">${m.away}</span></div>
+        </div>
+        <div class="mh-sub">${fmtDay(k)} · الساعة ${fmtTime(k)} بتوقيت الكويت
+          ${shut?"":`<br><span data-cd="${m.id}"></span>`}</div>
+      </div>
+
+      ${m.finished?`<div class="bnr done">انتهت المباراة واعتُمدت النتيجة</div>`
+        :started?`<div class="bnr live"><span class="dot"></span>المباراة جارية الحين</div>`
+        :shut?`<div class="bnr lock">التوقع مقفل — بقي أقل من ٥ دقايق على البداية</div>`:""}
+
+      <div class="q">
+        <div class="q-top"><span class="q-n">١</span><span class="q-title">كم تتوقع تنتهي النتيجة؟</span>
+          <span class="q-badge">٥ نقاط</span></div>
+        <div class="sc">
+          <div class="sc-side"><span class="f">${flag(m.home,"38px","27px")}</span><div class="n">${m.home}</div>
+            <div class="stp">
+              <button data-t="h" data-d="-1" aria-label="أنقص" ${shut?"disabled":""}>−</button>
+              <span class="v" id="h${m.id}">${ar(H)}</span>
+              <button data-t="h" data-d="1" aria-label="زد" ${shut?"disabled":""}>+</button></div></div>
+          <div class="sc-side"><span class="f">${flag(m.away,"38px","27px")}</span><div class="n">${m.away}</div>
+            <div class="stp">
+              <button data-t="a" data-d="-1" aria-label="أنقص" ${shut?"disabled":""}>−</button>
+              <span class="v" id="a${m.id}">${ar(A)}</span>
+              <button data-t="a" data-d="1" aria-label="زد" ${shut?"disabled":""}>+</button></div></div>
+        </div>
+        <p class="note">٣ نقاط للفايز، ونقطة على كل رقم صح.</p>
+      </div>
+
+      <div class="q">
+        <div class="q-top"><span class="q-n">٢</span><span class="q-title">كم كرت أصفر بالمباراة؟</span>
+          <span class="q-badge">نقطة</span></div>
+        <div class="grid">${[0,1,2,3,4,5].map(v=>
+          `<button class="opt${v===5?" sm":""}" data-y="${v}" aria-pressed="${Y===v}" ${shut?"disabled":""}>${v===5?"٥ فأكثر":ar(v)}</button>`).join("")}</div>
+        <p class="note">خيار ٥ فأكثر يكسب إذا طلعت الكروت خمسة أو أكثر.</p>
+      </div>
+
+      <div class="q">
+        <div class="q-top"><span class="q-n">٣</span><span class="q-title">بيصير بلنتي خلال المباراة؟</span>
+          <span class="q-badge">نقطة</span></div>
+        <div class="yn">
+          <button class="ynb yes" data-p="1" aria-pressed="${P===true}" ${shut?"disabled":""}>
+            <span class="ic">✓</span>نعم فيه بلنتي</button>
+          <button class="ynb no" data-p="0" aria-pressed="${P===false}" ${shut?"disabled":""}>
+            <span class="ic">✕</span>لا ما فيه</button>
+        </div>
+        <p class="note">النقطة اتيي مع نعم إذا صار بلنتي فعلاً.</p>
+      </div>
+
+      ${shut?"":`<div class="sw"><button class="sbtn${p?" ok":""}" id="s${m.id}">${p?"توقعك محفوظ ✓ — اضغط بعد التعديل":"احفظ توقعي"}</button></div>`}
+      <div id="sv${m.id}">${p?sumBox(m,p):""}</div>
+      ${shut&&!p?`<div class="sum" style="text-align:center;color:var(--sub);font-size:12.5px">ما سجّلت توقع لهالمباراة</div>`:""}
+      ${m.finished?`<div class="sum"><div class="sum-t">النتيجة الرسمية</div>
+        <div class="row"><span>النتيجة</span><b>${flag(m.home)} ${ar(m.home_goals)} × ${ar(m.away_goals)} ${flag(m.away)}</b></div>
+        <div class="row"><span>الكروت الصفرا</span><b>${ar(m.yellows??0)}</b></div>
+        <div class="row"><span>البلنتي</span><b>${m.penalty?"صار":"ما صار"}</b></div>
+        ${p?`<div class="row"><span>حصيلتك</span><b style="color:var(--pink)">${ar(scoreMatch(p,m))} نقاط</b></div>`:""}</div>`:""}`;
+
+    const btn=c.querySelector("#s"+m.id);
+    const dirty=()=>{ if(btn){ btn.classList.remove("ok"); btn.textContent="احفظ توقعي"; } };
+
+    c.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{
+      if(b.dataset.t==="h") H=Math.max(0,Math.min(15,H+ +b.dataset.d));
+      else A=Math.max(0,Math.min(15,A+ +b.dataset.d));
+      c.querySelector("#h"+m.id).textContent=ar(H);
+      c.querySelector("#a"+m.id).textContent=ar(A);
+      dirty();
+    });
+    c.querySelectorAll("[data-y]").forEach(b=>b.onclick=()=>{
+      Y=+b.dataset.y;
+      c.querySelectorAll("[data-y]").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.y===Y));
+      dirty();
+    });
+    c.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{
+      P=b.dataset.p==="1";
+      c.querySelectorAll("[data-p]").forEach(x=>x.setAttribute("aria-pressed",(x.dataset.p==="1")===P));
+      dirty();
+    });
+
+    if(btn) btn.onclick=async()=>{
+      if(isShut(m)){ toast("التوقع مقفل",true); return refresh(); }
+      const rec={user_id:ME.id,match_id:m.id,home_goals:H,away_goals:A,
+                 yellows:Y,penalty:P,updated_at:new Date().toISOString()};
+      const {error}=await db.from("gc_predictions").upsert(rec,{onConflict:"user_id,match_id"});
+      if(error){ toast("ما انحفظ، جرّب مرة ثانية",true); return; }
+      btn.classList.add("ok"); btn.textContent="توقعك محفوظ ✓ — اضغط بعد التعديل";
+      c.querySelector("#sv"+m.id).innerHTML=sumBox(m,rec);
+      toast("انحفظ توقعك ✓");
+      const f=await db.from("gc_predictions").select("*"); PREDS=f.data||[];
+    };
+    box.appendChild(c);
+  });
+  tickAll();
+}
+
+function sumBox(m,p){
+  return `<div class="sum"><div class="sum-t">توقعك المحفوظ</div>
+    <div class="row"><span>النتيجة</span><b>${flag(m.home)} ${ar(p.home_goals)} × ${ar(p.away_goals)} ${flag(m.away)}</b></div>
+    <div class="row"><span>الكروت الصفرا</span><b>${yFull(p.yellows)}</b></div>
+    <div class="row"><span>البلنتي</span><b>${p.penalty?"توقعت فيه بلنتي":"توقعت ما فيه"}</b></div></div>`;
+}
+
+function drawBoard(){
+  const rows=USERS.map(u=>({...u,pts:totalFor(u.id)})).sort((a,b)=>b.pts-a.pts);
+  $("#board").innerHTML=
+    `<tr><th class="rk">#</th><th>الاسم</th><th>توقع البطل</th><th style="text-align:left">النقاط</th></tr>`+
+    rows.map((r,i)=>{
+      const pick=CHAMPS.find(c=>c.user_id===r.id);
+      const show=pick?(champShut()||r.id===ME.id?flag(pick.team)+" "+pick.team:"مخفي"):"—";
+      return `<tr class="${r.id===ME.id?"me":""}"><td class="rk ${i<3?"top":""}">${ar(i+1)}</td>
+        <td>${r.name}</td><td>${show}</td><td class="p">${ar(r.pts)}</td></tr>`;
+    }).join("");
+}
+
+function drawAdmin(){
+  const box=$("#pane-admin");
+  box.innerHTML=`<div class="champ"><h3>🏆 بطل البطولة</h3>
+    <p>اضغط على البطل بعد النهائي عشان تتوزع الـ١٠ نقاط على اللي ضبطوا.</p>
+    <div class="tg">${TEAMS.map(t=>
+      `<button data-ch="${t}" aria-pressed="${SETTINGS.champion===t}">${flag(t,"30px","21px")}${t}</button>`).join("")}</div></div>`;
+  box.querySelectorAll("[data-ch]").forEach(b=>b.onclick=async()=>{
+    const {error}=await db.from("gc_settings").upsert({key:"champion",value:b.dataset.ch});
+    toast(error?"ما انحفظ":"البطل: "+b.dataset.ch,!!error); refresh();
+  });
+
+  MATCHES.forEach(m=>{
+    const c=document.createElement("div"); c.className="mc";
+    c.innerHTML=`
+      <div class="mh" style="padding:15px 18px">
+        <div class="mh-top" style="margin-bottom:0">
+          <span>${flag(m.home)} ${m.home} × ${m.away} ${flag(m.away)}</span>
+          <span style="color:${m.finished?"#7FE0A8":"var(--gold)"}">${m.finished?"معتمدة":"بانتظار"}</span></div>
+      </div>
+      <div class="q"><div class="q-top"><span class="q-n">١</span><span class="q-title">النتيجة النهائية</span></div>
+        <div class="g2">
+          <div class="adm"><label>أهداف ${m.home}</label><input type="number" min="0" id="ah${m.id}" value="${m.home_goals??0}"></div>
+          <div class="adm"><label>أهداف ${m.away}</label><input type="number" min="0" id="aa${m.id}" value="${m.away_goals??0}"></div>
+        </div></div>
+      <div class="q"><div class="q-top"><span class="q-n">٢</span><span class="q-title">عدد الكروت الصفرا</span></div>
+        <div class="adm"><input type="number" min="0" id="ay${m.id}" value="${m.yellows??0}"></div></div>
+      <div class="q"><div class="q-top"><span class="q-n">٣</span><span class="q-title">صار بلنتي؟</span></div>
+        <div class="yn">
+          <button class="ynb yes" data-ap="1" aria-pressed="${m.penalty===true}"><span class="ic">✓</span>نعم</button>
+          <button class="ynb no" data-ap="0" aria-pressed="${m.penalty===false||m.penalty==null}"><span class="ic">✕</span>لا</button>
+        </div></div>
+      <div class="sw"><button class="sbtn" id="as${m.id}">اعتمد النتيجة ووزّع النقاط</button></div>`;
+
+    let AP=m.penalty===true;
+    c.querySelectorAll("[data-ap]").forEach(b=>b.onclick=()=>{
+      AP=b.dataset.ap==="1";
+      c.querySelectorAll("[data-ap]").forEach(x=>x.setAttribute("aria-pressed",(x.dataset.ap==="1")===AP));
+    });
+    c.querySelector("#as"+m.id).onclick=async e=>{
+      const {error}=await db.from("gc_matches").update({
+        home_goals:+c.querySelector("#ah"+m.id).value,
+        away_goals:+c.querySelector("#aa"+m.id).value,
+        yellows:+c.querySelector("#ay"+m.id).value,
+        penalty:AP,finished:true,updated_at:new Date().toISOString()
+      }).eq("id",m.id);
+      if(error){ toast("ما انحفظت النتيجة",true); return; }
+      e.target.classList.add("ok"); e.target.textContent="معتمدة ✓";
+      toast("انحفظت النتيجة وتوزعت النقاط"); refresh();
+    };
+    box.appendChild(c);
+  });
+}
+
+const saved=localStorage.getItem("gc_me");
+if(saved){ ME=JSON.parse(saved); start(); }
+</script>
+</body>
+</html>
