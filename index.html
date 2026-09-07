@@ -77,6 +77,25 @@ img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inli
 .mh-sub{text-align:center;margin-top:14px;font-size:12px;color:rgba(255,255,255,.72);position:relative;z-index:1;line-height:1.9}
 .mh-sub b{color:var(--gold)}
 
+.mc.voted{border-color:#3ECF7F;box-shadow:0 16px 48px rgba(26,158,88,.28)}
+.mc.voted .mh{background:linear-gradient(135deg,#0B5D36 0%,#1A9E58 55%,#083F26 100%)}
+.chip{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:20px;
+  padding:3px 11px;font-size:11px;font-weight:800;color:#fff;white-space:nowrap}
+.dl{display:inline-block;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.18);
+  border-radius:10px;padding:6px 13px;margin-top:9px;font-size:11.5px;color:#fff;font-weight:700}
+.dl b{color:var(--gold)}
+.prog{background:#fff;border-radius:20px;padding:15px 17px;margin-bottom:16px;border:1px solid var(--line);
+  box-shadow:0 16px 48px rgba(79,0,140,.2)}
+.prog-t{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.prog-t span{font-size:13.5px;font-weight:700;color:var(--ink)}
+.prog-t b{font-family:'Noto Kufi Arabic',sans-serif;font-size:18px;color:var(--pur);font-weight:800}
+.bar{height:9px;background:var(--tint);border-radius:20px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--deep),var(--pink));border-radius:20px;
+  transition:width .4s}
+.prog p{font-size:11.5px;color:var(--sub);margin-top:8px;line-height:1.7}
+.sep{display:flex;align-items:center;gap:11px;margin:26px 2px 14px}
+.sep span{font-family:'Noto Kufi Arabic',sans-serif;font-size:13px;font-weight:800;color:#fff;white-space:nowrap}
+.sep i{flex:1;height:1px;background:rgba(255,255,255,.25)}
 .bnr{border-radius:12px;padding:11px;margin:12px 12px 0;text-align:center;font-size:12.5px;font-weight:700}
 .bnr.lock{background:rgba(200,134,10,.09);border:1px solid rgba(200,134,10,.28);color:#B8860B}
 .bnr.live{background:rgba(255,55,94,.08);border:1px solid rgba(255,55,94,.25);color:var(--pink);
@@ -406,7 +425,12 @@ function tickAll(){
     const m=MATCHES.find(x=>x.id===+el.dataset.cd); if(!m) return;
     const left=leftText(lockAt(m));
     if(!left){ refresh(); return; }
-    el.innerHTML="يقفل التوقع بعد <b>"+left+"</b>";
+    el.innerHTML="يقفل باب التوقع بعد <b>"+left+"</b>";
+  });
+  document.querySelectorAll("[data-cd2]").forEach(el=>{
+    const m=MATCHES.find(x=>x.id===+el.dataset.cd2); if(!m) return;
+    const left=leftText(new Date(m.kickoff));
+    el.innerHTML = left ? "المباراة تبدأ بعد <b>"+left+"</b>" : "المباراة بدأت";
   });
 }
 function toInput(iso){
@@ -417,7 +441,11 @@ function toInput(iso){
 }
 const fromInput=v=>v+":00+03:00";
 const fmtDay=d=>d.toLocaleDateString("ar-KW",{weekday:"long",day:"numeric",month:"long",timeZone:"Asia/Kuwait"});
-const fmtTime=d=>d.toLocaleTimeString("ar-KW",{hour:"2-digit",minute:"2-digit",timeZone:"Asia/Kuwait"});
+function fmtTime(d){
+  const p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kuwait",hour:"numeric",minute:"2-digit",hour12:true}).formatToParts(d);
+  const g=t=>p.find(x=>x.type===t).value;
+  return ar(g("hour"))+":"+ar(g("minute"))+" "+(g("dayPeriod")==="AM"?"ص":"م");
+}
 
 function drawMatches(){
   const box=$("#pane-matches"); box.innerHTML="";
@@ -438,7 +466,26 @@ function drawMatches(){
   });
   box.appendChild(ch);
 
-  MATCHES.forEach(m=>{
+  const openM=MATCHES.filter(m=>!m.finished).sort((a,b)=>new Date(a.kickoff)-new Date(b.kickoff));
+  const doneM=MATCHES.filter(m=>m.finished).sort((a,b)=>new Date(b.kickoff)-new Date(a.kickoff));
+  const votedCount=openM.filter(m=>myPred(m.id)).length;
+  const pend=openM.filter(m=>myPred(m.id)==null && !isShut(m)).length;
+
+  const pr=document.createElement("div"); pr.className="prog";
+  pr.innerHTML=`<div class="prog-t"><span>توقعاتك للمباريات الجاية</span>
+      <b>${ar(votedCount)} من ${ar(openM.length)}</b></div>
+    <div class="bar"><i style="width:${openM.length?Math.round(votedCount/openM.length*100):0}%"></i></div>
+    <p>${pend?"باقي عليك "+ar(pend)+" مباراة تقدر تتوقعها الحين.":"صوّتت على كل المباريات المفتوحة."}</p>`;
+  ch.after(pr);
+
+  let sepDone=false;
+  [...openM,...doneM].forEach(m=>{
+    if(m.finished && !sepDone){
+      sepDone=true;
+      const d=document.createElement("div"); d.className="sep";
+      d.innerHTML=`<i></i><span>المباريات المنتهية</span><i></i>`;
+      box.appendChild(d);
+    }
     const p=myPred(m.id), shut=isShut(m), k=new Date(m.kickoff), started=k<=new Date();
     const stage=m.stage==="group"?"دور المجموعات · مجموعة "+m.grp
               :m.stage==="semi"?"نصف النهائي":"المباراة النهائية";
@@ -446,17 +493,21 @@ function drawMatches(){
     let Y=p?Math.min(p.yellows,YMAX):0, P=p?p.penalty:false;
     let W=p?(p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw")):null;
 
-    const c=document.createElement("div"); c.className="mc";
+    const c=document.createElement("div"); c.className="mc"+(p&&!m.finished?" voted":"");
     c.innerHTML=`
       <div class="mh">
-        <div class="mh-top"><span>${stage}</span><span>${fmtTime(k)}</span></div>
+        <div class="mh-top"><span>${stage}</span>
+          ${p&&!m.finished?`<span class="chip">✓ صوّتت</span>`:`<span>${fmtTime(k)}</span>`}</div>
         <div class="mh-teams">
           <div class="mh-team"><span class="f">${flag(m.home)}</span><span class="mh-name">${m.home}</span></div>
           <div class="mh-vs">×</div>
           <div class="mh-team"><span class="f">${flag(m.away)}</span><span class="mh-name">${m.away}</span></div>
         </div>
-        <div class="mh-sub">${fmtDay(k)} · الساعة ${fmtTime(k)} بتوقيت الكويت
-          ${shut?"":`<br><span data-cd="${m.id}"></span>`}</div>
+        <div class="mh-sub">${fmtDay(k)}<br>
+          تبدأ الساعة <b>${fmtTime(k)}</b> بتوقيت الكويت
+          ${m.finished?"":`<br><span data-cd2="${m.id}"></span>`}
+          ${shut?"":`<br><span class="dl">آخر وقت للتصويت <b>${fmtTime(lockAt(m))}</b></span>
+          <br><span data-cd="${m.id}" style="display:inline-block;margin-top:7px"></span>`}</div>
       </div>
 
       ${m.finished?`<div class="bnr done">انتهت المباراة واعتُمدت النتيجة</div>`
