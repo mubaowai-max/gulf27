@@ -21,24 +21,50 @@ body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:var(--ink);mi
 h1,h2,h3,.kufi{font-family:'Noto Kufi Arabic',sans-serif}
 button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit}
 :focus-visible{outline:3px solid var(--lav);outline-offset:2px;border-radius:10px}
-img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inline-block;vertical-align:-.16em;
-  box-shadow:0 1px 3px rgba(0,0,0,.25)}
+img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:inline-block;
+  vertical-align:-.16em;filter:drop-shadow(0 1px 2px rgba(0,0,0,.28))}
 
 /* ── دخول ── */
-#login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;z-index:100;overflow-y:auto}
-.lb{background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 26px;width:100%;max-width:400px;
-  box-shadow:0 20px 60px rgba(79,0,140,.3);text-align:center}
-.lb h1{font-size:28px;color:var(--pur);margin-bottom:2px}
-.lb p.s{font-size:13px;color:var(--sub);margin-bottom:22px}
-.lb input{width:100%;background:var(--tint);border:1.5px solid var(--line);border-radius:12px;padding:13px 15px;
-  color:var(--ink);font-family:inherit;font-size:15px;outline:none;margin-bottom:11px}
-.lb input:focus{border-color:var(--pur2)}
-.lb button{width:100%;padding:14px;background:linear-gradient(135deg,var(--pur),var(--pur2));border-radius:12px;
-  color:#fff;font-size:15px;font-weight:700}
-.lb .err{background:#fdecea;border:1px solid rgba(255,55,94,.25);border-radius:10px;padding:9px;font-size:12.5px;
-  color:var(--red);margin-top:11px;display:none}
+@keyframes lgUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes lgFlag{from{opacity:0;transform:translateY(6px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes lgGlow{0%,100%{opacity:.55}50%{opacity:.9}}
+#login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;
+  z-index:100;overflow-y:auto}
+.lb{width:100%;max-width:380px;background:#fff;border-radius:24px;overflow:hidden;
+  box-shadow:0 22px 60px rgba(20,2,40,.45)}
+.lb-top{background:#2E0A4A;padding:24px 22px 20px;text-align:center;position:relative;overflow:hidden}
+.lb-glow{position:absolute;top:-70px;right:50%;transform:translateX(50%);width:220px;height:150px;
+  background:radial-gradient(closest-side,rgba(255,214,102,.35),transparent);
+  animation:lgGlow 3.5s ease-in-out infinite}
+.lb-cup{position:relative;display:block;margin:0 auto;animation:lgUp .5s cubic-bezier(.22,1,.36,1) both}
+.lb h1{position:relative;font-size:23px;font-weight:700;color:#fff;margin:11px 0 3px;
+  animation:lgUp .5s cubic-bezier(.22,1,.36,1) .1s both}
+.lb .s{position:relative;font-size:11.5px;color:var(--lav);
+  animation:lgUp .5s cubic-bezier(.22,1,.36,1) .18s both}
+.lb-cd{position:relative;display:flex;justify-content:center;gap:6px;margin-top:16px;
+  animation:lgUp .5s cubic-bezier(.22,1,.36,1) .26s both;font-variant-numeric:tabular-nums}
+.lb-cd div{border:1px solid rgba(255,255,255,.17);border-radius:9px;padding:6px 9px;min-width:46px}
+.lb-cd b{display:block;font-family:'Noto Kufi Arabic',sans-serif;font-size:17px;color:#fff;font-weight:700}
+.lb-cd span{display:block;font-size:8.5px;color:rgba(255,255,255,.5)}
+.lb-cdl{position:relative;font-size:10px;color:rgba(255,255,255,.5);margin-top:10px;
+  animation:lgUp .5s cubic-bezier(.22,1,.36,1) .3s both}
+.lb-flags{display:flex;justify-content:center;gap:6px;padding:13px 0 0;background:#fff}
+.lb-flags img{width:26px;height:17px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.25));
+  animation:lgFlag .4s ease-out both}
+.lb-body{padding:15px 22px 22px}
+.lb input{width:100%;background:var(--tint);border:1.5px solid var(--line);border-radius:13px;
+  padding:13px 15px;color:var(--ink);font-family:inherit;font-size:15px;outline:none;margin-bottom:10px;
+  direction:rtl;text-align:right;transition:border-color .18s,background .18s}
+.lb input::placeholder{color:#9b8fb5}
+.lb input:focus{border-color:var(--pur2);background:#fff}
+.lb button{width:100%;padding:14px;background:linear-gradient(135deg,var(--pur),var(--pur2));
+  border-radius:13px;color:#fff;font-size:15px;font-weight:700;transition:transform .14s ease}
+.lb button:active{transform:scale(.985)}
+.lb .err{background:#fdecea;border:1px solid rgba(255,55,94,.25);border-radius:10px;padding:9px;
+  font-size:12.5px;color:var(--red);margin-top:11px;display:none}
 .lb .err.on{display:block}
-.lb .hint{font-size:12px;color:var(--sub);margin-top:14px}
+.lb .hint{font-size:11.5px;color:#6B5B83;margin-top:14px;text-align:center;line-height:1.8}
+@media (prefers-reduced-motion:reduce){.lb *{animation:none!important}}
 
 /* ── ترويسة ── */
 .hdr{background:var(--pur);border-bottom:3px solid var(--pink);padding:14px 16px 10px;
@@ -51,6 +77,8 @@ img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inli
   border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 14px}
 .hdr-n{font-size:12.5px;font-weight:700;color:#fff}
 .hdr-p{font-size:11px;color:var(--gold);font-weight:700}
+.hdr-rk{font-size:11px;color:rgba(255,255,255,.75);font-weight:700;
+  border-right:1px solid rgba(255,255,255,.25);padding-right:8px;margin-right:2px}
 .hdr-x{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:9px;
   padding:6px 13px;color:#fff;font-size:11.5px;font-weight:600}
 
@@ -72,7 +100,8 @@ img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inli
 .mh-teams{display:flex;align-items:center;justify-content:center;gap:14px;position:relative;z-index:1}
 .mh-team{display:flex;flex-direction:column;align-items:center;flex:1}
 .mh-team .f{font-size:0;margin-bottom:9px}
-.mh-team .f img{width:56px;height:39px;border-radius:5px;box-shadow:0 6px 14px rgba(0,0,0,.3)}
+.mh-team .f img{width:58px;height:38px;object-fit:contain;border-radius:3px;box-shadow:none;
+  filter:drop-shadow(0 5px 12px rgba(0,0,0,.45))}
 .mh-name{font-size:16px;font-weight:700;color:#fff}
 .mh-vs{font-family:'Noto Kufi Arabic',sans-serif;font-size:17px;font-weight:800;color:var(--gold);
   background:rgba(255,255,255,.12);border-radius:13px;padding:8px 13px;border:1px solid rgba(255,217,61,.3)}
@@ -132,7 +161,7 @@ img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inli
 
 .sc{display:flex;gap:12px}
 .sc-side{flex:1;background:var(--tint2);border:2.5px solid #ede5fa;border-radius:16px;padding:14px 8px;text-align:center}
-.sc-side .f img{width:38px;height:27px;border-radius:4px}
+.sc-side .f img{width:42px;height:27px;object-fit:contain;border-radius:3px}
 .sc-side .n{font-size:13.5px;font-weight:700;color:var(--ink);margin:7px 0 10px}
 .stp{display:flex;align-items:center;justify-content:center;gap:9px}
 .stp button{width:34px;height:34px;border-radius:11px;background:#fff;border:2px solid #e0d4f7;
@@ -173,6 +202,23 @@ img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inli
 .ynb:disabled{opacity:.4}
 .note{font-size:11.5px;color:var(--sub);margin-top:10px;text-align:center;line-height:1.8}
 
+.mc.shrunk .qwrap{display:none}
+.mc.shrunk .edit{display:block}
+.edit{display:none;width:calc(100% - 24px);margin:0 12px 16px;padding:12px;border-radius:12px;
+  border:1.5px solid var(--line);background:#fff;color:var(--pur);font-weight:700;font-size:13.5px}
+.edit:active{background:var(--tint)}
+.lockq{margin:0 12px 14px;border:1.5px dashed #E0D4F5;border-radius:14px;padding:16px 14px;
+  text-align:center;background:#FCFAFF}
+.lockq b{display:block;font-size:13px;font-weight:800;color:var(--pur);margin-bottom:4px}
+.lockq span{font-size:11.5px;color:#7A6890;line-height:1.7}
+.extra{display:none}
+.extra.open{display:block;animation:slideIn .35s cubic-bezier(.22,1,.36,1)}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.xbar{display:flex;align-items:center;gap:9px;padding:11px 15px;margin:0 12px 4px;border-radius:12px;
+  background:#FBF6E9;border:1px solid #F1E6CE}
+.xbar b{font-size:12.5px;font-weight:800;color:#8A6D00}
+.xbar span{font-size:11px;color:#A08540;margin-right:auto}
+.skipnote{font-size:11px;color:#7A6890;text-align:center;padding:2px 12px 10px}
 .sw{padding:4px 12px 18px}
 .sbtn{width:100%;padding:16px;background:linear-gradient(135deg,var(--deep),var(--pink));border-radius:16px;
   color:#fff;font-size:15.5px;font-weight:700;box-shadow:0 8px 24px rgba(90,0,158,.28)}
@@ -185,6 +231,43 @@ img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inli
 .row b{font-weight:700;color:#1E0050}
 
 /* ── البطل ── */
+.rg-lead{display:flex;align-items:center;gap:11px;background:#FAF6FF;border:1px solid var(--line);
+  border-radius:15px;padding:11px 13px;margin-bottom:16px}
+.rg-lead img{width:46px;height:30px;object-fit:contain;border-radius:3px;box-shadow:none;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.28))}
+.rg-lead .l1{font-size:10.5px;color:var(--sub);display:block}
+.rg-lead .l2{font-size:14px;font-weight:700;color:var(--ink);display:block}
+.rg-lead .big{margin-right:auto;font-size:22px;font-weight:800;color:var(--pur);
+  font-family:'Noto Kufi Arabic',sans-serif;font-variant-numeric:tabular-nums}
+.rg-lead .big small{font-size:12px;color:var(--sub)}
+.rg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 9px}
+.rg-t{display:block;width:100%;background:none;border:none;padding:0;text-align:center;
+  transition:transform .14s ease}
+.rg-t:active{transform:scale(.96)}
+.rg-t:disabled{opacity:.55}
+.rg-card{display:block;position:relative;padding:5px;border-radius:11px;border:2px solid transparent;
+  transition:border-color .16s ease,background .16s ease}
+.rg-t:hover .rg-card{background:#FAF7FE}
+.rg-t[aria-pressed="true"] .rg-card{border-color:var(--pur);background:#F5EFFF}
+.rg-hold{position:absolute;top:-8px;right:50%;transform:translateX(50%);background:#FFF6DA;z-index:2;
+  border:1px solid #F2DFA0;color:#8A6D00;font-size:8.5px;font-weight:700;border-radius:20px;
+  padding:0 6px;white-space:nowrap}
+
+.rg-card img{display:block;margin:0 auto;width:100%;max-width:74px;height:48px;object-fit:contain;
+  border-radius:3px;vertical-align:baseline;box-shadow:none;filter:drop-shadow(0 3px 7px rgba(0,0,0,.3))}
+.rg-bar{display:block;width:100%;height:5px;background:#EFE8FA;border-radius:20px;
+  overflow:hidden;margin:9px 0 0}
+.rg-bar i{display:block;height:100%;background:#C9A24B;border-radius:20px;
+  transition:width .8s cubic-bezier(.22,1,.36,1)}
+.rg-t[aria-pressed="true"] .rg-bar i{background:var(--pur)}
+.rg-nm{font-size:12.5px;font-weight:700;color:var(--ink);margin-top:8px;display:block;line-height:1.4}
+.rg-t[aria-pressed="true"] .rg-nm{color:var(--pur)}
+.rg-pc{font-size:12px;color:var(--pur);font-weight:700;font-variant-numeric:tabular-nums;display:block}
+.rg-t[aria-pressed="true"] .rg-pc{color:#B08A2E}
+.rg-ttl{font-size:10px;color:#8A6D00;display:block}
+.rg-foot{font-size:11px;color:#3E2A52;text-align:center;margin-top:15px;line-height:1.8}
+.rg-who{font-size:10.5px;color:#7A5E96;background:#F7F2FD;border-radius:9px;padding:8px 10px;
+  margin-top:12px;line-height:1.9}
 .champ{background:#fff;border-radius:24px;padding:18px 16px;margin-bottom:16px;border:2px solid var(--gold);
   box-shadow:0 16px 48px rgba(79,0,140,.22)}
 .champ h3{font-size:17px;color:var(--pur);margin-bottom:4px}
@@ -192,9 +275,106 @@ img.fl{width:1.5em;height:1.06em;object-fit:cover;border-radius:3px;display:inli
 .tg{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
 .tg button{background:var(--tint2);border:2.5px solid #ede5fa;border-radius:14px;padding:11px 2px;
   font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.6}
-.tg button img{width:30px;height:21px;border-radius:3px;display:block;margin:0 auto 5px}
+.tg button img{width:32px;height:21px;object-fit:contain;border-radius:2px;display:block;margin:0 auto 5px}
 .tg button[aria-pressed="true"]{border-color:var(--deep);background:linear-gradient(135deg,#f5efff,#ebe0fc)}
 .tg button:disabled{opacity:.4}
+
+/* ── لوحة المشاركين ── */
+.ap-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+.ap-h span:first-child{font-size:16px;font-weight:800;color:var(--pur);font-family:'Noto Kufi Arabic',sans-serif}
+.ap-h span:last-child{font-size:10.5px;color:#6B5B83}
+.ap-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}
+.ap-st{background:var(--tint);border:1px solid var(--line);border-radius:14px;padding:12px 8px;text-align:center}
+.ap-st b{display:block;font-family:'Noto Kufi Arabic',sans-serif;font-size:22px;font-weight:800;
+  color:var(--pur);font-variant-numeric:tabular-nums;line-height:1.2}
+.ap-st span{display:block;font-size:10.5px;color:#5F4C77;margin-top:3px}
+.ap-st.live b{color:var(--green)}
+.ap-r{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid #F4EFFA}
+.ap-r:last-child{border-bottom:none}
+.ap-av{width:34px;height:34px;border-radius:50%;background:#F0E9FB;color:var(--pur);display:flex;
+  align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;position:relative}
+.ap-av i{position:absolute;bottom:0;left:0;width:10px;height:10px;border-radius:50%;
+  border:2px solid #fff;background:#C6BFD3}
+.ap-av.live i{background:#2ECC71}
+.ap-nm{flex:1;min-width:0}
+.ap-nm b{display:block;font-size:13.5px;font-weight:700;color:var(--ink)}
+.ap-nm span{display:block;font-size:10.5px;color:#6B5B83}
+.ap-bar{height:5px;background:#F1EBFA;border-radius:20px;overflow:hidden;margin-top:5px;width:96px}
+.ap-bar i{display:block;height:100%;background:#7B1FA2;border-radius:20px}
+.ap-pill{font-size:10px;font-weight:700;border-radius:20px;padding:3px 9px;white-space:nowrap}
+.ap-pill.live{background:#E6F9F0;color:#137A43;border:1px solid #B2F0CB}
+.ap-pill.off{background:#F4F3F7;color:#6B6579;border:1px solid #E6E4EE}
+
+/* ── لوحة الترتيب ── */
+.lb2{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px 16px;
+  box-shadow:0 16px 44px rgba(45,10,74,.18)}
+.lb2-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.lb2-h b{font-size:17px;font-weight:800;color:#2E0A4A;font-family:'Noto Kufi Arabic',sans-serif}
+.lb2-h span{font-size:11px;color:#6B5B83;font-variant-numeric:tabular-nums}
+.lb2-w{border-bottom:1px solid #F5F1FB}
+.lb2-w:last-of-type{border-bottom:none}
+.lb2-r{width:100%;display:flex;align-items:center;gap:11px;padding:11px 8px;border:none;background:none;
+  text-align:right;border-radius:12px;transition:background .16s ease}
+.lb2-r:hover{background:#FBF8FF}
+.lb2-rk{width:20px;text-align:center;font-family:'Noto Kufi Arabic',sans-serif;font-size:13px;
+  font-weight:800;color:#B0A6C2;font-variant-numeric:tabular-nums}
+.lb2-w.p1 .lb2-rk{color:#C9A24B}.lb2-w.p2 .lb2-rk{color:#9C93AE}.lb2-w.p3 .lb2-rk{color:#B08968}
+.lb2-av{width:34px;height:34px;border-radius:50%;background:#F3EEFB;color:var(--pur);display:flex;
+  align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.lb2-w.p1 .lb2-av{background:#FFF6DA;color:#8A6D00;box-shadow:0 0 0 2px #F2DFA0}
+.lb2-i{flex:1;min-width:0}
+.lb2-i b{display:block;font-size:14px;font-weight:700;color:var(--ink);line-height:1.4}
+.lb2-i span{display:block;font-size:10.5px;color:#7A6890}
+.lb2-i span img{width:15px;height:11px;object-fit:contain;vertical-align:-1px;border-radius:1px;
+  margin:0 2px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.22))}
+.lb2-bar{height:4px;background:#F3EEFB;border-radius:20px;overflow:hidden;margin-top:6px;max-width:150px}
+.lb2-bar i{display:block;height:100%;background:#C5AEE0;border-radius:20px;
+  transition:width .9s cubic-bezier(.22,1,.36,1)}
+.lb2-w.p1 .lb2-bar i{background:#C9A24B}
+.lb2-p{font-family:'Noto Kufi Arabic',sans-serif;font-size:19px;font-weight:800;color:var(--pur);
+  font-variant-numeric:tabular-nums;min-width:34px;text-align:left}
+.lb2-w.p1 .lb2-p{color:#C9A24B}
+.lb2-cv{font-size:11px;color:#B0A6C2;transition:transform .2s ease}
+.lb2-w.open .lb2-cv{transform:rotate(180deg)}
+.lb2-w.me .lb2-r{background:#FBF8FF}
+.lb2-d{display:none;background:#FBF8FF;border:1px solid var(--line);border-radius:12px;
+  margin:0 4px 10px;overflow:hidden}
+.lb2-w.open .lb2-d{display:block}
+.dt-h,.dt-r{display:grid;grid-template-columns:1.45fr .68fr .92fr .45fr .4fr 40px;gap:4px;
+  align-items:center;padding:8px 11px}
+.dt-pair{display:flex;gap:3px;width:100%}
+.dt-pair .dt-chip{flex:1;font-size:9.5px;padding:4px 1px;display:flex;align-items:center;
+  justify-content:center;gap:3px}
+.dt-pair img{width:13px;height:9px;object-fit:contain;border-radius:1px}
+.dt-h{background:#F5F0FC;border-bottom:1px solid var(--line)}
+.dt-h span{font-size:8.5px;font-weight:800;color:#7A6890;text-align:center}
+.dt-h span:first-child{text-align:right}
+.dt-r{border-bottom:1px solid #F6F2FC}
+.dt-r:last-child{border-bottom:none}
+.dt-m b{display:block;font-size:11px;font-weight:700;color:#2E0A4A;white-space:nowrap}
+.dt-m span{display:flex;align-items:center;gap:5px;margin-top:4px;font-size:10px;color:var(--sub);
+  font-variant-numeric:tabular-nums}
+.dt-m span i{font-style:normal;font-weight:800;color:#2E0A4A;font-size:12px}
+.dt-m img{width:15px;height:11px;object-fit:contain;vertical-align:-1px;border-radius:1px}
+.dt-c{display:flex;flex-direction:column;align-items:center;gap:1px}
+.dt-chip{width:100%;text-align:center;font-weight:700;padding:4px 2px;border-radius:6px;font-size:10px}
+.dt-chip.ok{background:#E4F7EE;color:#137A43}
+.dt-chip.no{background:#FDECEE;color:#B4434F}
+.dt-chip.nu{background:#F1EEF7;color:#6B6579}
+.dt-c small{font-size:8px;font-weight:800}
+.dt-c small.g{color:#B08A2E}
+.dt-c small.z{color:#C9C2D4}
+.dt-pts{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--pur),#7B1FA2);border-radius:9px;padding:6px 3px}
+.dt-pts b{font-family:'Noto Kufi Arabic',sans-serif;font-size:14px;font-weight:800;color:var(--gold);
+  line-height:1;font-variant-numeric:tabular-nums}
+.dt-pts span{font-size:7px;color:rgba(255,255,255,.5);margin-top:1px}
+.dt-pend{grid-column:2/-2;font-size:10px;color:#B08A2E;text-align:center}
+.dt-wait{background:#F3EEFB;border-radius:9px;padding:6px 3px;text-align:center;color:var(--sub);font-size:12px}
+.dt-tot{padding:9px 13px;border-top:1px solid var(--line);background:#F7F2FD;
+  font-size:11.5px;font-weight:800;color:var(--pur);font-variant-numeric:tabular-nums}
+.lb2-none{padding:14px;text-align:center;font-size:11.5px;color:#7A6890}
+.lb2-foot{font-size:10.5px;color:#6B5B83;text-align:center;margin-top:12px}
 
 /* ── ترتيب وقوانين ── */
 .panel{background:#fff;border-radius:22px;padding:16px;border:1px solid var(--line);
@@ -252,13 +432,42 @@ tr.me td{background:var(--tint)}
 
 <section id="login">
   <div class="lb">
-    <h1>قروب عائلة العويس</h1>
-    <p class="s">بطولة توقعات خليجي 27</p>
-    <input id="inName" placeholder="اكتب اسمك" autocomplete="username">
-    <input id="inPin" placeholder="الرقم السري" type="tel" inputmode="numeric" autocomplete="current-password">
-    <button id="btnLogin">دخول</button>
-    <div class="err" id="loginErr"></div>
-    <p class="hint">إذا اسمك مو مسجّل، كلّم مبارك يضيفك</p>
+    <div class="lb-top">
+      <span class="lb-glow"></span>
+      <svg class="lb-cup" width="46" height="46" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" stroke="#FFD666" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M7 5.5H5a2.5 2.5 0 0 0 2.6 2.9M17 5.5h2a2.5 2.5 0 0 1-2.6 2.9" stroke="#FFD666" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M12 14v3M9 20h6M10 17h4l.6 3H9.4l.6-3Z" stroke="#FFD666" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1>قروب عائلة العويس</h1>
+      <p class="s">بطولة توقعات خليجي 27 · جدة</p>
+      <div class="lb-cd">
+        <div><b id="cdD">00</b><span>يوم</span></div>
+        <div><b id="cdH">00</b><span>ساعة</span></div>
+        <div><b id="cdM">00</b><span>دقيقة</span></div>
+        <div><b id="cdS">00</b><span>ثانية</span></div>
+      </div>
+      <p class="lb-cdl">على انطلاق البطولة</p>
+    </div>
+
+    <div class="lb-flags" id="lbFlags">
+      <img src="https://flagcdn.com/kw.svg" alt="الكويت">
+      <img src="https://flagcdn.com/sa.svg" alt="السعودية">
+      <img src="https://flagcdn.com/iq.svg" alt="العراق">
+      <img src="https://flagcdn.com/om.svg" alt="عمان">
+      <img src="https://flagcdn.com/qa.svg" alt="قطر">
+      <img src="https://flagcdn.com/ae.svg" alt="الإمارات">
+      <img src="https://flagcdn.com/bh.svg" alt="البحرين">
+      <img src="https://flagcdn.com/ye.svg" alt="اليمن">
+    </div>
+
+    <div class="lb-body">
+      <input id="inName" placeholder="اكتب اسمك" autocomplete="username">
+      <input id="inPin" placeholder="الرقم السري" type="tel" inputmode="numeric" autocomplete="current-password">
+      <button id="btnLogin">دخول</button>
+      <div class="err" id="loginErr"></div>
+      <p class="hint">إذا اسمك مو مسجّل، كلّم مبارك العويس يضيفك</p>
+    </div>
   </div>
 </section>
 
@@ -272,6 +481,7 @@ tr.me td{background:var(--tint)}
       <div class="hdr-u">
         <span class="hdr-n" id="uName"></span>
         <span class="hdr-p"><span id="uPts">0</span> نقطة</span>
+        <span class="hdr-rk" id="uRank"></span>
       </div>
       <button class="hdr-x" id="btnOut">خروج</button>
     </div>
@@ -288,7 +498,7 @@ tr.me td{background:var(--tint)}
     <div class="pane act" id="pane-matches"></div>
 
     <div class="pane" id="pane-board">
-      <div class="panel"><table id="board"></table></div>
+      <div id="board"></div>
       <div class="panel" style="margin-top:16px">
         <h4 style="font-size:15px;color:var(--pur);margin-bottom:12px">توقعات الجميع لكل مباراة</h4>
         <select class="sel" id="mSel"></select>
@@ -299,7 +509,8 @@ tr.me td{background:var(--tint)}
     <div class="pane" id="pane-rules">
       <div class="panel rules">
         <h4>كيف تلعب</h4>
-        <p>قبل كل مباراة تدخل وتتوقع ثلاث أشياء: النتيجة، وعدد الكروت الصفرا، وهل بيصير بلنتي أو لا. وبعدين تضغط زر الحفظ.</p>
+        <p>قبل كل مباراة تختار منو راح يفوز — وهذا إجباري. وباقي الأسئلة اختيارية: النتيجة، وعدد الكروت الصفرا، والبلنتي.</p>
+        <p>لو اكتفيت بالفايز بس تاخذ 3 نقاط، ولو كمّلت الباقي توصل 7. واللي ما تجاوب عليه ما ياخذ ولا يخصم.</p>
         <p>تقدر تعدّل توقعك أي وقت. <b>التوقع يقفل قبل بداية المباراة بخمس دقايق</b>، وكل بطاقة مكتوب فيها كم باقي على القفل.</p>
         <h4>نقاط المباراة</h4>
         <p><b>3 نقاط</b> — إذا عرفت مين الفايز، والتعادل يحتسب مثل الفوز.</p>
@@ -308,9 +519,10 @@ tr.me td{background:var(--tint)}
         <p><b>نقطة</b> — إذا اخترت <b>نعم فيه بلنتي</b> وصار بلنتي فعلاً خلال المباراة.</p>
         <p style="margin-top:8px">أقصى شي بالمباراة الوحدة <b>7 نقاط</b>.</p>
         <h4>نقاط البطل</h4>
-        <p><b>10 نقاط</b> — إذا ضبطت المنتخب اللي ياخذ الكاس. تختاره من فوق صفحة المباريات، ويقفل قبل أول مباراة يوم 23 سبتمبر.</p>
+        <p><b>10 نقاط</b> — إذا ضبطت المنتخب اللي ياخذ الكاس. تختاره من فوق صفحة المباريات، والباب يسكّر قبل أول مباراة يوم 23 سبتمبر.</p>
+        <p>وانتبه: نقاط البطل ما تنضاف من الحين. تنضاف لرصيدك بعد النهائي لمن يتحدد البطل فعلاً.</p>
         <h4>الترتيب</h4>
-        <p>النقاط تنحدث بعد ما يعتمد مبارك نتيجة كل مباراة. وتوقعات البطل تبقى مخفية عن الكل لين يقفل باب الاختيار.</p>
+        <p>النقاط تنحدث بعد ما يعتمد مبارك العويس نتيجة كل مباراة. وتوقعات البطل تبقى مخفية عن الكل لين يقفل باب الاختيار.</p>
       </div>
     </div>
 
@@ -329,6 +541,10 @@ const RULES = { winner:3, goalEach:1, yellows:1, penalty:1, champion:10,
 const CODES = {"السعودية":"sa","الكويت":"kw","عمان":"om","العراق":"iq",
                "الإمارات":"ae","البحرين":"bh","اليمن":"ye","قطر":"qa"};
 const TEAMS = Object.keys(CODES);
+const TITLES = {"الكويت":10,"العراق":4,"السعودية":3,"قطر":3,"البحرين":2,"عمان":2,"الإمارات":2,"اليمن":0};
+const HOLDER = "البحرين";
+const TEAMS_BY_TITLES = [...TEAMS].sort((a,b)=>TITLES[b]-TITLES[a]);
+const titleText = n => n===0?"بدون ألقاب":n===1?"لقب واحد":n===2?"لقبان":n+" ألقاب";
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 const $  = s => document.querySelector(s);
@@ -377,14 +593,30 @@ async function start(){
   $("#login").classList.add("hide"); $("#app").classList.remove("hide");
   $("#uName").textContent=ME.name;
   if(ME.is_admin) $("#tabAdmin").classList.remove("hide");
+  beat(); setInterval(beat,60000);
   await refresh(); setInterval(refresh,60000); setInterval(tickAll,1000);
+}
+
+async function beat(){
+  try{ await db.from("gc_users").update({last_seen:new Date().toISOString()}).eq("id",ME.id); }catch(e){}
+}
+function seenText(iso){
+  if(!iso) return ["off","ما دخل أبداً"];
+  const d=Date.now()-new Date(iso).getTime();
+  if(d<3*60000) return ["live","متصل الحين"];
+  const mi=Math.floor(d/60000);
+  if(mi<60) return ["off","قبل "+mi+" دقيقة"];
+  const h=Math.floor(mi/60);
+  if(h<24) return ["off","قبل "+h+" ساعة"];
+  const dy=Math.floor(h/24);
+  return ["off", dy===1?"أمس":"قبل "+dy+" يوم"];
 }
 
 async function refresh(){
   const [m,p,u,c,s]=await Promise.all([
     db.from("gc_matches").select("*").order("kickoff"),
     db.from("gc_predictions").select("*"),
-    db.from("gc_users").select("id,name"),
+    db.from("gc_users").select("id,name,last_seen"),
     db.from("gc_champion_picks").select("*"),
     db.from("gc_settings").select("*")
   ]);
@@ -394,26 +626,49 @@ async function refresh(){
   drawBoard(); drawPredsPanel(); if(ME.is_admin) drawAdmin();
 }
 
+function predWinner(pred){
+  if(pred.winner_pick) return pred.winner_pick;
+  if(pred.home_goals==null||pred.away_goals==null) return null;
+  return pred.home_goals>pred.away_goals?"home":pred.home_goals<pred.away_goals?"away":"draw";
+}
 function scoreMatch(pred,m){
   if(!pred||!m.finished) return 0;
   let pts=0;
   const rw=Math.sign(m.home_goals-m.away_goals);
-  const wp=pred.winner_pick||(pred.home_goals>pred.away_goals?"home":pred.home_goals<pred.away_goals?"away":"draw");
-  const gw=wp==="home"?1:wp==="away"?-1:0;
-  if(rw===gw) pts+=RULES.winner;
-  if(RULES.scoreAlways||rw===gw){
-    if(pred.home_goals===m.home_goals) pts+=RULES.goalEach;
-    if(pred.away_goals===m.away_goals) pts+=RULES.goalEach;
+  const wp=predWinner(pred);
+  const gw=wp==="home"?1:wp==="away"?-1:wp==="draw"?0:null;
+  const wOK = gw!==null && rw===gw;
+  if(wOK) pts+=RULES.winner;
+  if(RULES.scoreAlways||wOK){
+    if(pred.home_goals!=null&&pred.home_goals===m.home_goals) pts+=RULES.goalEach;
+    if(pred.away_goals!=null&&pred.away_goals===m.away_goals) pts+=RULES.goalEach;
   }
-  if(m.yellows!=null){
+  if(m.yellows!=null&&pred.yellows!=null){
     const hit = pred.yellows>=YMAX ? m.yellows>=YMAX : pred.yellows===m.yellows;
     if(hit) pts+=RULES.yellows;
   }
-  if(m.penalty!=null){
+  if(m.penalty!=null&&pred.penalty!=null){
     if(RULES.penaltyBothWays ? pred.penalty===m.penalty : (pred.penalty&&m.penalty)) pts+=RULES.penalty;
   }
   return pts;
 }
+function rankOf(uid){
+  const done=MATCHES.filter(m=>m.finished);
+  const arr=USERS.map(u=>{
+    let correct=0;
+    done.forEach(m=>{
+      const pr=PREDS.find(x=>x.user_id===u.id&&x.match_id===m.id);
+      if(!pr) return;
+      const wp=predWinner(pr); if(!wp) return;
+      const rw=Math.sign(m.home_goals-m.away_goals);
+      if(rw===(wp==="home"?1:wp==="away"?-1:0)) correct++;
+    });
+    return {id:u.id,name:u.name,pts:totalFor(u.id),correct};
+  }).sort((a,b)=> b.pts-a.pts || b.correct-a.correct || a.name.localeCompare(b.name,"ar"));
+  const i=arr.findIndex(x=>x.id===uid);
+  return {rank:i+1,total:arr.length};
+}
+
 function totalFor(uid){
   let t=PREDS.filter(p=>p.user_id===uid)
     .reduce((s,p)=>s+scoreMatch(p,MATCHES.find(m=>m.id===p.match_id)||{}),0);
@@ -476,16 +731,42 @@ function fmtTime(d){
 function drawMatches(){
   const box=$("#pane-matches"); box.innerHTML="";
   $("#uPts").textContent=ar(totalFor(ME.id));
+  const rk=rankOf(ME.id);
+  const el=$("#uRank");
+  if(el) el.textContent = rk.total>1 ? "المركز "+rk.rank : "";
 
   const mine=CHAMPS.find(c=>c.user_id===ME.id);
+  const total=CHAMPS.length;
+  const share=t=>total?Math.round(CHAMPS.filter(c=>c.team===t).length/total*100):0;
+  const lead=[...TEAMS].sort((a,b)=>share(b)-share(a))[0];
+
   const ch=document.createElement("div"); ch.className="champ";
-  ch.innerHTML=`<h3>🏆 مين ياخذ الكاس؟</h3>
+  ch.innerHTML=`
+    <h3>منو راح ياخذ كأس الخليج؟</h3>
     <p>${champShut()
-      ? (mine?"اخترت "+mine.team+" · باب الاختيار مقفل":"ما اخترت منتخب قبل ما يقفل الباب")
-      : "اضغط على منتخب واحد. إذا ضبطت تاخذ 10 نقاط. الباب يقفل قبل أول مباراة."}</p>
-    <div class="tg">${TEAMS.map(t=>
-      `<button data-team="${t}" aria-pressed="${!!mine&&mine.team===t}" ${champShut()?"disabled":""}>
-        ${flag(t,"30px","21px")}${t}</button>`).join("")}</div>`;
+      ? (mine?"اخترت "+mine.team+" · الباب مسكّر، والـ10 نقاط تنضاف بنهاية البطولة إذا ضبطت"
+             :"ما اخترت منتخب قبل ما يسكّر الباب")
+      : "اختر منتخب واحد. الباب يسكّر قبل أول مباراة، والـ10 نقاط تنضاف لرصيدك بنهاية البطولة إذا ضبطت."}</p>
+    ${total?`<div class="rg-lead">${flag(lead,"42px","30px")}
+      <span><span class="l1">الأكثر توقعاً بالقروب</span><span class="l2">${lead}</span></span>
+      <span class="big">${share(lead)}<small>%</small></span></div>`:""}
+    <div class="rg-grid">${TEAMS_BY_TITLES.map(t=>`
+      <button class="rg-t" data-team="${t}"
+        aria-pressed="${!!mine&&mine.team===t}" ${champShut()?"disabled":""}>
+        <span class="rg-card">${t===HOLDER?`<span class="rg-hold">حامل اللقب</span>`:""}${flag(t)}
+          <span class="rg-bar"><i style="width:${share(t)}%"></i></span></span>
+        <span class="rg-nm">${t}</span>
+        <span class="rg-pc">${share(t)}%</span>
+        <span class="rg-ttl">${titleText(TITLES[t])}</span>
+      </button>`).join("")}</div>
+    <p class="rg-foot">${ar(total)} من ${ar(USERS.length)} صوّتوا · الشريط الذهبي يبيّن نسبة اللي اختاروا كل منتخب</p>
+    ${ME.is_admin&&total?`<div class="rg-who"><b>للأدمن فقط —</b> ${
+      TEAMS.filter(t=>CHAMPS.some(c=>c.team===t)).map(t=>{
+        const names=CHAMPS.filter(c=>c.team===t)
+          .map(c=>(USERS.find(u=>u.id===c.user_id)||{}).name||"—").join("، ");
+        return t+": "+names;
+      }).join(" · ")}</div>`:""}`;
+
   ch.querySelectorAll("[data-team]").forEach(b=>b.onclick=async()=>{
     const {error}=await db.from("gc_champion_picks").upsert({user_id:ME.id,team:b.dataset.team});
     toast(error?"ما انحفظ الاختيار":"اخترت "+b.dataset.team,!!error); refresh();
@@ -498,7 +779,7 @@ function drawMatches(){
   const pend=openM.filter(m=>myPred(m.id)==null && !isShut(m)).length;
 
   const pr=document.createElement("div"); pr.className="prog";
-  pr.innerHTML=`<div class="prog-t"><span>توقعاتك للمباريات الجاية</span>
+  pr.innerHTML=`<div class="prog-t"><span>توقعاتك للمباريات القادمة</span>
       <b>${ar(votedCount)} من ${ar(openM.length)}</b></div>
     <div class="bar"><i style="width:${openM.length?Math.round(votedCount/openM.length*100):0}%"></i></div>
     <p>${pend?"باقي عليك "+ar(pend)+" مباراة تقدر تتوقعها الحين.":"صوّتت على كل المباريات المفتوحة."}</p>`;
@@ -516,11 +797,15 @@ function drawMatches(){
     const k0={kickoff:m.kickoff};
     const stage=m.stage==="group"?"دور المجموعات · مجموعة "+m.grp
               :m.stage==="semi"?"نصف النهائي":"المباراة النهائية";
-    let H=p?p.home_goals:0, A=p?p.away_goals:0;
-    let Y=p?Math.min(p.yellows,YMAX):0, P=p?p.penalty:false;
-    let W=p?(p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw")):null;
+    let H=p&&p.home_goals!=null?p.home_goals:null;
+    let A=p&&p.away_goals!=null?p.away_goals:null;
+    let Y=p&&p.yellows!=null?Math.min(p.yellows,YMAX):null;
+    let P=p&&p.penalty!=null?p.penalty:null;
+    let W=p?predWinner(p):null;
+    const shown=v=>v==null?"—":ar(v);
 
-    const c=document.createElement("div"); c.className="mc"+(p&&!m.finished?" voted":"");
+    const c=document.createElement("div");
+    c.className="mc"+(p&&!m.finished?" voted":"")+((p&&!shut)?" shrunk":"");
     c.innerHTML=`
       <div class="mh">
         <div class="mh-top"><span>${stage}</span>
@@ -557,9 +842,10 @@ function drawMatches(){
         :started?`<div class="bnr live"><span class="dot"></span>المباراة جارية الحين</div>`
         :shut?`<div class="bnr lock">التوقع مقفل — بقي أقل من 5 دقايق على البداية</div>`:""}
 
+      <div class="qwrap">
       <div class="q">
-        <div class="q-top"><span class="q-n">1</span><span class="q-title">مين بيفوز بالمباراة؟</span>
-          <span class="q-badge">3 نقاط</span></div>
+        <div class="q-top"><span class="q-n">1</span><span class="q-title">منو راح يفوز بالمباراة؟</span>
+          <span class="q-badge">3 نقاط · إجباري</span></div>
         <div class="wn">
           <button data-w="home" aria-pressed="${W==='home'}" ${shut?"disabled":""}>${flag(m.home,"34px","24px")}${m.home}</button>
           <button data-w="draw" aria-pressed="${W==='draw'}" ${shut?"disabled":""}><span class="dr">🤝</span>تعادل</button>
@@ -568,19 +854,26 @@ function drawMatches(){
         <p class="note">3 نقاط كاملة إذا ضبطت، والتعادل يحتسب مثل الفوز.</p>
       </div>
 
+      <div class="lockq" id="lk${m.id}" ${W?'style="display:none"':""}>
+        <b>باقي 4 نقاط تقدر تكسبها</b>
+        <span>اختر منو راح يفوز فوق، وراح تنفتح لك 3 أسئلة اختيارية: النتيجة، والكروت الصفرا، والبلنتي.</span>
+      </div>
+
+      <div class="extra${W?" open":""}" id="ex${m.id}">
+      <div class="xbar"><b>الأسئلة الاختيارية</b><span>+4 نقاط ممكنة</span></div>
       <div class="q">
         <div class="q-top"><span class="q-n">2</span><span class="q-title">وكم تنتهي النتيجة؟</span>
-          <span class="q-badge">نقطتين</span></div>
+          <span class="q-badge">نقطتين · اختياري</span></div>
         <div class="sc">
           <div class="sc-side"><span class="f">${flag(m.home,"38px","27px")}</span><div class="n">${m.home}</div>
             <div class="stp">
               <button data-t="h" data-d="-1" aria-label="أنقص" ${shut?"disabled":""}>−</button>
-              <span class="v" id="h${m.id}">${ar(H)}</span>
+              <span class="v" id="h${m.id}">${shown(H)}</span>
               <button data-t="h" data-d="1" aria-label="زد" ${shut?"disabled":""}>+</button></div></div>
           <div class="sc-side"><span class="f">${flag(m.away,"38px","27px")}</span><div class="n">${m.away}</div>
             <div class="stp">
               <button data-t="a" data-d="-1" aria-label="أنقص" ${shut?"disabled":""}>−</button>
-              <span class="v" id="a${m.id}">${ar(A)}</span>
+              <span class="v" id="a${m.id}">${shown(A)}</span>
               <button data-t="a" data-d="1" aria-label="زد" ${shut?"disabled":""}>+</button></div></div>
         </div>
         <p class="note">نقطة على كل رقم صح، وتنحسب حتى لو غلطت بالفايز.</p>
@@ -588,7 +881,7 @@ function drawMatches(){
 
       <div class="q">
         <div class="q-top"><span class="q-n">3</span><span class="q-title">كم كرت أصفر بالمباراة؟</span>
-          <span class="q-badge">نقطة</span></div>
+          <span class="q-badge">نقطة · اختياري</span></div>
         <div class="grid">${[0,1,2,3,4,5].map(v=>
           `<button class="opt${v===5?" sm":""}" data-y="${v}" aria-pressed="${Y===v}" ${shut?"disabled":""}>${v===5?"5 فأكثر":ar(v)}</button>`).join("")}</div>
         <p class="note">خيار 5 فأكثر يكسب إذا طلعت الكروت خمسة أو أكثر.</p>
@@ -596,7 +889,7 @@ function drawMatches(){
 
       <div class="q">
         <div class="q-top"><span class="q-n">4</span><span class="q-title">بيصير بلنتي خلال المباراة؟</span>
-          <span class="q-badge">نقطة</span></div>
+          <span class="q-badge">نقطة · اختياري</span></div>
         <div class="yn">
           <button class="ynb yes" data-p="1" aria-pressed="${P===true}" ${shut?"disabled":""}>
             <span class="ic">✓</span>نعم فيه بلنتي</button>
@@ -605,10 +898,14 @@ function drawMatches(){
         </div>
         <p class="note">النقطة اتيي مع نعم إذا صار بلنتي فعلاً.</p>
       </div>
+      <p class="skipnote">تقدر تحفظ بدون ما تجاوب على الاختيارية</p>
+      </div>
 
       ${shut?"":`<div class="warn" id="w${m.id}">لم يتم حفظ التصويت — اضغط زر الحفظ تحت</div>
       <div class="sw"><button class="sbtn${p?" ok":""}" id="s${m.id}">${p?"توقعك محفوظ ✓":"احفظ توقعي"}</button></div>`}
+      </div>
       <div id="sv${m.id}">${p?sumBox(m,p):""}</div>
+      ${shut?"":`<button class="edit" id="ed${m.id}">عدّل توقعي</button>`}
       ${predsPanel(m,revealed(m))}
       ${shut&&!p?`<div class="sum" style="text-align:center;color:var(--sub);font-size:12.5px">ما سجّلت توقع لهالمباراة</div>`:""}
       ${m.finished?`<div class="sum"><div class="sum-t">النتيجة الرسمية</div>
@@ -618,7 +915,11 @@ function drawMatches(){
         ${p?`<div class="row"><span>حصيلتك</span><b style="color:var(--pink)">${ar(scoreMatch(p,m))} نقاط</b></div>`:""}</div>`:""}`;
 
     const btn=c.querySelector("#s"+m.id), wrn=c.querySelector("#w"+m.id);
+    const WARN_DEF="لم يتم حفظ التصويت — اضغط زر الحفظ تحت";
+    let confirmSkip=false;
     const dirty=()=>{
+      confirmSkip=false;
+      if(wrn) wrn.textContent=WARN_DEF;
       DIRTY[m.id]=true;
       if(btn){ btn.classList.remove("ok"); btn.classList.add("pend"); btn.textContent="احفظ توقعي"; }
       if(wrn) wrn.classList.add("on");
@@ -627,21 +928,29 @@ function drawMatches(){
     c.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{
       W=b.dataset.w;
       c.querySelectorAll("[data-w]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.w===W));
-      if(W==="home"&&H<=A){ H=1; A=0; }
-      else if(W==="away"&&A<=H){ H=0; A=1; }
-      else if(W==="draw"&&H!==A){ H=1; A=1; }
-      c.querySelector("#h"+m.id).textContent=ar(H);
-      c.querySelector("#a"+m.id).textContent=ar(A);
+      const lk=c.querySelector("#lk"+m.id), ex=c.querySelector("#ex"+m.id);
+      if(lk) lk.style.display="none";
+      if(ex) ex.classList.add("open");
+      if(H!=null&&A!=null){
+        if(W==="home"&&H<=A){ H=1; A=0; }
+        else if(W==="away"&&A<=H){ H=0; A=1; }
+        else if(W==="draw"&&H!==A){ H=1; A=1; }
+        c.querySelector("#h"+m.id).textContent=ar(H);
+        c.querySelector("#a"+m.id).textContent=ar(A);
+      }
       dirty();
     });
 
     c.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{
-      if(b.dataset.t==="h") H=Math.max(0,Math.min(15,H+ +b.dataset.d));
-      else A=Math.max(0,Math.min(15,A+ +b.dataset.d));
-      c.querySelector("#h"+m.id).textContent=ar(H);
-      c.querySelector("#a"+m.id).textContent=ar(A);
-      W = H>A?"home":H<A?"away":"draw";
-      c.querySelectorAll("[data-w]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.w===W));
+      const d=+b.dataset.d;
+      if(b.dataset.t==="h") H=Math.max(0,Math.min(15,(H==null?0:H)+(H==null&&d<0?0:d)));
+      else A=Math.max(0,Math.min(15,(A==null?0:A)+(A==null&&d<0?0:d)));
+      c.querySelector("#h"+m.id).textContent=H==null?"—":ar(H);
+      c.querySelector("#a"+m.id).textContent=A==null?"—":ar(A);
+      if(H!=null&&A!=null){
+        W = H>A?"home":H<A?"away":"draw";
+        c.querySelectorAll("[data-w]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.w===W));
+      }
       dirty();
     });
     c.querySelectorAll("[data-y]").forEach(b=>b.onclick=()=>{
@@ -655,17 +964,43 @@ function drawMatches(){
       dirty();
     });
 
+    const ed=c.querySelector("#ed"+m.id);
+    if(ed) ed.onclick=()=>c.classList.remove("shrunk");
+
     if(btn) btn.onclick=async()=>{
       if(isShut(m)){ toast("التوقع مقفل",true); return refresh(); }
-      if(!W){ toast("اختر مين بيفوز أول",true); return; }
+
+      if(!W){ toast("لازم تختار منو راح يفوز أول",true); return; }
+      const miss=[(H==null||A==null)?"النتيجة":null, Y==null?"الكروت الصفرا":null,
+                  P==null?"البلنتي":null].filter(Boolean);
+      if(miss.length && !confirmSkip){
+        confirmSkip=true;
+        if(wrn){
+          wrn.textContent="ناقصك: "+miss.join("، ")+" — كمّلها وتزيد نقاطك، أو اضغط الزر مرة ثانية للحفظ بدونها";
+          wrn.classList.add("on");
+        }
+        btn.classList.add("pend");
+        btn.textContent="احفظ بدون الاختيارية";
+        return;
+      }
+      if(H!=null&&A!=null){
+        const gw=H>A?"home":H<A?"away":"draw";
+        if(gw!==W){ toast("النتيجة ما تطابق اختيارك للفايز",true); return; }
+      }
       const rec={user_id:ME.id,match_id:m.id,winner_pick:W,home_goals:H,away_goals:A,
                  yellows:Y,penalty:P,updated_at:new Date().toISOString()};
       const {error}=await db.from("gc_predictions").upsert(rec,{onConflict:"user_id,match_id"});
-      if(error){ toast("ما انحفظ، جرّب مرة ثانية",true); return; }
+      if(error){
+        toast(String(error.message||"").includes("null")
+          ? "الحفظ مرفوض — لازم تعديل قاعدة البيانات"
+          : "ما انحفظ، جرّب مرة ثانية", true);
+        console.error(error); return;
+      }
       btn.classList.remove("pend"); btn.classList.add("ok"); btn.textContent="توقعك محفوظ ✓";
       if(wrn) wrn.classList.remove("on");
       DIRTY[m.id]=false;
       c.querySelector("#sv"+m.id).innerHTML=sumBox(m,rec);
+      c.classList.add("voted","shrunk");
       toast("انحفظ توقعك ✓");
       const f=await db.from("gc_predictions").select("*"); PREDS=f.data||[];
     };
@@ -708,25 +1043,118 @@ function predsPanel(m,open){
 }
 
 function sumBox(m,p){
-  const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
-  const wn=w==="home"?flag(m.home)+" "+m.home:w==="away"?flag(m.away)+" "+m.away:"تعادل";
+  const w=predWinner(p);
+  const wn=w==="home"?flag(m.home)+" "+m.home:w==="away"?flag(m.away)+" "+m.away:w==="draw"?"تعادل":"—";
+  const sc=(p.home_goals!=null&&p.away_goals!=null)
+    ? `${flag(m.home)} ${ar(p.home_goals)} × ${ar(p.away_goals)} ${flag(m.away)}` : "ما توقعت";
+  const yc=p.yellows!=null?yFull(p.yellows):"ما توقعت";
+  const pc=p.penalty==null?"ما توقعت":(p.penalty?"توقعت فيه بلنتي":"توقعت ما فيه");
+  const miss=[p.home_goals==null?"النتيجة":null,p.yellows==null?"الكروت":null,p.penalty==null?"البلنتي":null]
+    .filter(Boolean);
   return `<div class="sum"><div class="sum-t">توقعك المحفوظ</div>
     <div class="row"><span>الفايز</span><b>${wn}</b></div>
-    <div class="row"><span>النتيجة</span><b>${flag(m.home)} ${ar(p.home_goals)} × ${ar(p.away_goals)} ${flag(m.away)}</b></div>
-    <div class="row"><span>الكروت الصفرا</span><b>${yFull(p.yellows)}</b></div>
-    <div class="row"><span>البلنتي</span><b>${p.penalty?"توقعت فيه بلنتي":"توقعت ما فيه"}</b></div></div>`;
+    <div class="row"><span>النتيجة</span><b>${sc}</b></div>
+    <div class="row"><span>الكروت الصفرا</span><b>${yc}</b></div>
+    <div class="row"><span>البلنتي</span><b>${pc}</b></div>
+    ${miss.length?`<div class="row" style="border:none"><span style="color:#B08A2E">تقدر تزيد نقاطك لو كمّلت: ${miss.join("، ")}</span></div>`:""}</div>`;
 }
 
 function drawBoard(){
-  const rows=USERS.map(u=>({...u,pts:totalFor(u.id)})).sort((a,b)=>b.pts-a.pts);
-  $("#board").innerHTML=
-    `<tr><th class="rk">#</th><th>الاسم</th><th>توقع البطل</th><th style="text-align:left">النقاط</th></tr>`+
-    rows.map((r,i)=>{
-      const pick=CHAMPS.find(c=>c.user_id===r.id);
-      const show=pick?(champShut()||r.id===ME.id?flag(pick.team)+" "+pick.team:"مخفي"):"—";
-      return `<tr class="${r.id===ME.id?"me":""}"><td class="rk ${i<3?"top":""}">${ar(i+1)}</td>
-        <td>${r.name}</td><td>${show}</td><td class="p">${ar(r.pts)}</td></tr>`;
+  const box=$("#board");
+  const done=MATCHES.filter(m=>m.finished);
+  const ini=n=>n.trim().charAt(0);
+
+  const rows=USERS.map(u=>{
+    let correct=0;
+    done.forEach(m=>{
+      const pr=PREDS.find(x=>x.user_id===u.id&&x.match_id===m.id);
+      if(!pr) return;
+      const rw=Math.sign(m.home_goals-m.away_goals);
+      const wp=pr.winner_pick||(pr.home_goals>pr.away_goals?"home":pr.home_goals<pr.away_goals?"away":"draw");
+      if(rw===(wp==="home"?1:wp==="away"?-1:0)) correct++;
+    });
+    return {...u, pts:totalFor(u.id), correct};
+  }).sort((a,b)=> b.pts-a.pts || b.correct-a.correct || a.name.localeCompare(b.name,"ar"));
+
+  if(!rows.length){ box.innerHTML=`<div class="lb2"><p class="lb2-none">ما فيه مشاركين بعد</p></div>`; return; }
+  const top=rows[0].pts||1;
+
+  const wName=(m,p)=>{
+    const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
+    return w==="home"?m.home:w==="away"?m.away:"تعادل";
+  };
+  const wOk=(m,p)=>{
+    const rw=Math.sign(m.home_goals-m.away_goals);
+    const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
+    return rw===(w==="home"?1:w==="away"?-1:0);
+  };
+  const chip=(cls,txt,pts)=>`<div class="dt-c"><span class="dt-chip ${cls}">${txt}</span>
+    <small class="${pts?"g":"z"}">+${pts||0}</small></div>`;
+
+  const detail=r=>{
+    const vis=MATCHES.filter(m=>revealed(m));
+    if(!vis.length) return `<p class="lb2-none">ما بدأت أي مباراة بعد</p>`;
+    let tot=0;
+    const list=vis.map(m=>{
+      const p=PREDS.find(x=>x.user_id===r.id&&x.match_id===m.id);
+      const head=`<div class="dt-m"><b>${m.home} × ${m.away}</b>
+        <span>${m.finished
+          ? `${flag(m.home)} <i>${m.home_goals}</i> — <i>${m.away_goals}</i> ${flag(m.away)}`
+          : "بانتظار النتيجة"}</span></div>`;
+      if(!p) return `<div class="dt-r">${head}
+        <div class="dt-pend">ما سجّل توقع لهالمباراة</div>
+        <div class="dt-wait">—</div></div>`;
+      if(!m.finished) return `<div class="dt-r">${head}
+        <div class="dt-pend">توقّع ${p.home_goals==null?"الفايز فقط":p.home_goals+" × "+p.away_goals} · بلنتي ${p.penalty==null?"—":(p.penalty?"نعم":"لا")} · كروت ${p.yellows==null?"—":yFull(p.yellows)}</div>
+        <div class="dt-wait">—</div></div>`;
+      const pts=scoreMatch(p,m); tot+=pts;
+      const okW=wOk(m,p);
+      const okH=p.home_goals!=null&&p.home_goals===m.home_goals;
+      const okA=p.away_goals!=null&&p.away_goals===m.away_goals;
+      const okY=p.yellows!=null&&(p.yellows>=YMAX ? m.yellows>=YMAX : p.yellows===m.yellows);
+      const penCls = p.penalty==null?"nu":(p.penalty?(m.penalty?"ok":"no"):(m.penalty?"no":"nu"));
+      const penPts = (p.penalty&&m.penalty)?RULES.penalty:0;
+      return `<div class="dt-r">${head}
+        ${chip(okW?"ok":"no", wName(m,p)+(okW?" ✓":" ✗"), okW?RULES.winner:0)}
+        <div class="dt-c"><span class="dt-pair">
+          <span class="dt-chip ${p.home_goals==null?"nu":okH?"ok":"no"}">${flag(m.home)} ${p.home_goals==null?"—":p.home_goals}${p.home_goals==null?"":okH?" ✓":" ✗"}</span>
+          <span class="dt-chip ${p.away_goals==null?"nu":okA?"ok":"no"}">${flag(m.away)} ${p.away_goals==null?"—":p.away_goals}${p.away_goals==null?"":okA?" ✓":" ✗"}</span>
+        </span><small class="${(okH||okA)?"g":"z"}">+${(okH?1:0)+(okA?1:0)}</small></div>
+        ${chip(penCls, p.penalty==null?"—":(p.penalty?"نعم":"لا")+(penCls==="ok"?" ✓":penCls==="no"?" ✗":""), penPts)}
+        ${chip(p.yellows==null?"nu":okY?"ok":"no", p.yellows==null?"—":yLabel(p.yellows)+(okY?" ✓":" ✗"), okY?1:0)}
+        <div class="dt-pts"><b>${pts}</b><span>نقاط</span></div></div>`;
     }).join("");
+    return `<div class="dt-h"><span>المباراة</span><span>الفايز</span><span>النتيجة</span>
+      <span>بلنتي</span><span>كروت</span><span>نقاط</span></div>${list}
+      <div class="dt-tot">مجموع نقاط المباريات المنتهية: ${tot}</div>`;
+  };
+
+  const pick=r=>{
+    const pk=CHAMPS.find(c=>c.user_id===r.id);
+    if(!pk) return "ما اختار بطل";
+    if(champShut()||ME.is_admin) return "اختار "+flag(pk.team)+" "+pk.team;
+    return r.id===ME.id ? "اخترت "+flag(pk.team)+" "+pk.team : "سجّل توقع البطل";
+  };
+
+  box.innerHTML=`<div class="lb2">
+    <div class="lb2-h"><b>الترتيب</b><span>${done.length} مباريات انتهت من ${MATCHES.length}</span></div>
+    ${rows.map((r,i)=>`
+      <div class="lb2-w ${i===0?"p1":i===1?"p2":i===2?"p3":""} ${r.id===ME.id?"me":""}" data-u="${r.id}">
+        <button class="lb2-r">
+          <span class="lb2-rk">${i+1}</span>
+          <span class="lb2-av">${ini(r.name)}</span>
+          <span class="lb2-i"><b>${r.name}</b>
+            <span>${done.length?r.correct+" توقعات صح · ":""}${pick(r)}</span>
+            <span class="lb2-bar"><i style="width:${Math.round((r.pts/top)*100)}%"></i></span></span>
+          <span class="lb2-p">${r.pts}</span>
+          <span class="lb2-cv">▾</span>
+        </button>
+        <div class="lb2-d">${detail(r)}</div>
+      </div>`).join("")}
+    <p class="lb2-foot">اضغط على أي اسم تشوف توقعاته بالتفصيل</p>
+  </div>`;
+
+  box.querySelectorAll(".lb2-r").forEach(b=>b.onclick=()=>b.parentElement.classList.toggle("open"));
 }
 
 function drawPredsPanel(){
@@ -756,7 +1184,36 @@ function drawPredsPanel(){
 
 function drawAdmin(){
   const box=$("#pane-admin");
-  box.innerHTML=`<div class="champ"><h3>🏆 بطل البطولة</h3>
+  const openM=MATCHES.filter(m=>!m.finished);
+  const live=USERS.filter(u=>seenText(u.last_seen)[0]==="live").length;
+  const votedCh=CHAMPS.length;
+  const pctCh=USERS.length?Math.round(votedCh/USERS.length*100):0;
+
+  box.innerHTML=`<div class="panel" style="margin-bottom:16px">
+    <div class="ap-h"><span>المشاركون</span><span>للأدمن فقط</span></div>
+    <div class="ap-stats">
+      <div class="ap-st"><b>${USERS.length}</b><span>عضو مسجّل</span></div>
+      <div class="ap-st"><b>${pctCh}<small style="font-size:12px">%</small></b><span>صوّتوا للبطل</span></div>
+      <div class="ap-st live"><b>${live}</b><span>متصلين الحين</span></div>
+    </div>
+    ${[...USERS].sort((a,b)=>{
+        const A=seenText(a.last_seen)[0]==="live", B=seenText(b.last_seen)[0]==="live";
+        if(A!==B) return A?-1:1;
+        return new Date(b.last_seen||0)-new Date(a.last_seen||0);
+      }).map(u=>{
+        const st=seenText(u.last_seen);
+        const n=PREDS.filter(x=>x.user_id===u.id).length;
+        const pct=MATCHES.length?Math.round(n/MATCHES.length*100):0;
+        const pick=CHAMPS.find(c=>c.user_id===u.id);
+        return `<div class="ap-r">
+          <span class="ap-av ${st[0]==="live"?"live":""}">${u.name.trim().charAt(0)}<i></i></span>
+          <span class="ap-nm"><b>${u.name}</b>
+            <span>${n?"توقّع "+n+" من "+MATCHES.length+" مباراة":"ما توقّع أي مباراة"}${
+              pick?" · اختار "+pick.team:" · ما اختار بطل"}</span>
+            <span class="ap-bar"><i style="width:${pct}%"></i></span></span>
+          <span class="ap-pill ${st[0]}">${st[1]}</span></div>`;
+      }).join("")}
+  </div>` + `<div class="champ"><h3>🏆 بطل البطولة</h3>
     <p>اضغط على البطل بعد النهائي عشان تتوزع الـ10 نقاط على اللي ضبطوه.</p>
     <div class="tg">${TEAMS.map(t=>
       `<button data-ch="${t}" aria-pressed="${SETTINGS.champion===t}">${flag(t,"30px","21px")}${t}</button>`).join("")}</div></div>`;
@@ -862,6 +1319,24 @@ function drawAdmin(){
     box.appendChild(c);
   });
 }
+
+(function(){
+  document.querySelectorAll("#lbFlags img").forEach(function(im,i){
+    im.style.animationDelay=(0.34+i*0.05)+"s";
+  });
+  const T=new Date("2026-09-23T17:30:00+03:00").getTime();
+  const pad=n=>String(n).padStart(2,"0");
+  function tick(){
+    let d=T-Date.now(); if(d<0)d=0;
+    const e=id=>document.getElementById(id);
+    if(!e("cdD")) return;
+    e("cdD").textContent=pad(Math.floor(d/86400000));
+    e("cdH").textContent=pad(Math.floor(d%86400000/3600000));
+    e("cdM").textContent=pad(Math.floor(d%3600000/60000));
+    e("cdS").textContent=pad(Math.floor(d%60000/1000));
+  }
+  tick(); setInterval(tick,1000);
+})();
 
 const saved=localStorage.getItem("gc_me");
 if(saved){ ME=JSON.parse(saved); start(); }
