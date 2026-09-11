@@ -240,31 +240,6 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 .rg-lead .big{margin-right:auto;font-size:22px;font-weight:800;color:var(--pur);
   font-family:'Noto Kufi Arabic',sans-serif;font-variant-numeric:tabular-nums}
 .rg-lead .big small{font-size:12px;color:var(--sub)}
-.rg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 9px}
-.rg-t{display:block;width:100%;background:none;border:none;padding:0;text-align:center;
-  transition:transform .14s ease}
-.rg-t:active{transform:scale(.96)}
-.rg-t:disabled{opacity:.55}
-.rg-card{display:block;position:relative;padding:5px;border-radius:11px;border:2px solid transparent;
-  transition:border-color .16s ease,background .16s ease}
-.rg-t:hover .rg-card{background:#FAF7FE}
-.rg-t[aria-pressed="true"] .rg-card{border-color:var(--pur);background:#F5EFFF}
-.rg-hold{position:absolute;top:-8px;right:50%;transform:translateX(50%);background:#FFF6DA;z-index:2;
-  border:1px solid #F2DFA0;color:#8A6D00;font-size:8.5px;font-weight:700;border-radius:20px;
-  padding:0 6px;white-space:nowrap}
-
-.rg-card img{display:block;margin:0 auto;width:100%;max-width:74px;height:48px;object-fit:contain;
-  border-radius:3px;vertical-align:baseline;box-shadow:none;filter:drop-shadow(0 3px 7px rgba(0,0,0,.3))}
-.rg-bar{display:block;width:100%;height:5px;background:#EFE8FA;border-radius:20px;
-  overflow:hidden;margin:9px 0 0}
-.rg-bar i{display:block;height:100%;background:#C9A24B;border-radius:20px;
-  transition:width .8s cubic-bezier(.22,1,.36,1)}
-.rg-t[aria-pressed="true"] .rg-bar i{background:var(--pur)}
-.rg-nm{font-size:12.5px;font-weight:700;color:var(--ink);margin-top:8px;display:block;line-height:1.4}
-.rg-t[aria-pressed="true"] .rg-nm{color:var(--pur)}
-.rg-pc{font-size:12px;color:var(--pur);font-weight:700;font-variant-numeric:tabular-nums;display:block}
-.rg-t[aria-pressed="true"] .rg-pc{color:#B08A2E}
-.rg-ttl{font-size:10px;color:#8A6D00;display:block}
 .rg-foot{font-size:11px;color:#3E2A52;text-align:center;margin-top:15px;line-height:1.8}
 .rg-who{font-size:10.5px;color:#7A5E96;background:#F7F2FD;border-radius:9px;padding:8px 10px;
   margin-top:12px;line-height:1.9}
@@ -278,6 +253,73 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 .tg button img{width:32px;height:21px;object-fit:contain;border-radius:2px;display:block;margin:0 auto 5px}
 .tg button[aria-pressed="true"]{border-color:var(--deep);background:linear-gradient(135deg,#f5efff,#ebe0fc)}
 .tg button:disabled{opacity:.4}
+
+/* ── قائمة المباريات المختصرة ── */
+.fx-panel{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  box-shadow:0 18px 46px rgba(45,10,74,.24);margin-bottom:16px}
+.fx-sec{background:linear-gradient(135deg,#5A009E,#3D0070);padding:11px 15px;font-size:12.5px;
+  font-weight:800;color:#fff;display:flex;justify-content:space-between;align-items:center;
+  font-family:'Noto Kufi Arabic',sans-serif}
+.fx-sec span{font-size:10px;color:var(--lav);font-weight:600;font-family:'IBM Plex Sans Arabic',sans-serif}
+.fx-day{padding:9px 15px;font-size:10.5px;color:#fff;font-weight:700;
+  background:linear-gradient(135deg,#3D0070,#5A009E)}
+.fx-row{width:100%;display:block;padding:0;border:none;background:none;
+  border-bottom:1px solid #F6F2FC;transition:background .16s;text-align:right}
+.fx-row:hover{background:#FCFAFF}
+.fx-item.open .fx-row{background:#F7F1FF}
+.fx-top{display:flex;align-items:center;gap:8px;padding:11px 14px 6px}
+.fx-meta{display:flex;align-items:center;gap:6px;padding:0 14px 10px;flex-wrap:wrap}
+.fx-chip{font-size:9.5px;font-weight:700;border-radius:20px;padding:2px 8px;white-space:nowrap}
+.fx-chip.soon{background:#F1EFF6;color:#5B4B72}
+.fx-chip.live{background:#FFEAF0;color:#C41E48}
+.fx-chip.done{background:#EAF7F0;color:#1E7A50}
+.fx-chip.miss{background:#FDF4E0;color:#8A6100;border:1px solid #EFD9A4}
+.fx-chip.none{background:#F4F2F8;color:#5B4B72;display:inline-flex;align-items:center;gap:5px}
+.fx-chip.none i{width:6px;height:6px;border-radius:50%;background:var(--pink);display:inline-block}
+.fx-go{margin-right:auto;display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;
+  border-radius:20px;padding:4px 11px;background:linear-gradient(135deg,#5A009E,#7B1FA2);color:#fff;
+  white-space:nowrap}
+.fx-go.ghost{background:#fff;border:1.5px solid var(--pur);color:var(--pur)}
+.fx-go em{font-style:normal;font-size:9px;transition:transform .2s}
+.fx-item.open .fx-go em{transform:rotate(180deg)}
+.fx-dot.part{background:#fff;border:1.5px solid #E8B75A;position:relative;overflow:hidden;color:transparent}
+.fx-dot.part i{position:absolute;inset:0 50% 0 0;background:#E8B75A}
+.fx-side{flex:1;display:flex;align-items:center;gap:6px;min-width:0}
+.fx-side.l{justify-content:flex-end}
+.fx-nm{font-size:12.5px;color:var(--ink);white-space:nowrap;font-weight:700;overflow:hidden;
+  text-overflow:ellipsis}
+.fx-row img{width:19px;height:14px;object-fit:contain;flex-shrink:0;border-radius:2px;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
+.fx-tm{font-size:11.5px;color:#3E2A52;font-weight:800;font-variant-numeric:tabular-nums;
+  min-width:54px;text-align:center;background:#F4F2F8;border-radius:8px;padding:4px 0}
+.fx-tm.res{background:#EFEAF9;color:#2E0A4A}
+.fx-st{width:24px;display:flex;justify-content:center;flex-shrink:0}
+.fx-dot{width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800}
+.fx-dot.ok{background:#1E7A50;color:#fff}
+.fx-dot.no{background:#fff;color:#6B5B83;border:1.5px dashed #C9C2D4}
+.fx-dot.lk{background:#F1EEF7;color:#8A8399}
+.fx-exp{display:none;border-bottom:1px solid var(--line);background:#FBF8FF}
+.fx-item.open .fx-exp{display:block}
+.fx-exp .mc{margin:0;border:none;border-radius:0;box-shadow:none;background:none}
+.fx-lgd{display:flex;gap:14px;justify-content:center;padding:12px;background:#2E0A4A;
+  font-size:10.5px;color:rgba(255,255,255,.7)}
+.fx-lgd span{display:flex;align-items:center;gap:5px}
+.fx-lgd .fx-dot{width:14px;height:14px;font-size:8px}
+
+/* ── تنبيه النتائج المعلّقة ── */
+.pend-al{background:linear-gradient(135deg,#4a1020,#7a1030);border:1px solid rgba(255,55,94,.4);
+  border-radius:16px;padding:14px 15px;margin-bottom:16px;box-shadow:0 12px 34px rgba(120,10,45,.3)}
+.pend-al b{display:block;font-family:'Noto Kufi Arabic',sans-serif;font-size:14px;font-weight:800;
+  color:#fff;margin-bottom:3px}
+.pend-al p{font-size:11.5px;color:rgba(255,255,255,.65);margin-bottom:10px;line-height:1.7}
+.pend-li{display:flex;flex-direction:column;gap:7px}
+.pend-i{display:flex;align-items:center;gap:9px;background:rgba(0,0,0,.28);border-radius:11px;
+  padding:9px 11px;font-size:12px;color:#fff}
+.pend-i span{margin-right:auto;font-size:10.5px;color:#FFB4A2;font-weight:700;white-space:nowrap}
+.pend-i img{width:16px;height:12px;object-fit:contain;border-radius:1px}
+.tab-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--pink);
+  margin-right:5px;vertical-align:1px}
 
 /* ── لوحة المشاركين ── */
 .ap-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
@@ -375,6 +417,138 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
   font-size:11.5px;font-weight:800;color:var(--pur);font-variant-numeric:tabular-nums}
 .lb2-none{padding:14px;text-align:center;font-size:11.5px;color:#7A6890}
 .lb2-foot{font-size:10.5px;color:#6B5B83;text-align:center;margin-top:12px}
+
+.rg-rows{display:flex;flex-direction:column;gap:2px}
+.rg-r{display:flex;align-items:center;gap:10px;width:100%;padding:8px 7px;border:none;
+  border-radius:11px;background:none;text-align:right;cursor:pointer;
+  transition:background .18s cubic-bezier(.23,1,.32,1),box-shadow .18s}
+.rg-r:hover:not(:disabled){background:#FAF6FE}
+.rg-r:active:not(:disabled){transform:scale(.995)}
+.rg-r:disabled{opacity:.55;cursor:default}
+.rg-r[aria-pressed="true"]{background:#F1E8FC;box-shadow:inset 0 0 0 1.5px var(--pur)}
+.rg-r img.fl{width:28px;height:19px;border-radius:3px;flex-shrink:0;
+  box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.rg-nm{width:74px;flex-shrink:0;font-size:12.5px;font-weight:700;
+  color:var(--ink);line-height:1.35;position:relative}
+.rg-r[aria-pressed="true"] .rg-nm{color:var(--pur)}
+.rg-ti{display:block;font-size:9.5px;font-weight:400;color:var(--sub)}
+.rg-hold{display:inline-block;font-style:normal;font-size:8.5px;font-weight:700;
+  background:#FFF6DA;color:#8A6D00;border-radius:20px;padding:1px 7px;margin-right:5px;vertical-align:middle}
+.rg-tr{flex:1;min-width:0;height:8px;border-radius:99px;background:#F1EAFA;overflow:hidden}
+.rg-tr i{display:block;height:100%;border-radius:99px;
+  background:linear-gradient(90deg,#8E1AE0,#4F008C);transition:width .5s cubic-bezier(.23,1,.32,1)}
+.rg-r.zero .rg-tr i{background:#E0D5EE}
+.rg-pc{width:40px;text-align:left;flex-shrink:0;font-size:12.5px;
+  font-weight:800;color:var(--pur);font-variant-numeric:tabular-nums}
+.rg-r.zero .rg-pc{color:#A697BC}
+.rg-foot{font-size:11px;color:#3E2A52;text-align:center;margin-top:15px;line-height:1.8}
+.rg-who{font-size:10.5px;color:#7A5E96;background:#F7F2FD;border-radius:9px;padding:8px 10px;
+  margin-top:12px;line-height:1.9}
+.champ{background:#fff;border-radius:24px;padding:18px 16px;margin-bottom:16px;border:2px solid var(--gold);
+  box-shadow:0 16px 48px rgba(79,0,140,.22)}
+.champ h3{font-size:17px;color:var(--pur);margin-bottom:4px}
+.ch-prize{position:relative;overflow:hidden;border-radius:18px;padding:16px 18px 14px;margin:12px 0 13px;
+  background:linear-gradient(135deg,#43106B 0%,#2A0742 62%);border:1px solid rgba(255,217,61,.34)}
+.ch-prize::after{content:"";position:absolute;top:-58px;left:-30px;width:190px;height:150px;
+  background:radial-gradient(closest-side,rgba(255,217,61,.30),transparent 72%);pointer-events:none}
+.chp-row{position:relative;display:flex;align-items:center;gap:15px}
+.chp-cup{flex-shrink:0}
+.chp-sep{width:1px;align-self:stretch;background:rgba(255,217,61,.22);flex-shrink:0}
+.chp-n{font-family:'Noto Kufi Arabic',sans-serif;font-weight:800;font-size:40px;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--gold);
+  background:linear-gradient(180deg,#FFF0B8,#FFD93D 62%,#E8B713);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.chp-u{font-family:'Noto Kufi Arabic',sans-serif;font-size:13px;font-weight:700;color:var(--gold);
+  align-self:flex-end;margin-bottom:4px}
+.chp-tx{min-width:0}
+.chp-tx b{display:block;font-size:13.5px;font-weight:700;color:#fff;margin-bottom:4px}
+.chp-tx i{display:block;font-style:normal;font-size:11.5px;color:var(--lav);line-height:1.7}
+.chp-cd{position:relative;margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,217,61,.18);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.chp-cdl{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--lav)}
+.chp-box{display:flex;gap:6px}
+.chp-box div{border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:5px 9px;min-width:44px;text-align:center}
+.chp-box b{display:block;font-family:'Noto Kufi Arabic',sans-serif;font-size:15px;font-weight:700;
+  color:var(--gold);line-height:1.25;font-variant-numeric:tabular-nums}
+.chp-box span{display:block;font-size:8.5px;color:rgba(255,255,255,.5)}
+.chp-cd.shut{justify-content:center;font-size:11.5px;color:var(--lav)}
+@media (max-width:430px){
+  .chp-cd{justify-content:center}
+  .chp-box div{min-width:38px;padding:5px 7px}
+}
+.ap-tg{font-size:11px;font-weight:700;color:var(--pur);background:var(--tint);
+  border:1px solid var(--line);border-radius:999px;padding:6px 13px;line-height:1;
+  transition:background .15s ease,border-color .15s ease}
+.ap-tg:hover{background:#F0E9FB;border-color:#DCCDF5}
+.ap-list[hidden]{display:none}
+.champ p{font-size:12.5px;color:var(--sub);margin-bottom:14px;line-height:1.8}
+  .vb-wrap{padding:13px 14px 4px;margin-bottom:0}
+  .pmt{background:var(--tint);border-radius:18px;padding:16px 20px 14px;margin:14px 0 4px}
+  .pmt-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .pmt-top>b{font-family:'Noto Kufi Arabic',sans-serif;font-size:20px;font-weight:800;color:#B4A4CC;
+    font-variant-numeric:tabular-nums}
+  .pmt-now{display:flex;align-items:center;gap:9px}
+  .pmt-v{font-family:'Noto Kufi Arabic',sans-serif;font-size:38px;font-weight:800;color:var(--pur);
+    line-height:1;font-variant-numeric:tabular-nums;transition:color .25s}
+  .pmt-now i{font-style:normal;font-size:11.5px;font-weight:700;color:#9A8BB0}
+  .pmt-tier{font-family:'Noto Kufi Arabic',sans-serif;font-size:12px;font-weight:800;padding:5px 13px;
+    border-radius:20px;transition:background .25s,color .25s}
+  .pmt-tier.t1{background:#E3D5F5;color:var(--pur)}
+  .pmt-tier.t2{background:rgba(123,0,212,.13);color:#7B00D4}
+  .pmt-tier.t3{background:rgba(255,55,94,.16);color:#E01F46}
+  .pmt-rail{position:relative;height:18px;border-radius:9px;display:flex;overflow:visible;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,.18)}
+  .pmt-z{flex:1;display:flex;align-items:center;justify-content:center;
+    font-family:'Noto Kufi Arabic',sans-serif;font-size:10px;font-weight:800;color:#fff;
+    white-space:nowrap;overflow:hidden;text-shadow:0 1px 1px rgba(0,0,0,.18)}
+  .pmt-z.z1{background:linear-gradient(180deg,#B79FDB,#9C7FC7);border-radius:0 9px 9px 0}
+  .pmt-z.z2{background:linear-gradient(180deg,#8E1AE0,#6A00BC)}
+  .pmt-z.z3{background:linear-gradient(180deg,#FF4F72,#E8003C);border-radius:9px 0 0 9px}
+  .pmt-fill{position:absolute;top:0;right:0;height:18px;border-radius:9px;background:rgba(62,42,82,.14);
+    width:0;transition:width .38s cubic-bezier(.23,1,.32,1);pointer-events:none}
+  .pmt-dot{position:absolute;top:-5px;right:0;width:28px;height:28px;border-radius:50%;background:#fff;
+    border:6px solid var(--pur);box-shadow:0 4px 12px rgba(79,0,140,.35);transform:translateX(14px);z-index:3;
+    transition:right .38s cubic-bezier(.23,1,.32,1),border-color .25s}
+  .pmt-tick{position:absolute;top:-9px;width:3px;height:34px;background:#3E2A52;border-radius:2px;
+    transform:translateX(50%)}
+  .pmt-tick u{position:absolute;top:36px;right:50%;transform:translateX(50%);text-decoration:none;
+    font-family:'Noto Kufi Arabic',sans-serif;font-size:11.5px;font-weight:800;color:#3E2A52}
+  .pmt-zl{display:flex;margin-top:30px}
+  .pmt-zl span{flex:1;text-align:center;font-size:10.5px;font-weight:700;color:#9A8BB0}
+  .pmt-hint{margin:11px 0 0;font-size:11.5px;color:#8A7BA3;text-align:center;min-height:16px}
+  .pmt-hint b{color:var(--pur)}
+  .vb-h{font-size:11.5px;font-weight:800;color:var(--pur);margin-bottom:11px;display:flex;
+    justify-content:space-between;align-items:baseline}
+  .vb-h em{font-style:normal;font-size:10px;color:#7A6890;font-weight:600}
+  .vb-pc small{font-size:10px;font-weight:600;opacity:.75}
+  .vb-r{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+  .vb-r:last-child{margin-bottom:0}
+  .vb-r img.fl{border-radius:2px;flex-shrink:0}
+  .vb-fln{width:22px;height:15px;border-radius:2px;background:#F3E7C9;flex-shrink:0;display:block}
+  .vb-nm{font-size:11.5px;color:var(--ink);width:58px;flex-shrink:0;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis}
+  .vb-tr{flex:1;min-width:0;height:7px;border-radius:99px;background:#F1EAFA;overflow:hidden}
+  .vb-tr i{display:block;height:100%;border-radius:99px;
+    transition:width .5s cubic-bezier(.23,1,.32,1)}
+  .vb-pc{font-size:12px;font-weight:800;width:62px;text-align:left;flex-shrink:0;white-space:nowrap;
+    font-variant-numeric:tabular-nums}
+  .vb-rh .vb-tr i{background:var(--pur)}   .vb-rh .vb-pc{color:var(--pur)}
+  .vb-rd .vb-tr i{background:#C9A24B}      .vb-rd .vb-nm{color:#6B5B83}
+  .vb-rd .vb-pc{color:#A8842F}
+  .vb-ra .vb-tr i{background:#FF375E}      .vb-ra .vb-pc{color:#E01F46}
+  .vb-btn{width:calc(100% - 24px);margin:4px 12px 12px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,.10);
+    background:rgba(0,0,0,.03);color:inherit;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s cubic-bezier(.23,1,.32,1)}
+  .vb-btn:hover{background:rgba(0,0,0,.07)}
+  .vb-list{margin-top:0;border-top:1px solid var(--line)}
+
+
+  .vb-adm{font-style:normal;font-size:9px;font-weight:700;padding:2px 7px;border-radius:999px;
+    background:#FFD700;color:#5A4200;margin-inline-start:6px}
+
+
+  .dt-pick{color:#0E7A5F;font-weight:800}
+  .gc-hid{font-size:9px;font-weight:800;padding:2px 7px;border-radius:999px;background:#FDECEC;color:#B91C1C}
 
 /* ── ترتيب وقوانين ── */
 .panel{background:#fff;border-radius:22px;padding:16px;border:1px solid var(--line);
@@ -514,9 +688,10 @@ tr.me td{background:var(--tint)}
         <p>تقدر تعدّل توقعك أي وقت. <b>التوقع يقفل قبل بداية المباراة بخمس دقايق</b>، وكل بطاقة مكتوب فيها كم باقي على القفل.</p>
         <h4>نقاط المباراة</h4>
         <p><b>3 نقاط</b> — إذا عرفت مين الفايز، والتعادل يحتسب مثل الفوز.</p>
+        <p>وبنصف النهائي والنهائي ما فيه تعادل — تختار المنتخب اللي بيتأهل، ولو راحت لركلات الترجيح فالمتأهل هو اللي يحتسب.</p>
         <p><b>نقطة</b> — على كل رقم صح في النتيجة. يعني لو توقعت 2 × 1 وطلعت 2 × 1 تاخذ نقطتين. وهالنقاط تنحسب حتى لو غلطت بالفايز.</p>
         <p><b>نقطة</b> — إذا ضبط عدد الكروت الصفرا. الاختيار من صفر لخمسة، وخيار <b>5 فأكثر</b> يكسب إذا طلعت الكروت خمسة أو أكثر.</p>
-        <p><b>نقطة</b> — إذا اخترت <b>نعم فيه بلنتي</b> وصار بلنتي فعلاً خلال المباراة.</p>
+        <p><b>نقطة</b> — إذا ضبطت البلنتي، سواء توقعت إنه بيصير وصار، أو توقعت إنه ما يصير وما صار.</p>
         <p style="margin-top:8px">أقصى شي بالمباراة الوحدة <b>7 نقاط</b>.</p>
         <h4>نقاط البطل</h4>
         <p><b>10 نقاط</b> — إذا ضبطت المنتخب اللي ياخذ الكاس. تختاره من فوق صفحة المباريات، والباب يسكّر قبل أول مباراة يوم 23 سبتمبر.</p>
@@ -537,7 +712,7 @@ const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 const LOCK_MIN = 5, YMAX = 5;
 const RULES = { winner:3, goalEach:1, yellows:1, penalty:1, champion:10,
-                scoreAlways:true, penaltyBothWays:false };
+                scoreAlways:true, penaltyBothWays:true };
 const CODES = {"السعودية":"sa","الكويت":"kw","عمان":"om","العراق":"iq",
                "الإمارات":"ae","البحرين":"bh","اليمن":"ye","قطر":"qa"};
 const TEAMS = Object.keys(CODES);
@@ -567,6 +742,7 @@ function toast(msg,bad){
 
 let ME=null,MATCHES=[],PREDS=[],USERS=[],CHAMPS=[],SETTINGS={};
 const DIRTY={};
+let AP_OPEN=false;
 window.addEventListener("beforeunload",e=>{
   if(Object.values(DIRTY).some(Boolean)){ e.preventDefault(); e.returnValue=""; }
 });
@@ -623,7 +799,7 @@ async function refresh(){
   MATCHES=m.data||[]; PREDS=p.data||[]; USERS=u.data||[]; CHAMPS=c.data||[];
   SETTINGS=Object.fromEntries((s.data||[]).map(r=>[r.key,r.value]));
   if(!Object.values(DIRTY).some(Boolean)) drawMatches();
-  drawBoard(); drawPredsPanel(); if(ME.is_admin) drawAdmin();
+  drawBoard(); drawPredsPanel(); if(ME.is_admin){ drawAdmin(); markPending(); }
 }
 
 function predWinner(pred){
@@ -634,7 +810,7 @@ function predWinner(pred){
 function scoreMatch(pred,m){
   if(!pred||!m.finished) return 0;
   let pts=0;
-  const rw=Math.sign(m.home_goals-m.away_goals);
+  const rw = m.winner_team ? (m.winner_team==="home"?1:-1) : Math.sign(m.home_goals-m.away_goals);
   const wp=predWinner(pred);
   const gw=wp==="home"?1:wp==="away"?-1:wp==="draw"?0:null;
   const wOK = gw!==null && rw===gw;
@@ -660,7 +836,7 @@ function rankOf(uid){
       const pr=PREDS.find(x=>x.user_id===u.id&&x.match_id===m.id);
       if(!pr) return;
       const wp=predWinner(pr); if(!wp) return;
-      const rw=Math.sign(m.home_goals-m.away_goals);
+      const rw = m.winner_team ? (m.winner_team==="home"?1:-1) : Math.sign(m.home_goals-m.away_goals);
       if(rw===(wp==="home"?1:wp==="away"?-1:0)) correct++;
     });
     return {id:u.id,name:u.name,pts:totalFor(u.id),correct};
@@ -684,7 +860,13 @@ const isShut=m=>{
   return lockAt(m)<=new Date();
 };
 const revealed=m=>ME.is_admin||m.finished||(new Date(m.kickoff)<=new Date()&&m.locked!==false);
-const champShut=()=>new Date(SETTINGS.champion_deadline||0)<=new Date();
+const champDeadline=()=>{
+  var dl = SETTINGS.champion_deadline;
+  if(dl) return new Date(dl);
+  var first = (MATCHES||[]).map(m=>new Date(m.kickoff)).sort((a,b)=>a-b)[0];
+  return first || null;
+};
+const champShut=()=>{ const d=champDeadline(); return d ? d<=new Date() : false; };
 
 function leftText(target){
   let d=target-new Date(); if(d<=0) return null;
@@ -697,6 +879,18 @@ function leftText(target){
 }
 function pad2(n){ return ar(String(n).padStart(2,"0")); }
 function tickAll(){
+  document.querySelectorAll(".chp-cd[data-deadline]").forEach(el=>{
+    let d = +el.dataset.deadline - Date.now();
+    if(d<=0){
+      el.removeAttribute("data-deadline");
+      el.className="chp-cd shut";
+      el.innerHTML='<span>أُغلق التصويت على البطل</span>';
+      return;
+    }
+    const set=(c,v)=>{ const n=el.querySelector(c); if(n) n.textContent=pad2(v); };
+    set(".cd-d",Math.floor(d/86400000)); set(".cd-h",Math.floor(d%86400000/3600000));
+    set(".cd-m",Math.floor(d%3600000/60000)); set(".cd-s",Math.floor(d%60000/1000));
+  });
   document.querySelectorAll(".cd-top[data-kick]").forEach(el=>{
     let d=+el.dataset.kick-Date.now();
     if(d<=0){
@@ -743,23 +937,47 @@ function drawMatches(){
   const ch=document.createElement("div"); ch.className="champ";
   ch.innerHTML=`
     <h3>منو راح ياخذ كأس الخليج؟</h3>
+    <div class="ch-prize">
+      <div class="chp-row">
+        <svg class="chp-cup" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="var(--gold)"
+          stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/>
+          <path d="M17 5h3v2a3 3 0 0 1-3 3"/><path d="M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+        <span class="chp-sep"></span>
+        <span class="chp-n">${RULES.champion}</span><span class="chp-u">نقاط</span>
+        <span class="chp-tx"><b>لو ضبطت البطل، النقاط لك</b>
+          <i>خليجي 27 · جدة</i></span>
+      </div>
+      ${(function(){
+        var dl = champDeadline();
+        if(champShut() || !dl) return '<div class="chp-cd shut"><span>أُغلق التصويت على البطل</span></div>';
+        return '<div class="chp-cd" data-deadline="'+(+dl)+'">'
+          + '<span class="chp-cdl"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>'
+          + 'يغلق التصويت بعد</span>'
+          + '<span class="chp-box">'
+          + '<div><b class="cd-d">00</b><span>يوم</span></div>'
+          + '<div><b class="cd-h">00</b><span>ساعة</span></div>'
+          + '<div><b class="cd-m">00</b><span>دقيقة</span></div>'
+          + '<div><b class="cd-s">00</b><span>ثانية</span></div>'
+          + '</span></div>';
+      })()}
+    </div>
     <p>${champShut()
-      ? (mine?"اخترت "+mine.team+" · الباب مسكّر، والـ10 نقاط تنضاف بنهاية البطولة إذا ضبطت"
+      ? (mine?"اخترت "+mine.team+" · الباب مسكّر"
              :"ما اخترت منتخب قبل ما يسكّر الباب")
-      : "اختر منتخب واحد. الباب يسكّر قبل أول مباراة، والـ10 نقاط تنضاف لرصيدك بنهاية البطولة إذا ضبطت."}</p>
+      : "اختر منتخب واحد. الباب يسكّر قبل أول مباراة."}</p>
     ${total?`<div class="rg-lead">${flag(lead,"42px","30px")}
       <span><span class="l1">الأكثر توقعاً بالقروب</span><span class="l2">${lead}</span></span>
       <span class="big">${share(lead)}<small>%</small></span></div>`:""}
-    <div class="rg-grid">${TEAMS_BY_TITLES.map(t=>`
-      <button class="rg-t" data-team="${t}"
+    <div class="rg-rows">${[...TEAMS].sort((a,b)=>share(b)-share(a)||TITLES[b]-TITLES[a]).map(t=>`
+      <button class="rg-r${share(t)===0?" zero":""}" data-team="${t}"
         aria-pressed="${!!mine&&mine.team===t}" ${champShut()?"disabled":""}>
-        <span class="rg-card">${t===HOLDER?`<span class="rg-hold">حامل اللقب</span>`:""}${flag(t)}
-          <span class="rg-bar"><i style="width:${share(t)}%"></i></span></span>
-        <span class="rg-nm">${t}</span>
-        <span class="rg-pc">${share(t)}%</span>
-        <span class="rg-ttl">${titleText(TITLES[t])}</span>
+        ${flag(t,"28px","19px")}
+        <span class="rg-nm">${t}${t===HOLDER?`<em class="rg-hold">حامل اللقب</em>`:""}
+          <span class="rg-ti">${titleText(TITLES[t])}</span></span>
+        <span class="rg-tr"><i style="width:${share(t)}%"></i></span>
+        <span class="rg-pc">${ar(share(t))}%</span>
       </button>`).join("")}</div>
-    <p class="rg-foot">${ar(total)} من ${ar(USERS.length)} صوّتوا · الشريط الذهبي يبيّن نسبة اللي اختاروا كل منتخب</p>
     ${ME.is_admin&&total?`<div class="rg-who"><b>للأدمن فقط —</b> ${
       TEAMS.filter(t=>CHAMPS.some(c=>c.team===t)).map(t=>{
         const names=CHAMPS.filter(c=>c.team===t)
@@ -768,13 +986,14 @@ function drawMatches(){
       }).join(" · ")}</div>`:""}`;
 
   ch.querySelectorAll("[data-team]").forEach(b=>b.onclick=async()=>{
-    const {error}=await db.from("gc_champion_picks").upsert({user_id:ME.id,team:b.dataset.team});
+    const {error}=await db.from("gc_champion_picks").upsert({user_id:ME.id,team:b.dataset.team},{onConflict:"user_id"});
     toast(error?"ما انحفظ الاختيار":"اخترت "+b.dataset.team,!!error); refresh();
   });
   box.appendChild(ch);
 
-  const openM=MATCHES.filter(m=>!m.finished).sort((a,b)=>new Date(a.kickoff)-new Date(b.kickoff));
-  const doneM=MATCHES.filter(m=>m.finished).sort((a,b)=>new Date(b.kickoff)-new Date(a.kickoff));
+  const VIS=MATCHES.filter(m=>ME.is_admin||m.hidden!==true);
+  const openM=VIS.filter(m=>!m.finished).sort((a,b)=>new Date(a.kickoff)-new Date(b.kickoff));
+  const doneM=VIS.filter(m=>m.finished).sort((a,b)=>new Date(b.kickoff)-new Date(a.kickoff));
   const votedCount=openM.filter(m=>myPred(m.id)).length;
   const pend=openM.filter(m=>myPred(m.id)==null && !isShut(m)).length;
 
@@ -785,16 +1004,25 @@ function drawMatches(){
     <p>${pend?"باقي عليك "+ar(pend)+" مباراة تقدر تتوقعها الحين.":"صوّتت على كل المباريات المفتوحة."}</p>`;
   ch.after(pr);
 
-  let sepDone=false;
+  const list=document.createElement("div"); list.className="fx-panel";
+  box.appendChild(list);
+  const votedAll=openM.filter(x=>myPred(x.id)).length;
+  list.insertAdjacentHTML("beforeend",
+    `<div class="fx-sec">المباريات القادمة<span>${openM.length} مباراة · صوّتت على ${votedAll}</span></div>`);
+
+  let sepDone=false, lastDay="";
   [...openM,...doneM].forEach(m=>{
     if(m.finished && !sepDone){
-      sepDone=true;
-      const d=document.createElement("div"); d.className="sep";
-      d.innerHTML=`<i></i><span>المباريات المنتهية</span><i></i>`;
-      box.appendChild(d);
+      sepDone=true; lastDay="";
+      list.insertAdjacentHTML("beforeend",
+        `<div class="fx-sec">المباريات المنتهية<span>${doneM.length} مباراة</span></div>`);
     }
     const p=myPred(m.id), shut=isShut(m), k=new Date(m.kickoff), started=k<=new Date();
     const k0={kickoff:m.kickoff};
+    const KO = m.stage!=="group";
+    const qTitle = m.stage==="final" ? "منو راح ياخذ الكاس؟"
+                 : m.stage==="semi"  ? "منو راح يتأهل للنهائي؟"
+                 : "منو راح يفوز بالمباراة؟";
     const stage=m.stage==="group"?"دور المجموعات · مجموعة "+m.grp
               :m.stage==="semi"?"نصف النهائي":"المباراة النهائية";
     let H=p&&p.home_goals!=null?p.home_goals:null;
@@ -844,14 +1072,16 @@ function drawMatches(){
 
       <div class="qwrap">
       <div class="q">
-        <div class="q-top"><span class="q-n">1</span><span class="q-title">منو راح يفوز بالمباراة؟</span>
+        <div class="q-top"><span class="q-n">1</span><span class="q-title">${qTitle}</span>
           <span class="q-badge">3 نقاط · إجباري</span></div>
         <div class="wn">
           <button data-w="home" aria-pressed="${W==='home'}" ${shut?"disabled":""}>${flag(m.home,"34px","24px")}${m.home}</button>
-          <button data-w="draw" aria-pressed="${W==='draw'}" ${shut?"disabled":""}><span class="dr">🤝</span>تعادل</button>
+          ${KO?"":`<button data-w="draw" aria-pressed="${W==='draw'}" ${shut?"disabled":""}><span class="dr">🤝</span>تعادل</button>`}
           <button data-w="away" aria-pressed="${W==='away'}" ${shut?"disabled":""}>${flag(m.away,"34px","24px")}${m.away}</button>
         </div>
-        <p class="note">3 نقاط كاملة إذا ضبطت، والتعادل يحتسب مثل الفوز.</p>
+        <p class="note">${KO
+          ? "ما فيه تعادل بهالدور — اختر المنتخب اللي بيتأهل. ولو راحت لركلات الترجيح، المتأهل هو اللي يحتسب."
+          : "3 نقاط كاملة إذا ضبطت، والتعادل يحتسب مثل الفوز."}</p>
       </div>
 
       <div class="lockq" id="lk${m.id}" ${W?'style="display:none"':""}>
@@ -896,12 +1126,31 @@ function drawMatches(){
           <button class="ynb no" data-p="0" aria-pressed="${P===false}" ${shut?"disabled":""}>
             <span class="ic">✕</span>لا ما فيه</button>
         </div>
-        <p class="note">النقطة اتيي مع نعم إذا صار بلنتي فعلاً.</p>
+        <p class="note">نقطة إذا ضبطت — سواء صار بلنتي أو ما صار.</p>
       </div>
       <p class="skipnote">تقدر تحفظ بدون ما تجاوب على الاختيارية</p>
       </div>
 
-      ${shut?"":`<div class="warn" id="w${m.id}">لم يتم حفظ التصويت — اضغط زر الحفظ تحت</div>
+      ${shut?"":`<div class="pmt" id="pm${m.id}">
+        <div class="pmt-top">
+          <b>${RULES.winner+RULES.goalEach*2+RULES.yellows+RULES.penalty}</b>
+          <span class="pmt-now"><span class="pmt-v" id="pmv${m.id}">0</span><i>نقطة محتملة</i>
+            <span class="pmt-tier t1" id="pmt${m.id}">بداية</span></span>
+          <b>0</b>
+        </div>
+        <div class="pmt-rail a1" id="pmr${m.id}">
+          <span class="pmt-z z3">الإضافات</span>
+          <span class="pmt-z z2">النتيجة</span>
+          <span class="pmt-z z1">الفائز</span>
+          <i class="pmt-fill" id="pmf${m.id}"></i>
+          <i class="pmt-dot" id="pmd${m.id}"></i>
+          <em class="pmt-tick" style="right:42.857%"><u>3</u></em>
+          <em class="pmt-tick" style="right:71.428%"><u>5</u></em>
+        </div>
+        <div class="pmt-zl"><span>الكروت والبلنتي</span><span>هدف لكل رقم صح</span><span>الفائز أو التعادل</span></div>
+        <p class="pmt-hint" id="pmh${m.id}"></p>
+      </div>
+      <div class="warn" id="w${m.id}">لم يتم حفظ التصويت — اضغط زر الحفظ تحت</div>
       <div class="sw"><button class="sbtn${p?" ok":""}" id="s${m.id}">${p?"توقعك محفوظ ✓":"احفظ توقعي"}</button></div>`}
       </div>
       <div id="sv${m.id}">${p?sumBox(m,p):""}</div>
@@ -916,8 +1165,34 @@ function drawMatches(){
 
     const btn=c.querySelector("#s"+m.id), wrn=c.querySelector("#w"+m.id);
     const WARN_DEF="لم يتم حفظ التصويت — اضغط زر الحفظ تحت";
+    /* live “potential points” meter — reads the same W/H/A/Y/P the card already keeps */
+    const PMAX = RULES.winner + RULES.goalEach*2 + RULES.yellows + RULES.penalty;
+    const meter=()=>{
+      const v=c.querySelector("#pmv"+m.id); if(!v) return;
+      const t = (W!=null?RULES.winner:0) + (H!=null?RULES.goalEach:0) + (A!=null?RULES.goalEach:0)
+              + (Y!=null?RULES.yellows:0) + (P!=null?RULES.penalty:0);
+      const pct = t/PMAX*100;
+      v.textContent = ar(t);
+      c.querySelector("#pmf"+m.id).style.width = pct+"%";
+      c.querySelector("#pmd"+m.id).style.right = pct+"%";
+      const tier=c.querySelector("#pmt"+m.id), rail=c.querySelector("#pmr"+m.id);
+      let z;
+      if(t<3){ tier.textContent="بداية"; tier.className="pmt-tier t1"; z="a1"; }
+      else if(t<5){ tier.textContent="قوي"; tier.className="pmt-tier t2"; z="a2"; }
+      else { tier.textContent = t===PMAX?"كامل":"ممتاز"; tier.className="pmt-tier t3"; z="a3"; }
+      rail.className="pmt-rail "+z;
+      const col = t===PMAX ? "#FF375E" : "var(--pur)";
+      v.style.color = col;
+      c.querySelector("#pmd"+m.id).style.borderColor = col;
+      const h=c.querySelector("#pmh"+m.id);
+      h.innerHTML = W==null
+        ? "اختر الفائز عشان تفتح باقي الأسئلة."
+        : t===PMAX ? "كمّلت كل الأسئلة — توقعك يقدر يجيب لك <b>"+ar(PMAX)+" نقاط</b>."
+        : "باقي <b>"+ar(PMAX-t)+"</b> نقاط تقدر تكسبها من الأسئلة الاختيارية.";
+    };
     let confirmSkip=false;
     const dirty=()=>{
+      meter();
       confirmSkip=false;
       if(wrn) wrn.textContent=WARN_DEF;
       DIRTY[m.id]=true;
@@ -931,7 +1206,7 @@ function drawMatches(){
       const lk=c.querySelector("#lk"+m.id), ex=c.querySelector("#ex"+m.id);
       if(lk) lk.style.display="none";
       if(ex) ex.classList.add("open");
-      if(H!=null&&A!=null){
+      if(H!=null&&A!=null && !(KO&&H===A)){
         if(W==="home"&&H<=A){ H=1; A=0; }
         else if(W==="away"&&A<=H){ H=0; A=1; }
         else if(W==="draw"&&H!==A){ H=1; A=1; }
@@ -947,7 +1222,7 @@ function drawMatches(){
       else A=Math.max(0,Math.min(15,(A==null?0:A)+(A==null&&d<0?0:d)));
       c.querySelector("#h"+m.id).textContent=H==null?"—":ar(H);
       c.querySelector("#a"+m.id).textContent=A==null?"—":ar(A);
-      if(H!=null&&A!=null){
+      if(H!=null&&A!=null && !(KO&&H===A)){
         W = H>A?"home":H<A?"away":"draw";
         c.querySelectorAll("[data-w]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.w===W));
       }
@@ -985,7 +1260,9 @@ function drawMatches(){
       }
       if(H!=null&&A!=null){
         const gw=H>A?"home":H<A?"away":"draw";
-        if(gw!==W){ toast("النتيجة ما تطابق اختيارك للفايز",true); return; }
+        if(!(KO&&gw==="draw") && gw!==W){
+          toast("النتيجة ما تطابق اختيارك",true); return;
+        }
       }
       const rec={user_id:ME.id,match_id:m.id,winner_pick:W,home_goals:H,away_goals:A,
                  yellows:Y,penalty:P,updated_at:new Date().toISOString()};
@@ -1004,8 +1281,68 @@ function drawMatches(){
       toast("انحفظ توقعك ✓");
       const f=await db.from("gc_predictions").select("*"); PREDS=f.data||[];
     };
-    box.appendChild(c);
+    meter();
+
+    const dayLbl=fmtDay(k);
+    if(dayLbl!==lastDay){
+      lastDay=dayLbl;
+      list.insertAdjacentHTML("beforeend",`<div class="fx-day">${dayLbl}</div>`);
+    }
+
+    const missList=!p ? null
+      : [(p.home_goals==null||p.away_goals==null)?"النتيجة":null,
+         p.yellows==null?"الكروت":null, p.penalty==null?"البلنتي":null].filter(Boolean);
+    const full = p && missList.length===0;
+
+    const dot = m.finished ? ["lk","✓"]
+              : !p ? (shut?["lk","🔒"]:["no","!"])
+              : full ? ["ok","✓"] : ["part","<i></i>"];
+
+    const stateChip = m.finished ? `<span class="fx-chip done">انتهت</span>`
+      : started ? `<span class="fx-chip live">جارية الحين</span>`
+      : `<span class="fx-chip soon">لم تبدأ</span>`;
+
+    const predChip = m.finished
+      ? (p ? `<span class="fx-chip miss">جبت ${scoreMatch(p,m)} من ${RULES.winner+2*RULES.goalEach+RULES.yellows+RULES.penalty}</span>`
+           : `<span class="fx-chip none"><i></i>ما صوّتت</span>`)
+      : !p ? `<span class="fx-chip none"><i></i>ما صوّتت أبداً</span>`
+      : full ? `<span class="fx-chip done">توقعك كامل · 7 نقاط ممكنة</span>`
+      : `<span class="fx-chip miss">ناقصك: ${missList.join("، ")}</span>`;
+
+    const goTxt = (m.finished||shut) ? ["ghost","شوف التوقعات"]
+      : !p ? ["","توقّع الحين"]
+      : full ? ["ghost","عدّل توقعي"] : ["","كمّل توقعك"];
+
+    const mid = m.finished
+      ? `<span class="fx-tm res">${m.home_goals} - ${m.away_goals}</span>`
+      : `<span class="fx-tm">${fmtTime(k)}</span>`;
+
+    const item=document.createElement("div"); item.className="fx-item";
+    item.innerHTML=`<button class="fx-row" type="button">
+        <span class="fx-top">
+          <span class="fx-st"><span class="fx-dot ${dot[0]}">${dot[1]}</span></span>
+          <span class="fx-side l"><span class="fx-nm">${m.home}</span>${flag(m.home,"19px","14px")}</span>
+          ${mid}
+          <span class="fx-side">${flag(m.away,"19px","14px")}<span class="fx-nm">${m.away}</span></span>
+        </span>
+        <span class="fx-meta">${stateChip}${predChip}
+          <span class="fx-go ${goTxt[0]}">${goTxt[1]} <em>▾</em></span></span>
+      </button><div class="fx-exp"></div>`;
+    item.querySelector(".fx-exp").appendChild(c);
+    item.querySelector(".fx-row").onclick=()=>{
+      const wasOpen=item.classList.contains("open");
+      list.querySelectorAll(".fx-item.open").forEach(x=>x.classList.remove("open"));
+      if(!wasOpen){ item.classList.add("open"); tickAll(); }
+    };
+    list.appendChild(item);
   });
+
+  list.insertAdjacentHTML("beforeend",
+    `<div class="fx-lgd">
+      <span><span class="fx-dot ok">✓</span>صوّتت</span>
+      <span><span class="fx-dot no">!</span>ما صوّتت</span>
+      <span><span class="fx-dot lk">🔒</span>مقفلة</span>
+    </div>`);
   tickAll();
 }
 
@@ -1032,15 +1369,67 @@ function predsTable(m){
       <td>${x.penalty?"نعم":"لا"}</td>
       ${m.finished?`<td class="pt">${ar(scoreMatch(x,m))}</td>`:""}</tr>`).join("")+`</table>`;
 }
-function predsPanel(m,open){
-  const n=predsOf(m).length, total=USERS.length;
-  const label="توقعات المشاركين";
-  return `<div class="pv">
-    <div class="pv-h"><span>${label}</span><span class="c">${ar(n)} من ${ar(total)} سجّلوا</span></div>
-    ${open?predsTable(m)
-          :`<div class="locked-note">التوقعات مخفية لين تبدأ المباراة.<br>أول ما تصفّر البداية تنكشف توقعات الجميع.</div>`}
+function voteSplit(m){
+  const list = predsOf(m);
+  const n = list.length;
+  if(!n) return null;
+  let h=0,d=0,a=0;
+  list.forEach(x=>{ const w=predWinner(x); if(w==='home')h++; else if(w==='away')a++; else if(w==='draw')d++; });
+  const pc = v => Math.round(v/n*100);
+  return { n, h, d, a, ph:pc(h), pd:pc(d), pa:pc(a) };
+}
+
+function voteBar(m){
+  const s = voteSplit(m);
+  if(!s) return '';
+  /* one row per outcome \u2014 all three always shown, so a 0% side never disappears,
+     and the label sits outside the bar so it can never be clipped */
+  const row = (cls,fl,name,pc,cnt) => `<div class="vb-r ${cls}">
+      ${fl}<span class="vb-nm">${name}</span>
+      <span class="vb-tr"><i style="width:${pc}%"></i></span>
+      <span class="vb-pc"><b>${ar(cnt)}</b> <small>(${ar(pc)}%)</small></span>
+    </div>`;
+  const tot = s.n;
+  return `<div class="vb-wrap">
+    <div class="vb-h"><span>نسب التصويت</span>
+      <em>${ar(tot)} من ${ar(USERS.length)} صوّتوا</em></div>
+    ${row('vb-rh', flag(m.home,'22px','15px'), m.home, s.ph, s.h)}
+    ${row('vb-rd', '<span class="vb-fln"></span>', 'تعادل', s.pd, s.d)}
+    ${row('vb-ra', flag(m.away,'22px','15px'), m.away, s.pa, s.a)}
   </div>`;
 }
+
+function predsPanel(m,open){
+  const bar = voteBar(m);
+  const n = predsOf(m).length;
+  if(!open){
+    return `<div class="pv">${bar}
+      <div class="locked-note">🔒 أسماء المتوقّعين تظهر عند انطلاق المباراة</div>
+    </div>`;
+  }
+  const id = 'vw'+m.id;
+  return `<div class="pv">${bar}
+    <button class="vb-btn" data-view="${id}">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      <span>عرض المتوقّعين (${ar(n)})</span>
+      ${(ME.is_admin && new Date(m.kickoff) > new Date() && !m.finished) ? `<em class="vb-adm">للأدمن فقط</em>` : ``}
+    </button>
+    <div class="vb-list" id="${id}" style="display:none">${predsTable(m)}</div>
+  </div>`;
+}
+
+
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest && ev.target.closest('.vb-btn');
+  if(!b) return;
+  ev.preventDefault();
+  var box = document.getElementById(b.getAttribute('data-view'));
+  if(!box) return;
+  var open = box.style.display !== 'none';
+  box.style.display = open ? 'none' : 'block';
+  var lbl = b.querySelector('span');
+  if(lbl) lbl.textContent = open ? lbl.textContent.replace('إخفاء','عرض') : lbl.textContent.replace('عرض','إخفاء');
+});
 
 function sumBox(m,p){
   const w=predWinner(p);
@@ -1069,8 +1458,8 @@ function drawBoard(){
     done.forEach(m=>{
       const pr=PREDS.find(x=>x.user_id===u.id&&x.match_id===m.id);
       if(!pr) return;
-      const rw=Math.sign(m.home_goals-m.away_goals);
-      const wp=pr.winner_pick||(pr.home_goals>pr.away_goals?"home":pr.home_goals<pr.away_goals?"away":"draw");
+      const rw = m.winner_team ? (m.winner_team==="home"?1:-1) : Math.sign(m.home_goals-m.away_goals);
+      const wp=predWinner(pr); if(!wp) return;
       if(rw===(wp==="home"?1:wp==="away"?-1:0)) correct++;
     });
     return {...u, pts:totalFor(u.id), correct};
@@ -1084,7 +1473,7 @@ function drawBoard(){
     return w==="home"?m.home:w==="away"?m.away:"تعادل";
   };
   const wOk=(m,p)=>{
-    const rw=Math.sign(m.home_goals-m.away_goals);
+    const rw = m.winner_team ? (m.winner_team==="home"?1:-1) : Math.sign(m.home_goals-m.away_goals);
     const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
     return rw===(w==="home"?1:w==="away"?-1:0);
   };
@@ -1105,7 +1494,7 @@ function drawBoard(){
         <div class="dt-pend">ما سجّل توقع لهالمباراة</div>
         <div class="dt-wait">—</div></div>`;
       if(!m.finished) return `<div class="dt-r">${head}
-        <div class="dt-pend">توقّع ${p.home_goals==null?"الفايز فقط":p.home_goals+" × "+p.away_goals} · بلنتي ${p.penalty==null?"—":(p.penalty?"نعم":"لا")} · كروت ${p.yellows==null?"—":yFull(p.yellows)}</div>
+        <div class="dt-pend"><b class="dt-pick">${wName(m,p)}</b> · ${p.home_goals==null?"الفايز فقط":p.home_goals+" × "+p.away_goals} · بلنتي ${p.penalty==null?"—":(p.penalty?"نعم":"لا")} · كروت ${p.yellows==null?"—":yFull(p.yellows)}</div>
         <div class="dt-wait">—</div></div>`;
       const pts=scoreMatch(p,m); tot+=pts;
       const okW=wOk(m,p);
@@ -1157,6 +1546,13 @@ function drawBoard(){
   box.querySelectorAll(".lb2-r").forEach(b=>b.onclick=()=>b.parentElement.classList.toggle("open"));
 }
 
+function markPending(){
+  if(!ME.is_admin) return;
+  const t=$("#tabAdmin"); if(!t) return;
+  const n=MATCHES.filter(m=>!m.finished && new Date(m.kickoff).getTime()+2*60*60*1000<=Date.now()).length;
+  t.innerHTML = n ? '<span class="tab-dot"></span>الإدارة' : "الإدارة";
+}
+
 function drawPredsPanel(){
   const sel=$("#mSel"), holder=$("#mPreds");
   const list=MATCHES.filter(m=>revealed(m));
@@ -1189,14 +1585,29 @@ function drawAdmin(){
   const votedCh=CHAMPS.length;
   const pctCh=USERS.length?Math.round(votedCh/USERS.length*100):0;
 
-  box.innerHTML=`<div class="panel" style="margin-bottom:16px">
-    <div class="ap-h"><span>المشاركون</span><span>للأدمن فقط</span></div>
+  const late=MATCHES.filter(m=>!m.finished && new Date(m.kickoff).getTime()+2*60*60*1000<=Date.now())
+                    .sort((a,b)=>new Date(a.kickoff)-new Date(b.kickoff));
+  const sinceTxt=k=>{
+    const h=Math.floor((Date.now()-new Date(k).getTime())/3600000);
+    return h<24 ? "خلصت من "+h+" ساعة" : "خلصت من "+Math.floor(h/24)+" يوم";
+  };
+
+  box.innerHTML=`${late.length?`<div class="pend-al">
+    <b>${late.length===1?"مباراة تنتظر النتيجة":late.length+" مباريات تنتظر النتيجة"}</b>
+    <p>خلصت وما اعتمدت نتيجتها — النقاط ما تتوزع لين تعتمدها.</p>
+    <div class="pend-li">${late.map(m=>`<div class="pend-i">
+      ${flag(m.home)} ${m.home} × ${m.away} ${flag(m.away)}
+      <span>${sinceTxt(m.kickoff)}</span></div>`).join("")}</div>
+  </div>`:""}
+  <div class="panel" style="margin-bottom:16px">
+    <div class="ap-h"><span>المشاركون</span>
+      <button class="ap-tg" id="apToggle" type="button" aria-expanded="${AP_OPEN}" aria-controls="apList">${AP_OPEN?"إخفاء القائمة":"عرض المشاركين ("+ar(USERS.length)+")"}</button></div>
     <div class="ap-stats">
       <div class="ap-st"><b>${USERS.length}</b><span>عضو مسجّل</span></div>
       <div class="ap-st"><b>${pctCh}<small style="font-size:12px">%</small></b><span>صوّتوا للبطل</span></div>
       <div class="ap-st live"><b>${live}</b><span>متصلين الحين</span></div>
     </div>
-    ${[...USERS].sort((a,b)=>{
+    <div class="ap-list" id="apList" ${AP_OPEN?"":"hidden"}>${[...USERS].sort((a,b)=>{
         const A=seenText(a.last_seen)[0]==="live", B=seenText(b.last_seen)[0]==="live";
         if(A!==B) return A?-1:1;
         return new Date(b.last_seen||0)-new Date(a.last_seen||0);
@@ -1212,11 +1623,19 @@ function drawAdmin(){
               pick?" · اختار "+pick.team:" · ما اختار بطل"}</span>
             <span class="ap-bar"><i style="width:${pct}%"></i></span></span>
           <span class="ap-pill ${st[0]}">${st[1]}</span></div>`;
-      }).join("")}
+      }).join("")}</div>
   </div>` + `<div class="champ"><h3>🏆 بطل البطولة</h3>
     <p>اضغط على البطل بعد النهائي عشان تتوزع الـ10 نقاط على اللي ضبطوه.</p>
     <div class="tg">${TEAMS.map(t=>
       `<button data-ch="${t}" aria-pressed="${SETTINGS.champion===t}">${flag(t,"30px","21px")}${t}</button>`).join("")}</div></div>`;
+  const apT=box.querySelector("#apToggle");
+  if(apT) apT.onclick=function(){
+    AP_OPEN=!AP_OPEN;
+    const l=box.querySelector("#apList"); if(l) l.hidden=!AP_OPEN;
+    apT.setAttribute("aria-expanded",AP_OPEN);
+    apT.textContent = AP_OPEN ? "إخفاء القائمة" : "عرض المشاركين ("+ar(USERS.length)+")";
+  };
+
   box.querySelectorAll("[data-ch]").forEach(b=>b.onclick=async()=>{
     const {error}=await db.from("gc_settings").upsert({key:"champion",value:b.dataset.ch});
     toast(error?"ما انحفظ":"البطل: "+b.dataset.ch,!!error); refresh();
@@ -1231,7 +1650,7 @@ function drawAdmin(){
     c.innerHTML=`
       <div class="mh" style="padding:15px 18px">
         <div class="mh-top" style="margin-bottom:0">
-          <span>${flag(m.home)} ${m.home} × ${m.away} ${flag(m.away)}</span>
+          <span>${flag(m.home)} ${m.home} × ${m.away} ${flag(m.away)}${m.hidden?' <span class="gc-hid">مخفية</span>':""}</span>
           <span style="color:${m.finished?"#7FE0A8":"var(--gold)"}">${m.finished?"معتمدة":"بانتظار"}</span></div>
       </div>
 
@@ -1250,6 +1669,12 @@ function drawAdmin(){
           <button data-ls="shut" aria-pressed="${lockState==="shut"}">مقفل</button>
         </div>
         <p class="note">تلقائي يعني يقفل قبل الموعد بخمس دقايق. ولو فتحته يدوياً، توقعات المشاركين تبقى مخفية عن بعض.</p>
+        <label style="display:block;font-size:11px;color:var(--sub);font-weight:700;margin:12px 0 6px">ظهور المباراة</label>
+        <div class="st3">
+          <button data-hide="0" aria-pressed="${!m.hidden}">ظاهرة للجميع</button>
+          <button data-hide="1" aria-pressed="${!!m.hidden}">مخفية</button>
+        </div>
+        <p class="note">المخفية ما تظهر لأحد غير الإدارة — استخدمها لو تبي تأجل مباراة أو تصلّح بياناتها.</p>
         <div style="margin-top:12px"><button class="sbtn ghost" id="cfg${m.id}">احفظ المنتخبات والموعد</button></div>
       </div>
 
@@ -1268,6 +1693,14 @@ function drawAdmin(){
           <button class="ynb yes" data-ap="1" aria-pressed="${m.penalty===true}"><span class="ic">✓</span>نعم</button>
           <button class="ynb no" data-ap="0" aria-pressed="${m.penalty===false||m.penalty==null}"><span class="ic">✕</span>لا</button>
         </div></div>
+      ${m.stage==="group"?"":`<div class="q">
+        <div class="q-top"><span class="q-n">5</span><span class="q-title">منو المتأهل؟</span></div>
+        <div class="wn">
+          <button data-wt="home" aria-pressed="${m.winner_team==="home"}">${flag(m.home,"34px","24px")}${m.home}</button>
+          <button data-wt="away" aria-pressed="${m.winner_team==="away"}">${flag(m.away,"34px","24px")}${m.away}</button>
+        </div>
+        <p class="note">لازم تحدده حتى لو انتهت بركلات الترجيح — عليه تنحسب نقاط السؤال الأول.</p>
+      </div>`}
 
       <div class="sw">
         <button class="sbtn" id="as${m.id}">${m.finished?"حدّث النتيجة وأعد حساب النقاط":"اعتمد النتيجة ووزّع النقاط"}</button>
@@ -1303,7 +1736,7 @@ function drawAdmin(){
         home_goals:+c.querySelector("#ah"+m.id).value,
         away_goals:+c.querySelector("#aa"+m.id).value,
         yellows:+c.querySelector("#ay"+m.id).value,
-        penalty:AP,finished:true,updated_at:new Date().toISOString()
+        penalty:AP,winner_team:WT,finished:true,updated_at:new Date().toISOString()
       }).eq("id",m.id);
       if(error){ toast("ما انحفظت النتيجة",true); return; }
       toast("انحفظت النتيجة وتحدّث الترتيب"); refresh();
