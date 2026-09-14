@@ -346,6 +346,12 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 .ap-pill{font-size:10px;font-weight:700;border-radius:20px;padding:3px 9px;white-space:nowrap}
 .ap-pill.live{background:#E6F9F0;color:#137A43;border:1px solid #B2F0CB}
 .ap-pill.off{background:#F4F3F7;color:#6B6579;border:1px solid #E6E4EE}
+.ap-right{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.ap-pill.lock{background:#FFEFF3;color:#C41E48;border:1px solid #FFC2D0}
+.ap-lk{width:28px;height:28px;border-radius:9px;background:#F4F2F8;border:1px solid var(--line);
+  font-size:12px;line-height:1;flex-shrink:0}
+.ap-lk:active{background:#E9E4F3}
+.ap-lk.on{background:#FFEFF3;border-color:#FFC2D0}
 
 /* ── لوحة الترتيب ── */
 .lb2{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px 16px;
@@ -747,13 +753,32 @@ window.addEventListener("beforeunload",e=>{
   if(Object.values(DIRTY).some(Boolean)){ e.preventDefault(); e.returnValue=""; }
 });
 
+const MAX_FAILS=5;
 $("#btnLogin").onclick = async ()=>{
   const name=$("#inName").value.trim(), pin=$("#inPin").value.trim();
-  const e=$("#loginErr");
-  if(!name||!pin){ e.textContent="عبّي الاسم والرقم السري"; e.classList.add("on"); return; }
-  const {data}=await db.from("gc_users").select("*").eq("name",name).eq("pin",pin).maybeSingle();
-  if(!data){ e.textContent="الاسم أو الرقم السري غلط"; e.classList.add("on"); return; }
-  ME=data; localStorage.setItem("gc_me",JSON.stringify(data)); start();
+  const e=$("#loginErr"), btn=$("#btnLogin");
+  const show=t=>{ e.textContent=t; e.classList.add("on"); };
+  if(!name||!pin){ show("عبّي الاسم والرقم السري"); return; }
+
+  btn.disabled=true;
+  const {data:u}=await db.from("gc_users").select("*").eq("name",name).maybeSingle();
+  btn.disabled=false;
+
+  if(!u){ show("هذا الاسم مو مسجّل. كلّم مبارك العويس يضيفك."); return; }
+  if(u.locked){ show("الحساب مقفل بعد "+MAX_FAILS+" محاولات خاطئة. كلّم مبارك العويس يفتحه لك."); return; }
+
+  if(String(u.pin)!==pin){
+    const n=(u.fail_count||0)+1;
+    const lock = n>=MAX_FAILS;
+    await db.from("gc_users").update({fail_count:n, locked:lock}).eq("id",u.id);
+    show(lock ? "انقفل الحساب بعد "+MAX_FAILS+" محاولات. كلّم مبارك العويس يفتحه لك."
+              : "الرقم السري غلط — باقي لك "+(MAX_FAILS-n)+" محاولات قبل ما ينقفل الحساب.");
+    return;
+  }
+
+  if(u.fail_count) await db.from("gc_users").update({fail_count:0}).eq("id",u.id);
+  e.classList.remove("on");
+  ME=u; localStorage.setItem("gc_me",JSON.stringify(u)); start();
 };
 $("#inPin").addEventListener("keydown",e=>{ if(e.key==="Enter") $("#btnLogin").click(); });
 $("#btnOut").onclick=()=>{ localStorage.removeItem("gc_me"); location.reload(); };
@@ -792,7 +817,7 @@ async function refresh(){
   const [m,p,u,c,s]=await Promise.all([
     db.from("gc_matches").select("*").order("kickoff"),
     db.from("gc_predictions").select("*"),
-    db.from("gc_users").select("id,name,last_seen"),
+    db.from("gc_users").select("id,name,last_seen,locked,fail_count"),
     db.from("gc_champion_picks").select("*"),
     db.from("gc_settings").select("*")
   ]);
@@ -1605,7 +1630,9 @@ function drawAdmin(){
     <div class="ap-stats">
       <div class="ap-st"><b>${USERS.length}</b><span>عضو مسجّل</span></div>
       <div class="ap-st"><b>${pctCh}<small style="font-size:12px">%</small></b><span>صوّتوا للبطل</span></div>
-      <div class="ap-st live"><b>${live}</b><span>متصلين الحين</span></div>
+      <div class="ap-st ${USERS.some(u=>u.locked)?"":"live"}">
+        <b style="${USERS.some(u=>u.locked)?"color:#C41E48":""}">${USERS.filter(u=>u.locked).length||live}</b>
+        <span>${USERS.some(u=>u.locked)?"حسابات مقفلة":"متصلين الحين"}</span></div>
     </div>
     <div class="ap-list" id="apList" ${AP_OPEN?"":"hidden"}>${[...USERS].sort((a,b)=>{
         const A=seenText(a.last_seen)[0]==="live", B=seenText(b.last_seen)[0]==="live";
@@ -1620,14 +1647,32 @@ function drawAdmin(){
           <span class="ap-av ${st[0]==="live"?"live":""}">${u.name.trim().charAt(0)}<i></i></span>
           <span class="ap-nm"><b>${u.name}</b>
             <span>${n?"توقّع "+n+" من "+MATCHES.length+" مباراة":"ما توقّع أي مباراة"}${
-              pick?" · اختار "+pick.team:" · ما اختار بطل"}</span>
+              pick?" · اختار "+pick.team:" · ما اختار بطل"}${
+              (!u.locked&&u.fail_count)?' · <b style="color:#C41E48">'+u.fail_count+' محاولات خاطئة</b>':""}</span>
             <span class="ap-bar"><i style="width:${pct}%"></i></span></span>
-          <span class="ap-pill ${st[0]}">${st[1]}</span></div>`;
+          <span class="ap-right">
+            ${u.locked
+              ? `<span class="ap-pill lock">مقفل</span>`
+              : `<span class="ap-pill ${st[0]}">${st[1]}</span>`}
+            <button class="ap-lk ${u.locked?"on":""}" data-lock="${u.id}"
+              data-want="${u.locked?"0":"1"}" type="button"
+              title="${u.locked?"افتح الحساب":"اقفل الحساب"}">${u.locked?"🔓":"🔒"}</button>
+          </span></div>`;
       }).join("")}</div>
   </div>` + `<div class="champ"><h3>🏆 بطل البطولة</h3>
     <p>اضغط على البطل بعد النهائي عشان تتوزع الـ10 نقاط على اللي ضبطوه.</p>
     <div class="tg">${TEAMS.map(t=>
       `<button data-ch="${t}" aria-pressed="${SETTINGS.champion===t}">${flag(t,"30px","21px")}${t}</button>`).join("")}</div></div>`;
+  box.querySelectorAll("[data-lock]").forEach(b=>b.onclick=async()=>{
+    const want=b.dataset.want==="1";
+    b.disabled=true;
+    const {error}=await db.from("gc_users")
+      .update({locked:want, fail_count:0}).eq("id",b.dataset.lock);
+    b.disabled=false;
+    toast(error?"ما انحفظ — تأكد من صلاحية التعديل":(want?"انقفل الحساب":"انفتح الحساب"),!!error);
+    refresh();
+  });
+
   const apT=box.querySelector("#apToggle");
   if(apT) apT.onclick=function(){
     AP_OPEN=!AP_OPEN;
