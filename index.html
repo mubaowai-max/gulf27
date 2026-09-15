@@ -1243,8 +1243,13 @@ function drawMatches(){
 
     c.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{
       const d=+b.dataset.d;
-      if(b.dataset.t==="h") H=Math.max(0,Math.min(15,(H==null?0:H)+(H==null&&d<0?0:d)));
-      else A=Math.max(0,Math.min(15,(A==null?0:A)+(A==null&&d<0?0:d)));
+      if(b.dataset.t==="h"){
+        H=Math.max(0,Math.min(15,(H==null?0:H)+(H==null&&d<0?0:d)));
+        if(A==null) A=0;
+      } else {
+        A=Math.max(0,Math.min(15,(A==null?0:A)+(A==null&&d<0?0:d)));
+        if(H==null) H=0;
+      }
       c.querySelector("#h"+m.id).textContent=H==null?"—":ar(H);
       c.querySelector("#a"+m.id).textContent=A==null?"—":ar(A);
       if(H!=null&&A!=null && !(KO&&H===A)){
