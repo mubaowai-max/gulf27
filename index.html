@@ -207,6 +207,8 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 .edit{display:none;width:calc(100% - 24px);margin:0 12px 16px;padding:12px;border-radius:12px;
   border:1.5px solid var(--line);background:#fff;color:var(--pur);font-weight:700;font-size:13.5px}
 .edit:active{background:var(--tint)}
+.q.qmiss{border-color:var(--pink);background:#FFF7F9;box-shadow:0 0 0 3px rgba(255,55,94,.1)}
+.q.qmiss .q-title{color:#C41E48}
 .lockq{margin:0 12px 14px;border:1.5px dashed #E0D4F5;border-radius:14px;padding:16px 14px;
   text-align:center;background:#FCFAFF}
 .lockq b{display:block;font-size:13px;font-weight:800;color:var(--pur);margin-bottom:4px}
@@ -689,8 +691,8 @@ tr.me td{background:var(--tint)}
     <div class="pane" id="pane-rules">
       <div class="panel rules">
         <h4>كيف تلعب</h4>
-        <p>قبل كل مباراة تختار منو راح يفوز — وهذا إجباري. وباقي الأسئلة اختيارية: النتيجة، وعدد الكروت الصفرا، والبلنتي.</p>
-        <p>لو اكتفيت بالفايز بس تاخذ 3 نقاط، ولو كمّلت الباقي توصل 7. واللي ما تجاوب عليه ما ياخذ ولا يخصم.</p>
+        <p>قبل كل مباراة تجاوب على أربعة أسئلة: منو راح يفوز، وكم تنتهي النتيجة، وكم كرت أصفر، وهل بيصير بلنتي.</p>
+        <p>لازم تجاوب عليها كلها — التوقع الناقص ما ينحفظ، والموقع يبيّن لك شنو الناقص بالضبط.</p>
         <p>تقدر تعدّل توقعك أي وقت. <b>التوقع يقفل قبل بداية المباراة بخمس دقايق</b>، وكل بطاقة مكتوب فيها كم باقي على القفل.</p>
         <h4>نقاط المباراة</h4>
         <p><b>3 نقاط</b> — إذا عرفت مين الفايز، والتعادل يحتسب مثل الفوز.</p>
@@ -1110,15 +1112,15 @@ function drawMatches(){
       </div>
 
       <div class="lockq" id="lk${m.id}" ${W?'style="display:none"':""}>
-        <b>باقي 4 نقاط تقدر تكسبها</b>
-        <span>اختر منو راح يفوز فوق، وراح تنفتح لك 3 أسئلة اختيارية: النتيجة، والكروت الصفرا، والبلنتي.</span>
+        <b>باقي 4 نقاط</b>
+        <span>اختر منو راح يفوز فوق، وراح تنفتح لك باقي الأسئلة: النتيجة، والكروت الصفرا، والبلنتي. لازم تجاوب عليها كلها عشان ينحفظ توقعك.</span>
       </div>
 
       <div class="extra${W?" open":""}" id="ex${m.id}">
-      <div class="xbar"><b>الأسئلة الاختيارية</b><span>+4 نقاط ممكنة</span></div>
-      <div class="q">
+      <div class="xbar"><b>باقي الأسئلة</b><span>+4 نقاط · كلها مطلوبة</span></div>
+      <div class="q" id="q2${m.id}">
         <div class="q-top"><span class="q-n">2</span><span class="q-title">وكم تنتهي النتيجة؟</span>
-          <span class="q-badge">نقطتين · اختياري</span></div>
+          <span class="q-badge">نقطتين · إجباري</span></div>
         <div class="sc">
           <div class="sc-side"><span class="f">${flag(m.home,"38px","27px")}</span><div class="n">${m.home}</div>
             <div class="stp">
@@ -1134,17 +1136,17 @@ function drawMatches(){
         <p class="note">نقطة على كل رقم صح، وتنحسب حتى لو غلطت بالفايز.</p>
       </div>
 
-      <div class="q">
+      <div class="q" id="q3${m.id}">
         <div class="q-top"><span class="q-n">3</span><span class="q-title">كم كرت أصفر بالمباراة؟</span>
-          <span class="q-badge">نقطة · اختياري</span></div>
+          <span class="q-badge">نقطة · إجباري</span></div>
         <div class="grid">${[0,1,2,3,4,5].map(v=>
           `<button class="opt${v===5?" sm":""}" data-y="${v}" aria-pressed="${Y===v}" ${shut?"disabled":""}>${v===5?"5 فأكثر":ar(v)}</button>`).join("")}</div>
         <p class="note">خيار 5 فأكثر يكسب إذا طلعت الكروت خمسة أو أكثر.</p>
       </div>
 
-      <div class="q">
+      <div class="q" id="q4${m.id}">
         <div class="q-top"><span class="q-n">4</span><span class="q-title">بيصير بلنتي خلال المباراة؟</span>
-          <span class="q-badge">نقطة · اختياري</span></div>
+          <span class="q-badge">نقطة · إجباري</span></div>
         <div class="yn">
           <button class="ynb yes" data-p="1" aria-pressed="${P===true}" ${shut?"disabled":""}>
             <span class="ic">✓</span>نعم فيه بلنتي</button>
@@ -1153,7 +1155,7 @@ function drawMatches(){
         </div>
         <p class="note">نقطة إذا ضبطت — سواء صار بلنتي أو ما صار.</p>
       </div>
-      <p class="skipnote">تقدر تحفظ بدون ما تجاوب على الاختيارية</p>
+      <p class="skipnote">لازم تجاوب على الأسئلة الأربعة عشان ينحفظ توقعك</p>
       </div>
 
       ${shut?"":`<div class="pmt" id="pm${m.id}">
@@ -1215,10 +1217,9 @@ function drawMatches(){
         : t===PMAX ? "كمّلت كل الأسئلة — توقعك يقدر يجيب لك <b>"+ar(PMAX)+" نقاط</b>."
         : "باقي <b>"+ar(PMAX-t)+"</b> نقاط تقدر تكسبها من الأسئلة الاختيارية.";
     };
-    let confirmSkip=false;
     const dirty=()=>{
       meter();
-      confirmSkip=false;
+      ["q2","q3","q4"].forEach(q=>{ const el=c.querySelector("#"+q+m.id); if(el) el.classList.remove("qmiss"); });
       if(wrn) wrn.textContent=WARN_DEF;
       DIRTY[m.id]=true;
       if(btn){ btn.classList.remove("ok"); btn.classList.add("pend"); btn.textContent="احفظ توقعي"; }
@@ -1278,14 +1279,20 @@ function drawMatches(){
       if(!W){ toast("لازم تختار منو راح يفوز أول",true); return; }
       const miss=[(H==null||A==null)?"النتيجة":null, Y==null?"الكروت الصفرا":null,
                   P==null?"البلنتي":null].filter(Boolean);
-      if(miss.length && !confirmSkip){
-        confirmSkip=true;
+      ["q2","q3","q4"].forEach(q=>{ const el=c.querySelector("#"+q+m.id); if(el) el.classList.remove("qmiss"); });
+      if(miss.length){
+        if(H==null||A==null) c.querySelector("#q2"+m.id)?.classList.add("qmiss");
+        if(Y==null) c.querySelector("#q3"+m.id)?.classList.add("qmiss");
+        if(P==null) c.querySelector("#q4"+m.id)?.classList.add("qmiss");
         if(wrn){
-          wrn.textContent="ناقصك: "+miss.join("، ")+" — كمّلها وتزيد نقاطك، أو اضغط الزر مرة ثانية للحفظ بدونها";
+          wrn.textContent="ما ينحفظ — ناقصك: "+miss.join("، ");
           wrn.classList.add("on");
         }
         btn.classList.add("pend");
-        btn.textContent="احفظ بدون الاختيارية";
+        btn.textContent="كمّل الناقص عشان تحفظ";
+        toast("ناقصك: "+miss.join("، "),true);
+        const first=c.querySelector(".qmiss");
+        if(first) first.scrollIntoView({behavior:"smooth",block:"center"});
         return;
       }
       if(H!=null&&A!=null){
@@ -1475,7 +1482,7 @@ function sumBox(m,p){
     <div class="row"><span>النتيجة</span><b>${sc}</b></div>
     <div class="row"><span>الكروت الصفرا</span><b>${yc}</b></div>
     <div class="row"><span>البلنتي</span><b>${pc}</b></div>
-    ${miss.length?`<div class="row" style="border:none"><span style="color:#B08A2E">تقدر تزيد نقاطك لو كمّلت: ${miss.join("، ")}</span></div>`:""}</div>`;
+    ${miss.length?`<div class="row" style="border:none"><span style="color:#C41E48">توقع قديم ناقص: ${miss.join("، ")} — افتح وعدّله</span></div>`:""}</div>`;
 }
 
 function drawBoard(){
