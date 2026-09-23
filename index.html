@@ -28,8 +28,9 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 @keyframes lgUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes lgFlag{from{opacity:0;transform:translateY(6px) scale(.9)}to{opacity:1;transform:none}}
 @keyframes lgGlow{0%,100%{opacity:.55}50%{opacity:.9}}
-#login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;
-  z-index:100;overflow-y:auto}
+#login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100;
+  overflow-y:auto;padding:calc(18px + env(safe-area-inset-top,0px)) 18px
+  calc(18px + env(safe-area-inset-bottom,0px))}
 .lb{width:100%;max-width:380px;background:#fff;border-radius:24px;overflow:hidden;
   box-shadow:0 22px 60px rgba(20,2,40,.45)}
 .lb-top{background:#2E0A4A;padding:24px 22px 20px;text-align:center;position:relative;overflow:hidden}
@@ -67,8 +68,9 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 @media (prefers-reduced-motion:reduce){.lb *{animation:none!important}}
 
 /* ── ترويسة ── */
-.hdr{background:var(--pur);border-bottom:3px solid var(--pink);padding:14px 16px 10px;
-  position:sticky;top:0;z-index:50}
+.topbar{position:sticky;top:0;z-index:50}
+.hdr{background:var(--pur);border-bottom:3px solid var(--pink);
+  padding:calc(14px + env(safe-area-inset-top,0px)) 16px 10px}
 .hdr-brand{text-align:center}
 .hdr-t{font-family:'Noto Kufi Arabic',sans-serif;font-size:19px;font-weight:700;color:#fff;line-height:1.35}
 .hdr-s{font-size:11px;color:var(--lav);margin-top:3px}
@@ -84,11 +86,11 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 
 /* ── تبويبات ── */
 .tabs{display:flex;gap:5px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line);
-  overflow-x:auto;position:sticky;top:96px;z-index:40;justify-content:center}
+  overflow-x:auto;justify-content:center}
 .tab{padding:8px 17px;border-radius:9px;font-size:13.5px;color:#888;font-weight:600;white-space:nowrap}
 .tab.act{background:var(--pur);color:#fff;font-weight:700}
 .pane{display:none}.pane.act{display:block}
-.page{padding:16px 14px 40px;max-width:640px;margin:0 auto}
+.page{padding:16px 14px calc(40px + env(safe-area-inset-bottom,0px));max-width:640px;margin:0 auto}
 
 /* ── بطاقة ── */
 .mc{background:#fff;border-radius:24px;overflow:hidden;margin-bottom:16px;border:1px solid var(--line);
@@ -858,6 +860,8 @@ tr.me td{background:var(--tint)}
 .locked-note{padding:16px;text-align:center;font-size:12.5px;color:var(--sub);line-height:1.9}
 .adm select,.adm input[type=datetime-local]{width:100%;background:none;border:none;color:var(--ink);outline:none;
   font-family:inherit;font-size:14px;font-weight:700}
+.sbtn.done{background:linear-gradient(135deg,#1A9E58,#2ECC71);box-shadow:0 8px 24px rgba(26,158,88,.28)}
+.sbtn:disabled{opacity:.7}
 .sbtn.ghost{background:#fff;border:2px solid var(--line);color:var(--grey);box-shadow:none;font-size:14px;padding:13px}
 .sbtn.ghost:active{background:var(--tint)}
 .st3{display:flex;gap:8px}
@@ -867,7 +871,7 @@ tr.me td{background:var(--tint)}
 .sel{width:100%;padding:12px 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--tint);
   color:var(--ink);font-family:inherit;font-size:14px;font-weight:600;outline:none;margin-bottom:14px}
 .hide{display:none!important}
-#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--line);
+#toast{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--line);
   border-radius:13px;padding:12px 22px;font-size:13.5px;font-weight:700;z-index:999;display:none;
   box-shadow:0 10px 34px rgba(0,0,0,.3);color:var(--green)}
 #toast.on{display:block}
@@ -918,6 +922,7 @@ tr.me td{background:var(--tint)}
 </section>
 
 <main id="app" class="hide">
+  <div class="topbar">
   <div class="hdr">
     <div class="hdr-brand">
       <div class="hdr-t">قروب عائلة العويس</div>
@@ -938,6 +943,7 @@ tr.me td{background:var(--tint)}
     <button class="tab" data-tab="board">الترتيب</button>
     <button class="tab" data-tab="rules">القوانين</button>
     <button class="tab hide" data-tab="admin" id="tabAdmin">الإدارة</button>
+  </div>
   </div>
 
   <div class="page">
@@ -1014,7 +1020,7 @@ function toast(msg,bad){
 
 let ME=null,MATCHES=[],PREDS=[],USERS=[],CHAMPS=[],SETTINGS={};
 const DIRTY={};
-let AP_OPEN=false;
+let AP_OPEN=false, ADM_OPEN=null;
 window.addEventListener("beforeunload",e=>{
   if(Object.values(DIRTY).some(Boolean)){ e.preventDefault(); e.returnValue=""; }
 });
@@ -1729,9 +1735,19 @@ function missingBox(m){
     .sort((a,b)=>a.localeCompare(b,"ar"));
   if(!miss.length && !part.length)
     return `<div class="nv nv-ok">✓ كل المشاركين صوّتوا على هالمباراة</div>`;
+
+  const k=new Date(m.kickoff);
+  const msg =
+    "🏆 خليجي 27 — تذكير\n"+
+    fmtDay(k)+"\n\n"+
+    "⚽ "+m.home+" × "+m.away+" — "+fmtTime(k)+"\n"+
+    "❌ ما صوّتوا ("+miss.length+"):\n"+miss.join("، ")+
+    (part.length?"\n\n⚠️ توقعهم ناقص ("+part.length+"):\n"+part.join("، "):"")+
+    "\n\n⏰ التوقع يسكّر قبل المباراة بـ 5 دقايق";
+
   return `<div class="nv">
     ${miss.length?`<div class="nv-h"><b>ما صوّتوا (${ar(miss.length)})</b>
-        <button class="nv-cp" type="button" data-copy="${miss.join("، ")}">انسخ الأسماء</button></div>
+        <button class="nv-cp" type="button" data-copy="${encodeURIComponent(msg)}">انسخ الرسالة</button></div>
       <div class="nv-l">${miss.map(n=>`<span>${n}</span>`).join("")}</div>`:""}
     ${part.length?`<div class="nv-h" style="margin-top:${miss.length?"10px":"0"}"><b>توقعهم ناقص (${ar(part.length)})</b></div>
       <div class="nv-l part">${part.map(n=>`<span>${n}</span>`).join("")}</div>`:""}
@@ -1743,9 +1759,10 @@ document.addEventListener('click', function(ev){
   const cp = ev.target.closest && ev.target.closest('.nv-cp');
   if(cp){
     ev.stopPropagation();
-    const txt = cp.dataset.copy;
+    const txt = decodeURIComponent(cp.dataset.copy);
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject())
-      .then(()=>toast("انتسخت الأسماء"))
+      .then(()=>{ toast("انتسخت الرسالة — الصقها بالقروب"); cp.textContent="انتسخت ✓";
+                  setTimeout(()=>cp.textContent="انسخ الرسالة",2200); })
       .catch(()=>toast("ما قدرت أنسخ — انسخها يدوياً",true));
     return;
   }
@@ -1832,15 +1849,17 @@ function drawBoard(){
       const okH=p.home_goals!=null&&p.home_goals===m.home_goals;
       const okA=p.away_goals!=null&&p.away_goals===m.away_goals;
       const okY=p.yellows!=null&&(p.yellows>=YMAX ? m.yellows>=YMAX : p.yellows===m.yellows);
-      const penCls = p.penalty==null?"nu":(p.penalty?(m.penalty?"ok":"no"):(m.penalty?"no":"nu"));
-      const penPts = (p.penalty&&m.penalty)?RULES.penalty:0;
+      const penHit = p.penalty!=null && m.penalty!=null &&
+        (RULES.penaltyBothWays ? p.penalty===m.penalty : (p.penalty && m.penalty));
+      const penCls = p.penalty==null ? "nu" : (penHit ? "ok" : "no");
+      const penPts = penHit ? RULES.penalty : 0;
       return `<div class="dt-r">${head}
         ${chip(okW?"ok":"no", wName(m,p)+(okW?" ✓":" ✗"), okW?RULES.winner:0)}
         <div class="dt-c"><span class="dt-pair">
           <span class="dt-chip ${p.home_goals==null?"nu":okH?"ok":"no"}">${flag(m.home)} ${p.home_goals==null?"—":p.home_goals}${p.home_goals==null?"":okH?" ✓":" ✗"}</span>
           <span class="dt-chip ${p.away_goals==null?"nu":okA?"ok":"no"}">${flag(m.away)} ${p.away_goals==null?"—":p.away_goals}${p.away_goals==null?"":okA?" ✓":" ✗"}</span>
         </span><small class="${(okH||okA)?"g":"z"}">+${(okH?1:0)+(okA?1:0)}</small></div>
-        ${chip(penCls, p.penalty==null?"—":(p.penalty?"نعم":"لا")+(penCls==="ok"?" ✓":penCls==="no"?" ✗":""), penPts)}
+        ${chip(penCls, p.penalty==null?"—":(p.penalty?"نعم":"لا")+(penCls==="ok"?" ✓":" ✗"), penPts)}
         ${chip(p.yellows==null?"nu":okY?"ok":"no", p.yellows==null?"—":yLabel(p.yellows)+(okY?" ✓":" ✗"), okY?1:0)}
         <div class="dt-pts"><b>${pts}</b><span>نقاط</span></div></div>`;
     }).join("");
@@ -2095,14 +2114,40 @@ function drawAdmin(){
     };
 
     c.querySelector("#as"+m.id).onclick=async e=>{
-      const {error}=await db.from("gc_matches").update({
+      const btn2=e.currentTarget;
+      const back=()=>{ btn2.disabled=false; btn2.textContent=m.finished?"حدّث النتيجة وأعد حساب النقاط":"اعتمد النتيجة ووزّع النقاط"; };
+      btn2.disabled=true; btn2.textContent="جاري الحفظ…";
+
+      const payload={
         home_goals:+c.querySelector("#ah"+m.id).value,
         away_goals:+c.querySelector("#aa"+m.id).value,
         yellows:+c.querySelector("#ay"+m.id).value,
-        penalty:AP,winner_team:WT,finished:true,updated_at:new Date().toISOString()
-      }).eq("id",m.id);
-      if(error){ toast("ما انحفظت النتيجة",true); return; }
-      toast("انحفظت النتيجة وتحدّث الترتيب"); refresh();
+        penalty:AP, finished:true, updated_at:new Date().toISOString()
+      };
+      if(m.stage!=="group" && WT) payload.winner_team=WT;
+
+      let res;
+      try{
+        res = await Promise.race([
+          db.from("gc_matches").update(payload).eq("id",m.id),
+          new Promise(r=>setTimeout(()=>r({error:{message:"انتهى الوقت — تأكد من الاتصال"}}),12000))
+        ]);
+      }catch(ex){ res={error:{message:String(ex&&ex.message||ex)}}; }
+
+      if(res && res.error){
+        back();
+        const msg=String(res.error.message||"");
+        toast(msg.includes("column")||msg.includes("winner_team")||msg.includes("hidden")
+          ? "ناقص عمود بقاعدة البيانات — "+msg
+          : "ما انحفظت النتيجة — "+msg, true);
+        console.error(res.error); return;
+      }
+
+      btn2.disabled=false;
+      btn2.classList.add("done"); btn2.textContent="انحفظت ✓";
+      ADM_OPEN=m.id;
+      toast("انحفظت النتيجة وتوزعت النقاط");
+      setTimeout(refresh,700);
     };
 
     const un=c.querySelector("#un"+m.id);
@@ -2112,7 +2157,8 @@ function drawAdmin(){
       toast("انلغى الاعتماد وانسحبت نقاط هالمباراة"); refresh();
     };
 
-    const it=document.createElement("div"); it.className="adm-item";
+    const it=document.createElement("div");
+    it.className="adm-item"+(ADM_OPEN===m.id?" open":"");
     it.innerHTML=`<button class="adm-head" type="button">
         <span>${flag(m.home)} ${m.home} × ${m.away} ${flag(m.away)}${m.hidden?' <span class="gc-hid">مخفية</span>':""}</span>
         <span class="st" style="color:${m.finished?"#7FE0A8":"var(--gold)"}">${m.finished?"معتمدة":"بانتظار"}</span>
@@ -2122,7 +2168,7 @@ function drawAdmin(){
     it.querySelector(".adm-head").onclick=()=>{
       const was=it.classList.contains("open");
       box.querySelectorAll(".adm-item.open").forEach(x=>x.classList.remove("open"));
-      if(!was) it.classList.add("open");
+      if(!was){ it.classList.add("open"); ADM_OPEN=m.id; } else { ADM_OPEN=null; }
     };
     box.appendChild(it);
   });
