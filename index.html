@@ -394,34 +394,38 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 .lb2-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
 .lb2-h b{font-size:17px;font-weight:800;color:#2E0A4A;font-family:'Noto Kufi Arabic',sans-serif}
 .lb2-h span{font-size:11px;color:#6B5B83;font-variant-numeric:tabular-nums}
-.lb2-w{border-bottom:1px solid #F5F1FB}
-.lb2-w:last-of-type{border-bottom:none}
-.lb2-r{width:100%;display:flex;align-items:center;gap:11px;padding:11px 8px;border:none;background:none;
-  text-align:right;border-radius:12px;transition:background .16s ease}
-.lb2-r:hover{background:#FBF8FF}
-.lb2-rk{width:20px;text-align:center;font-family:'Noto Kufi Arabic',sans-serif;font-size:13px;
-  font-weight:800;color:#B0A6C2;font-variant-numeric:tabular-nums}
-.lb2-w.p1 .lb2-rk{color:#C9A24B}.lb2-w.p2 .lb2-rk{color:#9C93AE}.lb2-w.p3 .lb2-rk{color:#B08968}
-.lb2-av{width:34px;height:34px;border-radius:50%;background:#F3EEFB;color:var(--pur);display:flex;
-  align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
-.lb2-w.p1 .lb2-av{background:#FFF6DA;color:#8A6D00;box-shadow:0 0 0 2px #F2DFA0}
+.lb2-w{margin-bottom:8px}
+.lb2-w:last-of-type{margin-bottom:0}
+.lb2-r{width:100%;display:flex;align-items:center;gap:10px;background:#FBF9FF;
+  border:1.5px solid var(--line);border-radius:14px;padding:10px 11px;text-align:right;
+  transition:border-color .16s,background .16s}
+.lb2-r:hover{border-color:#C5AEE0;background:#fff}
+.lb2-w.p1 .lb2-r{border-color:#F2DFA0;background:linear-gradient(135deg,#FFFBEF,#fff)}
+.lb2-w.me .lb2-r{background:#F7F1FF}
+.lb2-num{width:26px;height:26px;border-radius:9px;background:#EFEAF9;color:#5B4B72;display:flex;
+  align-items:center;justify-content:center;font-family:'Noto Kufi Arabic',sans-serif;font-size:12px;
+  font-weight:800;flex-shrink:0;font-variant-numeric:tabular-nums}
+.lb2-w.p1 .lb2-num{background:#C9A24B;color:#fff}
+.lb2-w.p2 .lb2-num{background:#CECBF6;color:#26215C}
+.lb2-w.p3 .lb2-num{background:#9FE1CB;color:#04342C}
 .lb2-i{flex:1;min-width:0}
-.lb2-i b{display:block;font-size:14px;font-weight:700;color:var(--ink);line-height:1.4}
+.lb2-i b{display:block;font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.4}
 .lb2-i span{display:block;font-size:10.5px;color:#7A6890}
-.lb2-i span img{width:15px;height:11px;object-fit:contain;vertical-align:-1px;border-radius:1px;
-  margin:0 2px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.22))}
-.lb2-bar{height:4px;background:#F3EEFB;border-radius:20px;overflow:hidden;margin-top:6px;max-width:150px}
-.lb2-bar i{display:block;height:100%;background:#C5AEE0;border-radius:20px;
-  transition:width .9s cubic-bezier(.22,1,.36,1)}
-.lb2-w.p1 .lb2-bar i{background:#C9A24B}
-.lb2-p{font-family:'Noto Kufi Arabic',sans-serif;font-size:19px;font-weight:800;color:var(--pur);
-  font-variant-numeric:tabular-nums;min-width:34px;text-align:left}
-.lb2-w.p1 .lb2-p{color:#C9A24B}
+.lb2-fl{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;min-width:34px}
+.lb2-fl img{width:26px;height:18px;object-fit:contain;border-radius:2px;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.25))}
+.lb2-fl span{font-size:8.5px;color:#8A6D00;font-weight:700}
+.lb2-fl.none span,.lb2-fl.hid span{color:#B0A6C2}
+.lb2-pts{background:linear-gradient(135deg,var(--pur),#7B1FA2);border-radius:11px;padding:6px 10px;
+  text-align:center;flex-shrink:0}
+.lb2-pts b{display:block;font-family:'Noto Kufi Arabic',sans-serif;font-size:15px;color:var(--gold);
+  font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.lb2-pts span{font-size:7.5px;color:rgba(255,255,255,.55)}
 .lb2-cv{font-size:11px;color:#B0A6C2;transition:transform .2s ease}
 .lb2-w.open .lb2-cv{transform:rotate(180deg)}
 .lb2-w.me .lb2-r{background:#FBF8FF}
 .lb2-d{display:none;background:#FBF8FF;border:1px solid var(--line);border-radius:12px;
-  margin:0 4px 10px;overflow:hidden}
+  margin:8px 2px 4px;overflow:hidden}
 .lb2-w.open .lb2-d{display:block}
 .dt-h,.dt-r{display:grid;grid-template-columns:1.45fr .68fr .92fr .45fr .4fr 40px;gap:4px;
   align-items:center;padding:8px 11px}
@@ -1738,8 +1742,7 @@ function missingBox(m){
 
   const k=new Date(m.kickoff);
   const msg =
-    "🏆 خليجي 27 — تذكير\n"+
-    fmtDay(k)+"\n\n"+
+    "🏆 خليجي 27 — تذكير\n"+fmtDay(k)+"\n\n"+
     "⚽ "+m.home+" × "+m.away+" — "+fmtTime(k)+"\n"+
     "❌ ما صوّتوا ("+miss.length+"):\n"+miss.join("، ")+
     (part.length?"\n\n⚠️ توقعهم ناقص ("+part.length+"):\n"+part.join("، "):"")+
@@ -1868,6 +1871,15 @@ function drawBoard(){
       <div class="dt-tot">مجموع نقاط المباريات المنتهية: ${tot}</div>`;
   };
 
+  const pickFlag=r=>{
+    const pk=CHAMPS.find(c=>c.user_id===r.id);
+    if(!pk) return `<span class="lb2-fl none"><span>ما اختار</span></span>`;
+    const open = champShut()||ME.is_admin||r.id===ME.id;
+    return open
+      ? `<span class="lb2-fl">${flag(pk.team,"26px","18px")}<span>${r.id===ME.id?"بطلك":"بطله"}</span></span>`
+      : `<span class="lb2-fl hid"><span>مخفي</span></span>`;
+  };
+
   const pick=r=>{
     const pk=CHAMPS.find(c=>c.user_id===r.id);
     if(!pk) return "ما اختار بطل";
@@ -1880,12 +1892,11 @@ function drawBoard(){
     ${rows.map((r,i)=>`
       <div class="lb2-w ${i===0?"p1":i===1?"p2":i===2?"p3":""} ${r.id===ME.id?"me":""}" data-u="${r.id}">
         <button class="lb2-r">
-          <span class="lb2-rk">${i+1}</span>
-          <span class="lb2-av">${ini(r.name)}</span>
+          <span class="lb2-num">${i+1}</span>
           <span class="lb2-i"><b>${r.name}</b>
-            <span>${done.length?r.correct+" توقعات صح · ":""}${pick(r)}</span>
-            <span class="lb2-bar"><i style="width:${Math.round((r.pts/top)*100)}%"></i></span></span>
-          <span class="lb2-p">${r.pts}</span>
+            <span>${done.length?r.correct+(r.correct===1?" توقع صح":" توقعات صح"):"ما بدأت النتائج"}</span></span>
+          ${pickFlag(r)}
+          <span class="lb2-pts"><b>${r.pts}</b><span>نقطة</span></span>
           <span class="lb2-cv">▾</span>
         </button>
         <div class="lb2-d">${detail(r)}</div>
@@ -2084,6 +2095,14 @@ function drawAdmin(){
         <p class="note">لازم تحدده حتى لو انتهت بركلات الترجيح — عليه تنحسب نقاط السؤال الأول.</p>
       </div>`}
 
+      <div class="q" style="padding-bottom:6px">
+        <div class="q-top"><span class="q-n">${m.stage==="group"?"5":"6"}</span>
+          <span class="q-title">توقعات المشاركين</span>
+          <span class="q-badge">${ar(predsOf(m).length)} من ${ar(USERS.length)}</span></div>
+      </div>
+      <div class="pv" style="margin:0 12px 14px">${predsTable(m)}</div>
+      ${missingBox(m)}
+
       <div class="sw">
         <button class="sbtn" id="as${m.id}">${m.finished?"حدّث النتيجة وأعد حساب النقاط":"اعتمد النتيجة ووزّع النقاط"}</button>
         ${m.finished?`<button class="sbtn ghost" id="un${m.id}" style="margin-top:9px">ألغِ الاعتماد</button>`:""}
@@ -2115,7 +2134,8 @@ function drawAdmin(){
 
     c.querySelector("#as"+m.id).onclick=async e=>{
       const btn2=e.currentTarget;
-      const back=()=>{ btn2.disabled=false; btn2.textContent=m.finished?"حدّث النتيجة وأعد حساب النقاط":"اعتمد النتيجة ووزّع النقاط"; };
+      const back=()=>{ btn2.disabled=false;
+        btn2.textContent=m.finished?"حدّث النتيجة وأعد حساب النقاط":"اعتمد النتيجة ووزّع النقاط"; };
       btn2.disabled=true; btn2.textContent="جاري الحفظ…";
 
       const payload={
@@ -2135,16 +2155,10 @@ function drawAdmin(){
       }catch(ex){ res={error:{message:String(ex&&ex.message||ex)}}; }
 
       if(res && res.error){
-        back();
-        const msg=String(res.error.message||"");
-        toast(msg.includes("column")||msg.includes("winner_team")||msg.includes("hidden")
-          ? "ناقص عمود بقاعدة البيانات — "+msg
-          : "ما انحفظت النتيجة — "+msg, true);
+        back(); toast("ما انحفظت النتيجة — "+(res.error.message||""),true);
         console.error(res.error); return;
       }
-
-      btn2.disabled=false;
-      btn2.classList.add("done"); btn2.textContent="انحفظت ✓";
+      btn2.disabled=false; btn2.classList.add("done"); btn2.textContent="انحفظت ✓";
       ADM_OPEN=m.id;
       toast("انحفظت النتيجة وتوزعت النقاط");
       setTimeout(refresh,700);
