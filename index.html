@@ -899,6 +899,26 @@ tr.me td{background:var(--tint)}
   white-space:nowrap;cursor:pointer;transition:background .15s,transform .15s}
 .lbt-cp:active{background:rgba(255,255,255,.28);transform:translateY(1px)}
 .lbt-cp.ok{background:rgba(180,247,210,.25);border-color:rgba(180,247,210,.5)}
+.lbt-acts{display:flex;gap:6px;flex-shrink:0}
+.lbt-cp[disabled]{opacity:.6}
+.lbt-sh{flex-shrink:0;background:linear-gradient(145deg,#EBC76B,#B5862A);border:none;border-radius:10px;
+  padding:7px 11px;font-family:inherit;font-size:10px;font-weight:700;color:#2E1A00;white-space:nowrap;
+  cursor:pointer;box-shadow:0 4px 12px -4px rgba(181,134,42,.85);transition:transform .15s}
+.lbt-sh:active{transform:translateY(1px)}
+.lbt-sh[disabled]{opacity:.6;cursor:default}
+/* وضع التصوير */
+.lbt-wm{display:none}
+.lbt.shooting .lbt-acts{visibility:hidden}
+.lbt.shooting .lbt-pd{display:none}
+.lbt.shooting .lbt-ft{display:none}
+.lbt.shooting .lbt-w.noshot{display:none}
+/* html2canvas يكسر وصل الحروف العربية مع letter-spacing */
+.lbt.shooting,.lbt.shooting *{letter-spacing:normal!important}
+.lbt.shooting .lbt-wm{display:block;padding:10px 15px;border-top:1px solid var(--line);
+  background:#FCFAFE;text-align:center;font-size:10px;font-weight:700;color:#9B8BB2;
+  font-family:'IBM Plex Sans Arabic',sans-serif}
+.lbt.shooting .pod-c,.lbt.shooting .lbt-w,.lbt.shooting .pod-b,.lbt.shooting .lbt-r::before{
+  animation:none!important;opacity:1!important;transform:none!important}
 
 /* المنصة */
 .pod{position:relative;z-index:2;display:grid;align-items:end;gap:9px;margin-top:16px}
@@ -1908,6 +1928,68 @@ function sumBox(m,p){
     ${miss.length?`<div class="row" style="border:none"><span style="color:#C41E48">توقع قديم ناقص: ${miss.join("، ")} — افتح وعدّله</span></div>`:""}</div>`;
 }
 
+let H2C=null;
+function loadH2C(){
+  if(window.html2canvas) return Promise.resolve();
+  if(H2C) return H2C;
+  H2C=new Promise((res,rej)=>{
+    const sc=document.createElement("script");
+    sc.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+    sc.onload=res;
+    sc.onerror=()=>{ H2C=null; rej(new Error("ما وصلت أداة الصورة")); };
+    document.head.appendChild(sc);
+  });
+  return H2C;
+}
+
+async function shotBoard(btn){
+  const card=document.querySelector("#board .lbt");
+  if(!card) return;
+  const lbl=btn.textContent;
+  btn.textContent="جاري…"; btn.disabled=true;
+  try{
+    await loadH2C();
+    card.querySelectorAll(".lbt-w.open").forEach(w=>w.classList.remove("open"));
+    const pd=card.querySelector(".lbt-pd"); if(pd) pd.classList.remove("on");
+    const ws=Array.prototype.slice.call(card.querySelectorAll(".lbt-w"));
+    ws.forEach((w,i)=>{ if(i>=7) w.classList.add("noshot"); });
+    const wm=card.querySelector(".lbt-wm");
+    const shown=Math.min(3+ws.length,10), all=3+ws.length;
+    if(wm) wm.textContent = (all>shown ? `أفضل ${shown} من ${all} مشارك · ` : "")
+      + "قروب عائلة العويس · خليجي 27";
+    card.classList.add("shooting");
+    await new Promise(r=>setTimeout(r,60));
+    const cv=await html2canvas(card,{backgroundColor:"#ffffff",scale:2,useCORS:true,logging:false});
+    card.classList.remove("shooting");
+    const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
+    if(!blob) throw new Error("ما طلعت الصورة");
+    const file=new File([blob],"ترتيب-خليجي27.png",{type:"image/png"});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file],title:"ترتيب خليجي 27"}); }
+      catch(e){ if(e && e.name==="AbortError") return; throw e; }
+      return;
+    }
+    if(navigator.clipboard && window.ClipboardItem){
+      try{
+        await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);
+        toast("انتسخت الصورة — الصقها بالقروب");
+        return;
+      }catch(e){}
+    }
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="ترتيب-خليجي27.png";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    toast("انحفظت الصورة — ارسلها بالواتساب");
+  }catch(e){
+    toast("ما قدرت أسوي صورة: "+((e&&e.message)||e),true);
+  }finally{
+    card.classList.remove("shooting");
+    card.querySelectorAll(".lbt-w.noshot").forEach(w=>w.classList.remove("noshot"));
+    btn.textContent=lbl; btn.disabled=false;
+  }
+}
+
 function drawBoard(){
   const box=$("#board");
   const done=MATCHES.filter(m=>m.finished);
@@ -1995,7 +2077,8 @@ function drawBoard(){
   const medal=i=>i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1)+".";
   const waTxt = "🏆 ترتيب توقعات خليجي 27\n"
     + `بعد ${done.length} من ${MATCHES.length} مباريات\n\n`
-    + rows.map((r,i)=>`${medal(i)} ${r.name} · ${r.pts} نقطة`).join("\n")
+    + rows.slice(0,10).map((r,i)=>`${medal(i)} ${r.name} · ${r.pts} نقطة`).join("\n")
+    + (rows.length>10 ? `\n\nوباقي الـ${rows.length-10} بالموقع` : "")
     + "\n\nقروب عائلة العويس";
 
   const pod3 = rows.slice(0,3);
@@ -2016,7 +2099,10 @@ function drawBoard(){
       <div class="lbt-hh">
         <div><b>ترتيب العائلة</b>
           <span>بعد ${done.length} مباريات من ${MATCHES.length} · ${USERS.length} مشارك</span></div>
-        ${ME.is_admin?`<button class="lbt-cp" data-copy="${encodeURIComponent(waTxt)}">انسخ للواتساب</button>`:""}
+        ${ME.is_admin?`<div class="lbt-acts">
+          <button class="lbt-sh" type="button">صورة</button>
+          <button class="lbt-cp" data-copy="${encodeURIComponent(waTxt)}">نص</button>
+        </div>`:""}
       </div>
       <div class="pod n${pod3.length}">${ord.map(podCell).join("")}</div>
     </div>
@@ -2041,9 +2127,13 @@ function drawBoard(){
         <div class="lbt-d">${detail(r)}</div>
       </div>`;}).join("")}`:""}
     <p class="lbt-ft">اضغط على أي اسم تشوف توقعاته بالتفصيل</p>
+    <p class="lbt-wm">قروب عائلة العويس · خليجي 27</p>
   </div>`;
 
   box.querySelectorAll(".lbt-r").forEach(b=>b.onclick=()=>b.parentElement.classList.toggle("open"));
+
+  const shb=box.querySelector(".lbt-sh");
+  if(shb) shb.onclick=()=>shotBoard(shb);
 
   const pd=box.querySelector("#podDet");
   const closePod=()=>{ pd.classList.remove("on");
