@@ -880,6 +880,113 @@ tr.me td{background:var(--tint)}
   box-shadow:0 10px 34px rgba(0,0,0,.3);color:var(--green)}
 #toast.on{display:block}
 #toast.bad{color:var(--red);border-color:rgba(255,55,94,.3)}
+
+/* ── الترتيب: منصة تتويج + جدول ── */
+.lbt{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;
+  box-shadow:0 1px 2px rgba(42,3,71,.06),0 18px 44px -18px rgba(42,3,71,.4)}
+
+/* الجزء العلوي الداكن */
+.lbt-hero{position:relative;background:radial-gradient(120% 130% at 50% -20%,#6A18AE,#2A0347 72%);
+  padding:17px 17px 0;overflow:hidden}
+.lbt-hero::after{content:"";position:absolute;inset-inline:0;bottom:0;height:60px;
+  background:linear-gradient(transparent,rgba(255,255,255,.07));pointer-events:none}
+.lbt-hh{position:relative;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.lbt-hh b{display:block;font-family:'Noto Kufi Arabic',sans-serif;font-size:17px;font-weight:800;
+  color:#fff;letter-spacing:-.4px}
+.lbt-hh span{display:block;font-size:10px;color:#C3ACE0;margin-top:3px;font-variant-numeric:tabular-nums}
+.lbt-cp{flex-shrink:0;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:10px;padding:7px 11px;font-family:inherit;font-size:10px;font-weight:700;color:#fff;
+  white-space:nowrap;cursor:pointer;transition:background .15s,transform .15s}
+.lbt-cp:active{background:rgba(255,255,255,.28);transform:translateY(1px)}
+.lbt-cp.ok{background:rgba(180,247,210,.25);border-color:rgba(180,247,210,.5)}
+
+/* المنصة */
+.pod{position:relative;z-index:2;display:grid;align-items:end;gap:9px;margin-top:16px}
+.pod.n3{grid-template-columns:1fr 1.16fr 1fr}
+.pod.n2{grid-template-columns:1.16fr 1fr}
+.pod.n1{grid-template-columns:1fr}
+.pod-c{width:100%;border:none;background:none;font-family:inherit;text-align:center;cursor:pointer;
+  padding:0;animation:podUp .55s cubic-bezier(.22,1,.36,1) both}
+.pod-c:focus-visible{outline:2px solid #EBC76B;outline-offset:3px;border-radius:10px}
+.pod-c.w1{animation-delay:.06s}.pod-c.w2{animation-delay:.16s}.pod-c.w3{animation-delay:.24s}
+@keyframes podUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.pod-fl{display:block;width:34px;height:24px;margin:0 auto 7px}
+.pod-c.w1 .pod-fl{width:42px;height:30px}
+.pod-fl img{width:100%;height:100%;object-fit:contain;border-radius:3px;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))}
+.pod-fl em{font-style:normal;color:rgba(255,255,255,.28);font-size:15px;line-height:24px;display:block}
+.pod-nm{display:block;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;margin-bottom:3px}
+.pod-c.w1 .pod-nm{font-size:14.5px;font-family:'Noto Kufi Arabic',sans-serif}
+.pod-me{display:inline-block;background:var(--pink);color:#fff;font-size:7.5px;font-weight:700;
+  border-radius:4px;padding:1px 4px;margin-inline-start:4px;vertical-align:1px}
+.pod-pt{display:block;font-family:'Noto Kufi Arabic',sans-serif;font-size:17px;font-weight:800;color:#EBC76B;
+  line-height:1;letter-spacing:-.6px;font-variant-numeric:tabular-nums;margin-bottom:8px}
+.pod-c.w1 .pod-pt{font-size:24px}
+.pod-b{border-radius:9px 9px 0 0;display:flex;align-items:flex-start;justify-content:center;
+  padding-top:7px;font-family:'Noto Kufi Arabic',sans-serif;font-size:15px;font-weight:800;color:#fff;
+  transform-origin:bottom;animation:podGrow .7s cubic-bezier(.22,1,.36,1) both;
+  transition:filter .16s}
+.pod-c:hover .pod-b{filter:brightness(1.08)}
+.pod-c.w1 .pod-b{height:56px;background:linear-gradient(#EBC76B,#A97A20);color:#3A2402;font-size:19px;
+  animation-delay:.14s;box-shadow:0 -4px 20px rgba(235,199,107,.35)}
+.pod-c.w2 .pod-b{height:40px;background:linear-gradient(#E3DFEA,#9F95B2);color:#332A42;animation-delay:.24s}
+.pod-c.w3 .pod-b{height:31px;background:linear-gradient(#DFB894,#A9784F);animation-delay:.32s}
+@keyframes podGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+/* لوح تفاصيل المتوّجين */
+.lbt-pd{display:none;background:#FBF8FF;border-bottom:1px solid var(--line);padding:10px}
+.lbt-pd.on{display:block;animation:pdIn .3s cubic-bezier(.22,1,.36,1) both}
+@keyframes pdIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.lbt-pdh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 4px 9px}
+.lbt-pdh b{font-family:'Noto Kufi Arabic',sans-serif;font-size:12.5px;font-weight:800;color:#2A0347}
+.lbt-pdx{width:26px;height:26px;border-radius:9px;background:#F1EAFA;border:1px solid var(--line);
+  font-family:inherit;font-size:13px;line-height:1;color:#6B5B83;cursor:pointer;flex-shrink:0}
+.lbt-pdx:active{background:#E6DBF6}
+.lbt-pdb{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+
+/* الجدول */
+.lbt-cols,.lbt-r{display:grid;grid-template-columns:26px 1fr 26px 32px 44px;align-items:center;
+  gap:9px;padding:0 15px}
+.lbt-cols{height:29px;background:#F8F4FD;border-bottom:1px solid var(--line)}
+.lbt-cols span{font-size:8.5px;font-weight:700;color:#7C6B94;letter-spacing:.3px;text-align:center}
+.lbt-cols span:nth-child(2){text-align:right}
+.lbt-w{border-bottom:1px solid #F7F2FC;animation:podUp .45s cubic-bezier(.22,1,.36,1) both}
+.lbt-w:last-of-type{border-bottom:none}
+.lbt-r{position:relative;height:44px;width:100%;border:none;background:none;font-family:inherit;
+  cursor:pointer;text-align:right;overflow:hidden;transition:background .16s}
+.lbt-r::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:var(--w,0%);
+  background:linear-gradient(270deg,rgba(79,0,140,.075),rgba(79,0,140,.015));
+  transform-origin:right;animation:lbFill .8s cubic-bezier(.22,1,.36,1) both}
+@keyframes lbFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.lbt-w.me .lbt-r::before{background:linear-gradient(270deg,rgba(255,55,94,.13),rgba(255,55,94,.02))}
+.lbt-r>*{position:relative}
+.lbt-r:hover{background:rgba(79,0,140,.03)}
+.lbt-r:focus-visible{outline:2px solid var(--pur);outline-offset:-2px}
+.lbt-w.open .lbt-r{background:#F4ECFC}
+.lbt-n{font-family:'Noto Kufi Arabic',sans-serif;font-size:13px;font-weight:800;color:#A79BBC;
+  text-align:center;font-variant-numeric:tabular-nums}
+.lbt-nm{font-size:13.5px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;text-align:right}
+.lbt-me{display:inline-block;background:var(--pink);color:#fff;font-size:8px;font-weight:700;
+  border-radius:4px;padding:2px 5px;margin-inline-start:5px;vertical-align:2px}
+.lbt-f{text-align:center;line-height:0}
+.lbt-f img{width:21px;height:15px;object-fit:contain;border-radius:2px;
+  filter:drop-shadow(0 1px 3px rgba(36,16,56,.28))}
+.lbt-f em{font-style:normal;color:#D3C9E0;font-size:11px;line-height:1}
+.lbt-ok{font-size:11px;font-weight:600;color:#7C6B94;text-align:center;font-variant-numeric:tabular-nums}
+.lbt-ok i{font-style:normal;font-size:9px;color:#C3B8D4}
+.lbt-p{font-family:'Noto Kufi Arabic',sans-serif;font-size:17px;font-weight:800;color:var(--pur);
+  text-align:center;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.lbt-w.me .lbt-p{color:var(--pink)}
+.lbt-d{display:none;background:#FBF8FF;border:1px solid var(--line);border-radius:12px;
+  margin:0 10px 10px;overflow:hidden}
+.lbt-w.open .lbt-d{display:block}
+.lbt-ft{padding:11px 15px;border-top:1px solid var(--line);font-size:10px;color:#A79BBC;
+  text-align:center;background:#FCFAFE}
+@media (prefers-reduced-motion:reduce){
+  .pod-c,.pod-b,.lbt-w,.lbt-r::before,.lbt-pd{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -1759,13 +1866,15 @@ function missingBox(m){
 
 
 document.addEventListener('click', function(ev){
-  const cp = ev.target.closest && ev.target.closest('.nv-cp');
+  const cp = ev.target.closest && ev.target.closest('.nv-cp, .lbt-cp');
   if(cp){
     ev.stopPropagation();
     const txt = decodeURIComponent(cp.dataset.copy);
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject())
-      .then(()=>{ toast("انتسخت الرسالة — الصقها بالقروب"); cp.textContent="انتسخت ✓";
-                  setTimeout(()=>cp.textContent="انسخ الرسالة",2200); })
+      .then(()=>{ const lbt=cp.classList.contains("lbt-cp"); const lbl=cp.textContent;
+                  toast(lbt?"انتسخ الترتيب — الصقه بالقروب":"انتسخت الرسالة — الصقها بالقروب");
+                  cp.textContent="انتسخ ✓"; cp.classList.add("ok");
+                  setTimeout(()=>{cp.textContent=lbl; cp.classList.remove("ok");},2200); })
       .catch(()=>toast("ما قدرت أنسخ — انسخها يدوياً",true));
     return;
   }
@@ -1816,7 +1925,7 @@ function drawBoard(){
     return {...u, pts:totalFor(u.id), correct};
   }).sort((a,b)=> b.pts-a.pts || b.correct-a.correct || a.name.localeCompare(b.name,"ar"));
 
-  if(!rows.length){ box.innerHTML=`<div class="lb2"><p class="lb2-none">ما فيه مشاركين بعد</p></div>`; return; }
+  if(!rows.length){ box.innerHTML=`<div class="lbt"><p class="lbt-ft" style="border:none;padding:18px">ما فيه مشاركين بعد</p></div>`; return; }
   const top=rows[0].pts||1;
 
   const wName=(m,p)=>{
@@ -1871,40 +1980,85 @@ function drawBoard(){
       <div class="dt-tot">مجموع نقاط المباريات المنتهية: ${tot}</div>`;
   };
 
-  const pickFlag=r=>{
+  const teamOf=r=>{
     const pk=CHAMPS.find(c=>c.user_id===r.id);
-    if(!pk) return `<span class="lb2-fl none"><span>ما اختار</span></span>`;
-    const open = champShut()||ME.is_admin||r.id===ME.id;
-    return open
-      ? `<span class="lb2-fl">${flag(pk.team,"26px","18px")}<span>${r.id===ME.id?"بطلك":"بطله"}</span></span>`
-      : `<span class="lb2-fl hid"><span>مخفي</span></span>`;
+    if(!pk) return null;
+    return (champShut()||ME.is_admin||r.id===ME.id) ? pk.team : "";
+  };
+  const cell=(r,w,h)=>{
+    const t=teamOf(r);
+    if(t===null) return `<em>-</em>`;
+    if(t==="")   return `<em>?</em>`;
+    return flag(t,w,h);
   };
 
-  const pick=r=>{
-    const pk=CHAMPS.find(c=>c.user_id===r.id);
-    if(!pk) return "ما اختار بطل";
-    if(champShut()||ME.is_admin) return "اختار "+flag(pk.team)+" "+pk.team;
-    return r.id===ME.id ? "اخترت "+flag(pk.team)+" "+pk.team : "سجّل توقع البطل";
+  const medal=i=>i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1)+".";
+  const waTxt = "🏆 ترتيب توقعات خليجي 27\n"
+    + `بعد ${done.length} من ${MATCHES.length} مباريات\n\n`
+    + rows.map((r,i)=>`${medal(i)} ${r.name} · ${r.pts} نقطة`).join("\n")
+    + "\n\nقروب عائلة العويس";
+
+  const pod3 = rows.slice(0,3);
+  const rest = rows.slice(3);
+  const ord = pod3.length>=3 ? [1,0,2] : pod3.length===2 ? [0,1] : [0];
+  const podCell=i=>{
+    const r=pod3[i]; const w=i+1;
+    return `<button class="pod-c w${w}" data-u="${r.id}" aria-expanded="false">
+      <span class="pod-fl">${cell(r,"100%","100%")}</span>
+      <span class="pod-nm">${r.name}${r.id===ME.id?'<span class="pod-me">أنت</span>':""}</span>
+      <span class="pod-pt">${r.pts}</span>
+      <span class="pod-b">${w}</span>
+    </button>`;
   };
 
-  box.innerHTML=`<div class="lb2">
-    <div class="lb2-h"><b>الترتيب</b><span>${done.length} مباريات انتهت من ${MATCHES.length}</span></div>
-    ${rows.map((r,i)=>`
-      <div class="lb2-w ${i===0?"p1":i===1?"p2":i===2?"p3":""} ${r.id===ME.id?"me":""}" data-u="${r.id}">
-        <button class="lb2-r">
-          <span class="lb2-num">${i+1}</span>
-          <span class="lb2-i"><b>${r.name}</b>
-            <span>${done.length?r.correct+(r.correct===1?" توقع صح":" توقعات صح"):"ما بدأت النتائج"}</span></span>
-          ${pickFlag(r)}
-          <span class="lb2-pts"><b>${r.pts}</b><span>نقطة</span></span>
-          <span class="lb2-cv">▾</span>
+  box.innerHTML=`<div class="lbt">
+    <div class="lbt-hero">
+      <div class="lbt-hh">
+        <div><b>ترتيب العائلة</b>
+          <span>بعد ${done.length} مباريات من ${MATCHES.length} · ${USERS.length} مشارك</span></div>
+        ${ME.is_admin?`<button class="lbt-cp" data-copy="${encodeURIComponent(waTxt)}">انسخ للواتساب</button>`:""}
+      </div>
+      <div class="pod n${pod3.length}">${ord.map(podCell).join("")}</div>
+    </div>
+
+    <div class="lbt-pd" id="podDet">
+      <div class="lbt-pdh"><b></b><button class="lbt-pdx" type="button">✕</button></div>
+      <div class="lbt-pdb"></div>
+    </div>
+
+    ${rest.length?`
+    <div class="lbt-cols"><span>#</span><span>الاسم</span><span>البطل</span><span>صح</span><span>النقاط</span></div>
+    ${rest.map((r,k)=>{
+      const i=k+3, pct=pod3[0].pts>0?Math.max(6,Math.round(r.pts/pod3[0].pts*100)):6;
+      return `<div class="lbt-w ${r.id===ME.id?"me":""}" data-u="${r.id}" style="animation-delay:${.05+k*.04}s">
+        <button class="lbt-r" style="--w:${pct}%;animation-delay:${.05+k*.04}s">
+          <span class="lbt-n">${i+1}</span>
+          <span class="lbt-nm">${r.name}${r.id===ME.id?'<span class="lbt-me">أنت</span>':""}</span>
+          <span class="lbt-f">${cell(r,"21px","15px")}</span>
+          <span class="lbt-ok">${done.length?r.correct+'<i>/'+done.length+'</i>':"-"}</span>
+          <span class="lbt-p">${r.pts}</span>
         </button>
-        <div class="lb2-d">${detail(r)}</div>
-      </div>`).join("")}
-    <p class="lb2-foot">اضغط على أي اسم تشوف توقعاته بالتفصيل</p>
+        <div class="lbt-d">${detail(r)}</div>
+      </div>`;}).join("")}`:""}
+    <p class="lbt-ft">اضغط على أي اسم تشوف توقعاته بالتفصيل</p>
   </div>`;
 
-  box.querySelectorAll(".lb2-r").forEach(b=>b.onclick=()=>b.parentElement.classList.toggle("open"));
+  box.querySelectorAll(".lbt-r").forEach(b=>b.onclick=()=>b.parentElement.classList.toggle("open"));
+
+  const pd=box.querySelector("#podDet");
+  const closePod=()=>{ pd.classList.remove("on");
+    box.querySelectorAll(".pod-c").forEach(x=>x.setAttribute("aria-expanded","false")); };
+  pd.querySelector(".lbt-pdx").onclick=closePod;
+  box.querySelectorAll(".pod-c").forEach(btn=>btn.onclick=()=>{
+    const r=rows.find(x=>x.id===btn.dataset.u);
+    if(!r) return;
+    if(btn.getAttribute("aria-expanded")==="true"){ closePod(); return; }
+    closePod();
+    pd.querySelector(".lbt-pdh b").textContent="توقعات "+r.name;
+    pd.querySelector(".lbt-pdb").innerHTML=detail(r);
+    pd.classList.add("on");
+    btn.setAttribute("aria-expanded","true");
+  });
 }
 
 function markPending(){
