@@ -232,6 +232,8 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
   white-space:nowrap}
 .pw-tag img{width:14px;height:10px;object-fit:contain;border-radius:1px}
 .pw-tag.none{background:#FFF1F4;color:#C41E48}
+.ver{text-align:center;font-size:10px;color:#A79BBC;padding:14px 10px 4px;
+  font-variant-numeric:tabular-nums}
 .lockq{margin:0 12px 14px;border:1.5px dashed #E0D4F5;border-radius:14px;padding:16px 14px;
   text-align:center;background:#FCFAFF}
 .lockq b{display:block;font-size:13px;font-weight:800;color:var(--pur);margin-bottom:4px}
@@ -1251,6 +1253,22 @@ async function refresh(){
   drawBoard(); drawPredsPanel(); if(ME.is_admin){ drawAdmin(); markPending(); }
 }
 
+// هل ضبط المتوقّع سؤال الفايز؟
+// المجموعات: من فرق الأهداف. الإقصائي: من المنتخب المتأهل فعلياً،
+// سواء سمّاه مباشرة أو كتب تعادل وسمّاه بالبنلتيات.
+function winnerOK(m,p){
+  if(!p) return false;
+  const wp=predWinner(p);
+  if(!wp) return false;
+  if(m.stage && m.stage!=="group"){
+    if(!m.winner_team) return false;
+    const mine = wp==="draw" ? (p.pen_winner||null) : wp;
+    return mine===m.winner_team;
+  }
+  if(m.home_goals==null||m.away_goals==null) return false;
+  const rw = m.home_goals>m.away_goals?"home":m.home_goals<m.away_goals?"away":"draw";
+  return rw===wp;
+}
 function realWinner(m){
   if(m.home_goals!=null && m.away_goals!=null)
     return m.home_goals>m.away_goals?1:m.home_goals<m.away_goals?-1:0;
@@ -1264,10 +1282,7 @@ function predWinner(pred){
 function scoreMatch(pred,m){
   if(!pred||!m.finished) return 0;
   let pts=0;
-  const rw = realWinner(m);
-  const wp=predWinner(pred);
-  const gw=wp==="home"?1:wp==="away"?-1:wp==="draw"?0:null;
-  const wOK = gw!==null && rw===gw;
+  const wOK = winnerOK(m,pred);
   if(wOK) pts+=RULES.winner;
   if(RULES.scoreAlways||wOK){
     if(pred.home_goals!=null&&pred.home_goals===m.home_goals) pts+=RULES.goalEach;
@@ -1289,9 +1304,7 @@ function rankOf(uid){
     done.forEach(m=>{
       const pr=PREDS.find(x=>x.user_id===u.id&&x.match_id===m.id);
       if(!pr) return;
-      const wp=predWinner(pr); if(!wp) return;
-      const rw = realWinner(m);
-      if(rw===(wp==="home"?1:wp==="away"?-1:0)) correct++;
+      if(winnerOK(m,pr)) correct++;
     });
     return {id:u.id,name:u.name,pts:totalFor(u.id),correct};
   }).sort((a,b)=> b.pts-a.pts || b.correct-a.correct || a.name.localeCompare(b.name,"ar"));
@@ -1544,7 +1557,7 @@ function drawMatches(){
           <span>للعرض بس، ما عليها نقاط.</span>
         </div>`:""}
         <p class="note">${KO
-          ? "اختر منو يفوز بالوقت الأصلي. ولو تتوقعها تنتهي تعادل وتروح لركلات الترجيح، اختر تعادل وبعدها قول منو ياخذها."
+          ? "النقاط تنحسب على المنتخب المتأهل. اختر المنتخب مباشرة، أو اختر تعادل وبعدها سمِّ اللي ياخذها بالترجيح — الاثنين يعطونك 3 نقاط لو ضبط المتأهل."
           : "3 نقاط كاملة إذا ضبطت، والتعادل يحتسب مثل الفوز."}</p>
       </div>
 
@@ -2057,9 +2070,7 @@ function drawBoard(){
     done.forEach(m=>{
       const pr=PREDS.find(x=>x.user_id===u.id&&x.match_id===m.id);
       if(!pr) return;
-      const rw = realWinner(m);
-      const wp=predWinner(pr); if(!wp) return;
-      if(rw===(wp==="home"?1:wp==="away"?-1:0)) correct++;
+      if(winnerOK(m,pr)) correct++;
     });
     return {...u, pts:totalFor(u.id), correct};
   }).sort((a,b)=> b.pts-a.pts || b.correct-a.correct || a.name.localeCompare(b.name,"ar"));
@@ -2074,11 +2085,7 @@ function drawBoard(){
     if(p.pen_winner) return "تعادل ثم "+(p.pen_winner==="home"?m.home:m.away)+" بالبنلتيات";
     return "تعادل";
   };
-  const wOk=(m,p)=>{
-    const rw = realWinner(m);
-    const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
-    return rw===(w==="home"?1:w==="away"?-1:0);
-  };
+  const wOk=(m,p)=>winnerOK(m,p);
   const chip=(cls,txt,pts)=>`<div class="dt-c"><span class="dt-chip ${cls}">${txt}</span>
     <small class="${pts?"g":"z"}">+${pts||0}</small></div>`;
 
@@ -2309,7 +2316,7 @@ function drawAdmin(){
            <button id="chClear" type="button">شيل الاختيار</button>
          </div>`
       : `<p class="ch-none">ما فيه بطل معتمد — الـ10 نقاط ما تنوزّعت على أحد بعد.</p>`}
-    </div>`;
+    </div>` + `<p class="ver">نسخة الموقع: 2026-10-03 · 22:20</p>`;
   const chC=box.querySelector("#chClear");
   if(chC) chC.onclick=async()=>{
     chC.disabled=true;
