@@ -227,6 +227,11 @@ img.fl{width:1.5em;height:1.06em;object-fit:contain;border-radius:2px;display:in
 .pkw button:active:not(:disabled){transform:scale(.985)}
 .pkw button:disabled{opacity:.55;cursor:default}
 .pkw img{border-radius:2px;flex-shrink:0}
+.pw-tag{display:inline-flex;align-items:center;gap:3px;background:#F3E9FD;color:var(--pur);
+  border-radius:6px;padding:2px 6px;margin-inline-start:5px;font-size:10px;font-weight:700;
+  white-space:nowrap}
+.pw-tag img{width:14px;height:10px;object-fit:contain;border-radius:1px}
+.pw-tag.none{background:#FFF1F4;color:#C41E48}
 .lockq{margin:0 12px 14px;border:1.5px dashed #E0D4F5;border-radius:14px;padding:16px 14px;
   text-align:center;background:#FCFAFF}
 .lockq b{display:block;font-size:13px;font-weight:800;color:var(--pur);margin-bottom:4px}
@@ -1830,7 +1835,14 @@ function drawMatches(){
 
 function winnerName(m,p){
   const w=p.winner_pick||(p.home_goals>p.away_goals?"home":p.home_goals<p.away_goals?"away":"draw");
-  return w==="home"?flag(m.home)+" "+m.home : w==="away"?flag(m.away)+" "+m.away : "تعادل";
+  if(w==="home") return flag(m.home)+" "+m.home;
+  if(w==="away") return flag(m.away)+" "+m.away;
+  if(p.pen_winner){
+    const t = p.pen_winner==="home"?m.home:m.away;
+    return 'تعادل <span class="pw-tag">ثم '+flag(t)+" "+t+"</span>";
+  }
+  if(m.stage!=="group") return 'تعادل <span class="pw-tag none">ما اختار البنلتيات</span>';
+  return "تعادل";
 }
 function predsOf(m){
   return PREDS.filter(x=>x.match_id===m.id).map(x=>{
@@ -2401,6 +2413,11 @@ function drawAdmin(){
       </div>`;
 
     let AP=m.penalty===true, LS=lockState;
+    let WT=m.winner_team||null;
+    c.querySelectorAll("[data-wt]").forEach(b=>b.onclick=()=>{
+      WT=b.dataset.wt;
+      c.querySelectorAll("[data-wt]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.wt===WT));
+    });
     c.querySelectorAll("[data-ap]").forEach(b=>b.onclick=()=>{
       AP=b.dataset.ap==="1";
       c.querySelectorAll("[data-ap]").forEach(x=>x.setAttribute("aria-pressed",(x.dataset.ap==="1")===AP));
@@ -2436,7 +2453,10 @@ function drawAdmin(){
         yellows:+c.querySelector("#ay"+m.id).value,
         penalty:AP, finished:true, updated_at:new Date().toISOString()
       };
-      if(m.stage!=="group" && WT) payload.winner_team=WT;
+      if(m.stage!=="group"){
+        if(!WT){ back(); toast("حدد منو المتأهل أول",true); return; }
+        payload.winner_team=WT;
+      }
 
       let res;
       try{
